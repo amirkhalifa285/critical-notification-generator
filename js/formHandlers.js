@@ -23,6 +23,9 @@ const elements = {
     issueTargetGroup: document.getElementById('issueTargetGroup'),
     issueTargetLabel: document.getElementById('issueTargetLabel'),
     issueTargetInput: document.getElementById('issueTarget'),
+    interruptionDetailsGroup: document.getElementById('interruptionDetailsGroup'),
+    interruptionFrequency: document.getElementById('interruptionFrequency'),
+    interruptionDuration: document.getElementById('interruptionDuration'),
     percentageGroup: document.getElementById('percentageGroup'),
     percentageInput: document.getElementById('percentageInput'),
     startTime: document.getElementById('startTime'),
@@ -137,6 +140,11 @@ function issueRequiresTarget() {
     return Boolean(elements.issueSelect.selectedOptions[0]?.dataset.targetLabel);
 }
 
+function isInterruptionIssue() {
+    return !getSelectedContext()?.fixedDropInBets
+        && elements.issueSelect.selectedOptions[0]?.dataset.interruption === 'true';
+}
+
 function syncIssueControls() {
     const isSystem = currentTemplate === 'system';
     const context = getSelectedContext();
@@ -144,7 +152,10 @@ function syncIssueControls() {
     const isCustom = !hasFixedIssue && elements.issueSelect.value === 'other';
     const needsPercentage = isSystem && issueRequiresPercentage();
     const needsTarget = isSystem && issueRequiresTarget();
-    const targetLabel = elements.issueSelect.selectedOptions[0]?.dataset.targetLabel;
+    const optionalTargetLabel = elements.issueSelect.selectedOptions[0]?.dataset.optionalTargetLabel;
+    const showsTarget = needsTarget || (isSystem && Boolean(optionalTargetLabel));
+    const targetLabel = elements.issueSelect.selectedOptions[0]?.dataset.targetLabel || optionalTargetLabel;
+    const needsInterruptionDetails = isSystem && isInterruptionIssue();
 
     elements.issueSelect.disabled = hasFixedIssue;
     elements.issueSelect.required = isSystem && !hasFixedIssue;
@@ -154,9 +165,12 @@ function syncIssueControls() {
         : '';
     elements.customIssueDiv.classList.toggle('show', isCustom);
     elements.customIssueInput.required = isSystem && isCustom;
-    elements.issueTargetGroup.classList.toggle('show', needsTarget);
+    elements.issueTargetGroup.classList.toggle('show', showsTarget);
     elements.issueTargetInput.required = needsTarget;
     elements.issueTargetLabel.textContent = targetLabel || 'Provider / channel';
+    elements.interruptionDetailsGroup.classList.toggle('show', needsInterruptionDetails);
+    elements.interruptionFrequency.required = needsInterruptionDetails;
+    elements.interruptionDuration.required = needsInterruptionDetails;
     elements.percentageGroup.classList.toggle('hidden', !needsPercentage);
     elements.percentageInput.required = needsPercentage;
 
@@ -198,21 +212,24 @@ function getIssueDescription(context) {
     const issueTemplate = elements.issueSelect.value === 'other'
         ? elements.customIssueInput.value.trim()
         : elements.issueSelect.value;
-    return issueTemplate.replace('{target}', elements.issueTargetInput.value.trim());
+    const target = elements.issueTargetInput.value.trim();
+    if (isInterruptionIssue() && target) return `${issueTemplate} via ${target}`;
+    return issueTemplate.replace('{target}', target);
 }
 
 function getExternalPartyName() {
     return elements.externalTeamInput.value.trim().replace(/\s+team$/i, '');
 }
 
-function getRootCause() {
+function getRootCause(emailType) {
     const selection = elements.rootCauseSelect.value;
     if (selection === 'other') return elements.customRootCauseInput.value.trim();
     if (selection !== 'external') return selection;
 
     const teamName = getExternalPartyName();
     if (!teamName) return '';
-    return `We have reached out to ${teamName} team and are waiting for their response`;
+    const waitingText = emailType === 'resolved' ? 'are still waiting' : 'are waiting';
+    return `We have reached out to ${teamName} team and ${waitingText} for their response`;
 }
 
 function updatePreview() {
@@ -293,9 +310,19 @@ function generateSystemPreview(fullTicket, emailType, context) {
         showPreviewMessage('Enter the impact percentage');
         return null;
     }
-    const issueWithPercentage = needsPercentage ? `${issueText} (~${percentage}%)` : issueText;
+    let impactDescription = needsPercentage ? `${issueText} (~${percentage}%)` : issueText;
 
-    const rootCause = getRootCause();
+    if (isInterruptionIssue()) {
+        const frequency = elements.interruptionFrequency.value;
+        const duration = elements.interruptionDuration.value;
+        if (!frequency || !duration) {
+            showPreviewMessage('Enter the interruption frequency and duration');
+            return null;
+        }
+        impactDescription = generateInterruptionImpact(issueText, frequency, duration, emailType);
+    }
+
+    const rootCause = getRootCause(emailType);
     if (!rootCause) {
         showPreviewMessage('Select or enter the root cause');
         return null;
@@ -336,7 +363,7 @@ function generateSystemPreview(fullTicket, emailType, context) {
     const formattedStartTime = formatDateTime(startValue, context);
     const subject = `${fullTicket} - Critical Notification - ${issueText}`;
     const safeIssue = escapeHTML(issueText);
-    const safeImpact = escapeHTML(issueWithPercentage);
+    const safeImpact = escapeHTML(impactDescription);
     const safeRootCause = escapeHTML(rootCause);
     const htmlBody = emailType === 'ongoing'
         ? generateSystemOpeningHTML(safeIssue, safeImpact, formattedStartTime, safeRootCause)

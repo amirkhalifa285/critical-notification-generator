@@ -13,6 +13,18 @@ function withPeriod(value) {
 }
 
 /**
+ * Build the impact-only detail used by interruption notifications.
+ */
+function generateInterruptionImpact(issueDescription, frequencyMinutes, durationMinutes, emailType) {
+    const durationUnit = Number(durationMinutes) === 1 ? 'minute' : 'minutes';
+    const timingText = emailType === 'resolved'
+        ? `Happened every ~${frequencyMinutes} minutes and lasted less than ~${durationMinutes} ${durationUnit} each time`
+        : `Happening every ~${frequencyMinutes} minutes and lasts less than ~${durationMinutes} ${durationUnit} each time`;
+
+    return `${issueDescription} (${timingText}, causing a drop in betting activity)`;
+}
+
+/**
  * Generate HTML for an ongoing Report notification
  * @param {string} reportName - Name of the report
  * @param {string} reportDate - Formatted date of the report
@@ -103,6 +115,7 @@ if (typeof module !== 'undefined' && module.exports) {
         generateReportResolvedHTML,
         generateSystemOpeningHTML,
         generateSystemResolvedHTML,
+        generateInterruptionImpact,
         withPeriod
     };
 }

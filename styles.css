@@ -141,6 +141,10 @@ select:disabled {
     line-height: 1.4;
 }
 
+.nested-field-label {
+    margin-top: 12px;
+}
+
 /* Radio Buttons */
 .radio-group {
     display: flex;

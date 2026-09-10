@@ -117,6 +117,7 @@
                                 <option value="Increase in failed deposits via {target} processor" data-target-label="Payment processor">Increase in failed deposits via [Processor]</option>
                                 <option value="Increase in rejected deposits via {target} processor" data-target-label="Payment processor">Increase in rejected deposits via [Processor]</option>
                                 <option value="Increase in declined deposits followed by a drop in approved deposits via {target}" data-target-label="Payment processor">Increase in declined deposits followed by a drop in approved deposits via [Processor]</option>
+                                <option value="Interruptions in bets" data-optional-target-label="Provider / channel" data-interruption="true">Interruptions in bets [optional provider/channel]</option>
                                 <option value="Hosting website is unavailable">Hosting website is unavailable</option>
                                 <option value="other">Other (Custom)</option>
                             </select>
@@ -127,6 +128,12 @@
                             </div>
                             <div class="custom-field" id="customIssueDiv">
                                 <input type="text" id="customIssue" placeholder="Enter custom issue description">
+                            </div>
+                            <div class="custom-field" id="interruptionDetailsGroup">
+                                <label for="interruptionFrequency">Happens every approximately (minutes)</label>
+                                <input type="number" id="interruptionFrequency" min="1" step="1" placeholder="e.g., 10">
+                                <label for="interruptionDuration" class="nested-field-label">Lasts less than approximately (minutes)</label>
+                                <input type="number" id="interruptionDuration" min="1" step="1" placeholder="e.g., 5">
                             </div>
                         </div>
                         

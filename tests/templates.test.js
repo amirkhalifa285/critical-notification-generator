@@ -2,9 +2,24 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const {
+    generateInterruptionImpact,
     generateSystemOpeningHTML,
     generateSystemResolvedHTML
 } = require('../js/templateGenerator');
+
+test('interruption impact uses ongoing wording only in the impact description', () => {
+    assert.equal(
+        generateInterruptionImpact('Interruptions in bets', '10', '5', 'ongoing'),
+        'Interruptions in bets (Happening every ~10 minutes and lasts less than ~5 minutes each time, causing a drop in betting activity)'
+    );
+});
+
+test('interruption impact changes to past tense when resolved', () => {
+    assert.equal(
+        generateInterruptionImpact('Interruptions in bets via BRIGHTSTAR', '7', '4', 'resolved'),
+        'Interruptions in bets via BRIGHTSTAR (Happened every ~7 minutes and lasted less than ~4 minutes each time, causing a drop in betting activity)'
+    );
+});
 
 test('ongoing template keeps the approved structure and omits a sign-off', () => {
     const output = generateSystemOpeningHTML(

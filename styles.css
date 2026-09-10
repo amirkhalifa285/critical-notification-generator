@@ -127,6 +127,20 @@ input:focus, select:focus, textarea:focus {
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
+select:disabled {
+    background: #edf2f7;
+    color: #718096;
+    cursor: not-allowed;
+}
+
+.field-hint {
+    display: block;
+    margin-top: 7px;
+    color: #718096;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
 /* Radio Buttons */
 .radio-group {
     display: flex;
@@ -212,6 +226,10 @@ input:focus, select:focus, textarea:focus {
 .success-message.show {
     display: block;
     animation: slideIn 0.3s ease;
+}
+
+.success-message.error {
+    background: #e53e3e;
 }
 
 @keyframes slideIn {

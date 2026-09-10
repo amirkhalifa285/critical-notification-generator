@@ -30,23 +30,37 @@
                 <form id="emailForm">
                     <!-- Common fields -->
                     <div class="form-group">
-                        <label for="environment">Environment (Ticket Prefix)</label>
+                        <label for="environment">Lottery / Environment</label>
                         <select id="environment" required>
-                            <option value="">-- Select Environment --</option>
-                            <option value="NCEL">NCEL</option>
-                            <option value="NHL">NHL</option>
-                            <option value="VAL">VAL</option>
-                            <option value="NGL">NGL</option>
+                            <option value="">-- Select Lottery / Environment --</option>
+                            <optgroup label="Direct Jira Projects">
+                                <option value="AGLC">AGLC — Alberta</option>
+                                <option value="FK-MI">FK-MI — Michigan</option>
+                                <option value="MASSL">MASSL — Massachusetts</option>
+                                <option value="MSL">MSL — Michigan</option>
+                                <option value="NCEL" data-report-delay="true">NCEL — North Carolina</option>
+                                <option value="NHL" data-report-delay="true">NHL — New Hampshire</option>
+                                <option value="PL">PL — Pennsylvania</option>
+                                <option value="SZ">SZ — Czech Republic</option>
+                                <option value="VAL" data-report-delay="true">VAL — Virginia</option>
+                                <option value="WV">WV — West Virginia</option>
+                            </optgroup>
+                            <option value="NGL">NG-LOT — select lottery</option>
+                            <optgroup label="USLOT">
+                                <option value="IGT Georgia">IGT Georgia — USLOT</option>
+                                <option value="Atlantic City">Atlantic City — USLOT</option>
+                            </optgroup>
                             <option value="other">Other (Custom)</option>
                         </select>
                         <div class="custom-field" id="customEnvDiv">
-                            <input type="text" id="customEnv" placeholder="Enter custom environment prefix">
+                            <input type="text" id="customEnv" placeholder="Enter custom Jira project prefix">
+                            <small class="field-hint">Custom projects use Israel time until a destination timezone is configured.</small>
                         </div>  
                     </div>
                     <div class="form-group hidden" id="nglSiteGroup">
-                        <label for="nglSite">NGL Site</label>
+                        <label for="nglSite">NG-LOT Lottery</label>
                         <select id="nglSite">
-                            <option value="">-- Select NGL Site --</option>
+                            <option value="">-- Select NG-LOT Lottery --</option>
                             <option value="Sisal IT">Sisal IT (Italy)</option>
                             <option value="Sisal TR">Sisal TR (Turkey)</option>
                             <option value="Olifeja">Olifeja (Lithuania)</option>
@@ -54,7 +68,7 @@
                             <option value="OPAP">OPAP (Greece)</option>
                             <option value="SzZrt">SzZrt (Hungary)</option>
                             <option value="Bitalih">Bitalih (Turkey)</option>
-                            <option value="Hipodorm">Hipodrom (Turkey)</option>
+                            <option value="Hipodrom">Hipodrom (Turkey)</option>
                             <option value="JSC">JSC (Portugal)</option>
                             <option value="UNL">UNL (Ukraine)</option>
                             <option value="PariPlay/888">PariPlay/888</option>
@@ -63,7 +77,8 @@
                     
                     <div class="form-group">
                         <label for="ticketNumber">Ticket Number</label>
-                        <input type="text" id="ticketNumber" placeholder="335674" required>
+                        <input type="text" id="ticketNumber" placeholder="335674" inputmode="numeric" pattern="[0-9]+" required>
+                        <small class="field-hint" id="jiraPrefixHint">The Jira project prefix is selected automatically.</small>
                     </div>
                     
                     <!-- Report-specific fields -->
@@ -81,8 +96,9 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="reportDate">Report Date</label>
+                            <label for="reportDate">Notification Date (Israel)</label>
                             <input type="date" id="reportDate" required>
+                            <small class="field-hint">The Activity Summary report date is automatically set to the previous day.</small>
                         </div>
                     </div>
                     
@@ -92,11 +108,23 @@
                             <label for="issueDescription">Issue Description</label>
                             <select id="issueDescription">
                                 <option value="">-- Select Issue --</option>
-                                <option value="Drop in bets">Drop in bets</option>
-                                <option value="Increase in failed logins followed by decrease in bets">Increase in failed logins followed by decrease in bets</option>
-                                <option value="Decrease in bets">Decrease in bets</option>
+                                <option value="Drop in bets via {target}" data-target-label="Provider / channel">Drop in bets via [Provider / channel]</option>
+                                <option value="Increase in failed logins followed by decrease in bets" data-requires-percentage="true">Increase in failed logins followed by decrease in bets</option>
+                                <option value="Increase in failed logins followed by drop in bets">Increase in failed logins followed by drop in bets</option>
+                                <option value="Decrease in bets via application platform" data-requires-percentage="true">Decrease in bets via application platform</option>
+                                <option value="Drop in approved cashouts via {target} processor" data-target-label="Payment processor">Drop in approved cashouts via [Processor]</option>
+                                <option value="Drop in approved deposits via {target} processor" data-target-label="Payment processor">Drop in approved deposits via [Processor]</option>
+                                <option value="Increase in failed deposits via {target} processor" data-target-label="Payment processor">Increase in failed deposits via [Processor]</option>
+                                <option value="Increase in rejected deposits via {target} processor" data-target-label="Payment processor">Increase in rejected deposits via [Processor]</option>
+                                <option value="Increase in declined deposits followed by a drop in approved deposits via {target}" data-target-label="Payment processor">Increase in declined deposits followed by a drop in approved deposits via [Processor]</option>
+                                <option value="Hosting website is unavailable">Hosting website is unavailable</option>
                                 <option value="other">Other (Custom)</option>
                             </select>
+                            <small class="field-hint hidden" id="nglIssueHint"></small>
+                            <div class="custom-field" id="issueTargetGroup">
+                                <label for="issueTarget" id="issueTargetLabel">Provider / channel</label>
+                                <input type="text" id="issueTarget" placeholder="Enter provider, processor, or channel">
+                            </div>
                             <div class="custom-field" id="customIssueDiv">
                                 <input type="text" id="customIssue" placeholder="Enter custom issue description">
                             </div>
@@ -108,23 +136,28 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="startTime">Start Time (Optional for Opening)</label>
+                            <label for="startTime">Start Time (Israel Time)</label>
                             <input type="datetime-local" id="startTime">
+                            <small class="field-hint">Automatically converted to the selected lottery's local time.</small>
                         </div>
                         
                         <div class="form-group hidden" id="endTimeGroup">
-                            <label for="endTime">End Time (For Resolved only)</label>
+                            <label for="endTime">End Time (Israel Time)</label>
                             <input type="datetime-local" id="endTime">
+                            <small class="field-hint">Automatically converted to the selected lottery's local time.</small>
                         </div>
                         
                         <div class="form-group">
                             <label for="rootCause">Root Cause</label>
                             <select id="rootCause">
                                 <option value="">-- Select Root Cause --</option>
-                                <option value="Under NG teams investigation">Under NG teams investigation</option>
-                                <option value="We have reached out to [Provider] and are awaiting their response" selected>We have reached out to [Provider] and are awaiting their response</option>
+                                <option value="Under Aristocrat teams investigation">Under Aristocrat teams investigation</option>
+                                <option value="external" selected>External team contacted — awaiting response</option>
                                 <option value="other">Other (Custom)</option>
                             </select>
+                            <div class="custom-field show" id="externalTeamDiv">
+                                <input type="text" id="externalTeam" placeholder="Provider or team name (e.g., Brightstar)">
+                            </div>
                             <div class="custom-field" id="customRootCauseDiv">
                                 <input type="text" id="customRootCause" placeholder="Enter custom root cause">
                             </div>
@@ -135,8 +168,8 @@
                         <label>Email Type</label>
                         <div class="radio-group">
                             <div class="radio-option">
-                                <input type="radio" id="opening" name="emailType" value="opening" checked>
-                                <label for="opening">⚠️ Opening</label>
+                                <input type="radio" id="ongoing" name="emailType" value="ongoing" checked>
+                                <label for="ongoing">⚠️ Ongoing</label>
                             </div>
                             <div class="radio-option">
                                 <input type="radio" id="resolved" name="emailType" value="resolved">

@@ -4,7 +4,16 @@
  */
 
 /**
- * Generate HTML for Report Opening notification
+ * Add sentence punctuation without producing duplicate periods for custom text.
+ * Values passed into this file have already been HTML escaped.
+ */
+function withPeriod(value) {
+    const trimmedValue = value.trim();
+    return /[.!?]$/.test(trimmedValue) ? trimmedValue : `${trimmedValue}.`;
+}
+
+/**
+ * Generate HTML for an ongoing Report notification
  * @param {string} reportName - Name of the report
  * @param {string} reportDate - Formatted date of the report
  * @returns {string} HTML string
@@ -15,7 +24,6 @@ function generateReportOpeningHTML(reportName, reportDate) {
         <p style="margin-bottom: 15px;"><u>Impact Description:</u> The report ${reportName} for ${reportDate} is being delayed.</p>
         <p style="margin-bottom: 15px;"><u>Root Cause:</u> Under Aristocrat BI team investigation.</p>
         <p style="margin-bottom: 15px;">Further updates will be provided once available.</p>
-        <p>Regards,</p>
     </div>`;
 }
 
@@ -31,12 +39,11 @@ function generateReportResolvedHTML(reportName, reportDate) {
         <p style="margin-bottom: 15px;"><u>Impact Description:</u> The report ${reportName} for ${reportDate} is being delayed.</p>
         <p style="margin-bottom: 15px;"><u>Root Cause:</u> Under Aristocrat BI team investigation.</p>
         <p style="margin-bottom: 15px;">More details will be provided in the incident report.</p>
-        <p>Regards,</p>
     </div>`;
 }
 
 /**
- * Generate HTML for System Issue Opening notification
+ * Generate HTML for an ongoing System Issue notification
  * @param {string} issueDescription - Description of the issue without precentage
  * @param {string} issueDescriptionWithPercent - Description with percentage (for Impact only)
  * @param {string} startTime - Formatted start time (optional)
@@ -46,16 +53,15 @@ function generateReportResolvedHTML(reportName, reportDate) {
 function generateSystemOpeningHTML(issueDescription, issueDescriptionWithPercent, startTime, rootCause) {
     let timeText = '';
     if (startTime) {
-        timeText = `<p style="margin-bottom: 15px;">The issue started on ${startTime} and is currently ongoing.</p>`;
+        timeText = `<p style="margin-bottom: 15px;">The issue started at ${startTime} and is currently ongoing.</p>`;
     }
     
     return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt;">
-        <p style="margin-bottom: 15px;">This is to inform you that our monitoring systems have detected: <b>${issueDescription}</b>.</p>
+        <p style="margin-bottom: 15px;">This is to inform you that our monitoring systems have detected: <b>${withPeriod(issueDescription)}</b></p>
         ${timeText}
-        <p style="margin-bottom: 15px;"><u>Impact description:</u> ${issueDescriptionWithPercent}.</p>
-        <p style="margin-bottom: 15px;"><u>Root cause:</u> ${rootCause || 'Under investigation'}.</p>
+        <p style="margin-bottom: 15px;"><u>Impact description:</u> ${withPeriod(issueDescriptionWithPercent)}</p>
+        <p style="margin-bottom: 15px;"><u>Root cause:</u> ${withPeriod(rootCause || 'Under investigation')}</p>
         <p style="margin-bottom: 15px;">Further updates will be provided once available.</p>
-        <p>Regards,</p>
     </div>`;
 }
 
@@ -82,12 +88,21 @@ function generateSystemResolvedHTML(issueDescription, issueDescriptionWithPercen
     }
     
     return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt;">
-        <p style="margin-bottom: 15px;">This is to inform you that our monitoring systems have detected: <b>${issueDescription}</b>.</p>
+        <p style="margin-bottom: 15px;">This is to inform you that our monitoring systems have detected: <b>${withPeriod(issueDescription)}</b></p>
         <p style="margin-bottom: 15px;"><b>The issue has been resolved.</b></p>
         ${timeSection}
-        <p style="margin-bottom: 15px;"><u>Impact description:</u> ${issueDescriptionWithPercent}.</p>
-        <p style="margin-bottom: 15px;"><u>Root cause:</u> ${rootCause || 'Under investigation'}.</p>
-        <p style="margin-bottom: 15px;">More details will be provided in the Incident Report.</p>
-        <p>Regards,</p>
+        <p style="margin-bottom: 15px;"><u>Impact description:</u> ${withPeriod(issueDescriptionWithPercent)}</p>
+        <p style="margin-bottom: 15px;"><u>Root cause:</u> ${withPeriod(rootCause || 'Under investigation')}</p>
+        <p style="margin-bottom: 15px;">Further updates will be provided in the incident report.</p>
     </div>`;
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        generateReportOpeningHTML,
+        generateReportResolvedHTML,
+        generateSystemOpeningHTML,
+        generateSystemResolvedHTML,
+        withPeriod
+    };
 }

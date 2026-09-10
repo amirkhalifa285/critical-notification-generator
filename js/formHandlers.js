@@ -1,27 +1,35 @@
 /**
- * Form Handlers
- * Handle form interactions and preview updates
+ * Form interactions, validation, and live preview generation.
  */
 
-// Global state
 let currentTemplate = 'report';
 
-// DOM Elements
 const elements = {
     envSelect: document.getElementById('environment'),
     customEnvDiv: document.getElementById('customEnvDiv'),
     customEnvInput: document.getElementById('customEnv'),
     nglSiteGroup: document.getElementById('nglSiteGroup'),
     nglSiteSelect: document.getElementById('nglSite'),
+    jiraPrefixHint: document.getElementById('jiraPrefixHint'),
+    ticketNumber: document.getElementById('ticketNumber'),
     reportSelect: document.getElementById('reportName'),
     customReportDiv: document.getElementById('customReportDiv'),
     customReportInput: document.getElementById('customReport'),
+    reportDate: document.getElementById('reportDate'),
     issueSelect: document.getElementById('issueDescription'),
     customIssueDiv: document.getElementById('customIssueDiv'),
     customIssueInput: document.getElementById('customIssue'),
+    nglIssueHint: document.getElementById('nglIssueHint'),
+    issueTargetGroup: document.getElementById('issueTargetGroup'),
+    issueTargetLabel: document.getElementById('issueTargetLabel'),
+    issueTargetInput: document.getElementById('issueTarget'),
     percentageGroup: document.getElementById('percentageGroup'),
     percentageInput: document.getElementById('percentageInput'),
+    startTime: document.getElementById('startTime'),
+    endTime: document.getElementById('endTime'),
     rootCauseSelect: document.getElementById('rootCause'),
+    externalTeamDiv: document.getElementById('externalTeamDiv'),
+    externalTeamInput: document.getElementById('externalTeam'),
     customRootCauseDiv: document.getElementById('customRootCauseDiv'),
     customRootCauseInput: document.getElementById('customRootCause'),
     form: document.getElementById('emailForm'),
@@ -32,326 +40,381 @@ const elements = {
     endTimeGroup: document.getElementById('endTimeGroup')
 };
 
+function getSelectedContext() {
+    return getLotteryContext(
+        elements.envSelect.value,
+        elements.nglSiteSelect.value,
+        elements.customEnvInput.value
+    );
+}
+
+function getEmailType() {
+    return document.querySelector('input[name="emailType"]:checked').value;
+}
+
+function showPreviewMessage(message) {
+    elements.previewContent.innerHTML = `<div class="empty-preview">${escapeHTML(message)}</div>`;
+}
+
 /**
- * Switch between Report and System Issue templates
- * @param {string} type - 'report' or 'system'
+ * Switch between Report Delay and System Issue templates.
  */
 function selectTemplate(type) {
     currentTemplate = type;
     document.getElementById('reportBtn').classList.toggle('active', type === 'report');
     document.getElementById('systemBtn').classList.toggle('active', type === 'system');
-    
     elements.reportFields.classList.toggle('hidden', type !== 'report');
     elements.systemFields.classList.toggle('hidden', type !== 'system');
-    
+
+    syncEnvironmentAvailability();
+    syncEnvironmentControls();
     updatePreview();
 }
 
-/**
- * Update the live preview based on form inputs
- */
-function updatePreview() {
-    // Get environment
-    let env = elements.envSelect.value;
-    let envForSubject = env; // For subject line (might be UNL instead of NGL)
-    
-    if (env === 'other') {
-        env = elements.customEnvInput.value.toUpperCase();
-        envForSubject = env;
-    } else if (env === 'NGL') {
-        // For NGL, use the selected site for timezone
-        const nglSite = elements.nglSiteSelect.value;
-        if (!nglSite) {
-            elements.previewContent.innerHTML = '<div class="empty-preview">Please select NGL site</div>';
-            return;
-        }
-        env = nglSite; // Use site name for timezone lookup
-        
-        // If UNL, use "UNL" in subject instead of "NGL"
-        if (nglSite === 'UNL') {
-            envForSubject = 'UNL';
-        } else {
-            envForSubject = 'NGL';
-        }
+function syncEnvironmentAvailability() {
+    const isReport = currentTemplate === 'report';
+
+    Array.from(elements.envSelect.options).forEach(option => {
+        if (!option.value) return;
+        option.disabled = isReport && option.dataset.reportDelay !== 'true';
+    });
+
+    const selectedOption = elements.envSelect.selectedOptions[0];
+    if (selectedOption?.disabled) elements.envSelect.value = '';
+}
+
+function syncRequiredFields() {
+    const isReport = currentTemplate === 'report';
+    const isSystem = currentTemplate === 'system';
+    const isResolved = getEmailType() === 'resolved';
+
+    elements.reportSelect.required = isReport;
+    elements.reportDate.required = isReport;
+    elements.customReportInput.required = isReport && elements.reportSelect.value === 'other';
+
+    elements.issueSelect.required = isSystem && !getSelectedContext()?.fixedDropInBets;
+    elements.startTime.required = isSystem;
+    elements.endTime.required = isSystem && isResolved;
+    elements.rootCauseSelect.required = isSystem;
+    elements.endTimeGroup.classList.toggle('hidden', !isResolved);
+}
+
+function syncEnvironmentControls() {
+    const isOther = elements.envSelect.value === 'other';
+    const isNGL = elements.envSelect.value === 'NGL';
+
+    elements.customEnvDiv.classList.toggle('show', isOther);
+    elements.customEnvInput.required = isOther;
+    elements.nglSiteGroup.classList.toggle('hidden', !isNGL);
+    elements.nglSiteSelect.required = isNGL;
+
+    if (!isNGL) elements.nglSiteSelect.value = '';
+
+    const context = getSelectedContext();
+    elements.jiraPrefixHint.textContent = context
+        ? `Jira ticket: ${context.jiraPrefix}-[number] · Times shown in ${context.timezone}`
+        : 'The Jira project prefix is selected automatically.';
+
+    syncExternalTeamSuggestion(context);
+
+    syncRequiredFields();
+    syncIssueControls();
+    syncRootCauseControls();
+}
+
+function issueRequiresPercentage() {
+    if (getSelectedContext()?.fixedDropInBets) return false;
+
+    if (elements.issueSelect.value === 'other') {
+        return elements.customIssueInput.value.toLowerCase().includes('decrease in bets');
     }
-    
-    const ticketNumber = document.getElementById('ticketNumber').value;
-    const emailType = document.querySelector('input[name="emailType"]:checked').value;
-    
-    // Basic validation
-    if (!env || !ticketNumber) {
-        elements.previewContent.innerHTML = '<div class="empty-preview">Fill in all required fields</div>';
+
+    return elements.issueSelect.selectedOptions[0]?.dataset.requiresPercentage === 'true';
+}
+
+function issueRequiresTarget() {
+    if (getSelectedContext()?.fixedDropInBets) return false;
+    return Boolean(elements.issueSelect.selectedOptions[0]?.dataset.targetLabel);
+}
+
+function syncIssueControls() {
+    const isSystem = currentTemplate === 'system';
+    const context = getSelectedContext();
+    const hasFixedIssue = context?.fixedDropInBets === true;
+    const isCustom = !hasFixedIssue && elements.issueSelect.value === 'other';
+    const needsPercentage = isSystem && issueRequiresPercentage();
+    const needsTarget = isSystem && issueRequiresTarget();
+    const targetLabel = elements.issueSelect.selectedOptions[0]?.dataset.targetLabel;
+
+    elements.issueSelect.disabled = hasFixedIssue;
+    elements.issueSelect.required = isSystem && !hasFixedIssue;
+    elements.nglIssueHint.classList.toggle('hidden', !hasFixedIssue);
+    elements.nglIssueHint.textContent = hasFixedIssue
+        ? `This lottery always uses “Drop in bets via ${context.displayName}”.`
+        : '';
+    elements.customIssueDiv.classList.toggle('show', isCustom);
+    elements.customIssueInput.required = isSystem && isCustom;
+    elements.issueTargetGroup.classList.toggle('show', needsTarget);
+    elements.issueTargetInput.required = needsTarget;
+    elements.issueTargetLabel.textContent = targetLabel || 'Provider / channel';
+    elements.percentageGroup.classList.toggle('hidden', !needsPercentage);
+    elements.percentageInput.required = needsPercentage;
+
+    if (!needsPercentage) elements.percentageInput.value = '';
+}
+
+function syncRootCauseControls() {
+    const isSystem = currentTemplate === 'system';
+    const isExternal = elements.rootCauseSelect.value === 'external';
+    const isCustom = elements.rootCauseSelect.value === 'other';
+
+    syncExternalTeamSuggestion(getSelectedContext());
+    elements.externalTeamDiv.classList.toggle('show', isExternal);
+    elements.externalTeamInput.required = isSystem && isExternal;
+    elements.customRootCauseDiv.classList.toggle('show', isCustom);
+    elements.customRootCauseInput.required = isSystem && isCustom;
+}
+
+function syncExternalTeamSuggestion(context = getSelectedContext()) {
+    if (elements.rootCauseSelect.value !== 'external') return;
+
+    const suggestion = context?.fixedDropInBets
+        ? context.displayName
+        : elements.issueTargetInput.value.trim();
+    const wasAutoFilled = elements.externalTeamInput.dataset.autoFilled === 'true';
+
+    if (suggestion && (!elements.externalTeamInput.value || wasAutoFilled)) {
+        elements.externalTeamInput.value = suggestion;
+        elements.externalTeamInput.dataset.autoFilled = 'true';
+    } else if (!suggestion && wasAutoFilled) {
+        elements.externalTeamInput.value = '';
+        elements.externalTeamInput.dataset.autoFilled = 'false';
+    }
+}
+
+function getIssueDescription(context) {
+    if (context.fixedDropInBets) return `Drop in bets via ${context.displayName}`;
+
+    const issueTemplate = elements.issueSelect.value === 'other'
+        ? elements.customIssueInput.value.trim()
+        : elements.issueSelect.value;
+    return issueTemplate.replace('{target}', elements.issueTargetInput.value.trim());
+}
+
+function getExternalPartyName() {
+    return elements.externalTeamInput.value.trim().replace(/\s+team$/i, '');
+}
+
+function getRootCause() {
+    const selection = elements.rootCauseSelect.value;
+    if (selection === 'other') return elements.customRootCauseInput.value.trim();
+    if (selection !== 'external') return selection;
+
+    const teamName = getExternalPartyName();
+    if (!teamName) return '';
+    return `We have reached out to ${teamName} team and are waiting for their response`;
+}
+
+function updatePreview() {
+    const environment = elements.envSelect.value;
+    if (!environment) {
+        showPreviewMessage('Fill in all required fields');
         return;
     }
-    
-    const fullTicket = `${envForSubject}-${ticketNumber}`;
-    let subject = '';
-    let htmlBody = '';
-    
-    if (currentTemplate === 'report') {
-        const result = generateReportPreview(fullTicket, emailType);
-        if (!result) return;
-        subject = result.subject;
-        htmlBody = result.htmlBody;
-    } else {
-        const result = generateSystemPreview(fullTicket, emailType, env);
-        if (!result) return;
-        subject = result.subject;
-        htmlBody = result.htmlBody;
+
+    if (environment === 'NGL' && !elements.nglSiteSelect.value) {
+        showPreviewMessage('Please select an NG-LOT lottery');
+        return;
     }
-    
-    // Display preview
+
+    const context = getSelectedContext();
+    if (!context) {
+        showPreviewMessage('Enter a custom Jira project prefix');
+        return;
+    }
+
+    const ticketNumber = elements.ticketNumber.value.trim();
+    if (!/^\d+$/.test(ticketNumber)) {
+        showPreviewMessage('Enter a numeric Jira ticket number');
+        return;
+    }
+
+    const fullTicket = `${context.jiraPrefix}-${ticketNumber}`;
+    const emailType = getEmailType();
+    const result = currentTemplate === 'report'
+        ? generateReportPreview(fullTicket, emailType)
+        : generateSystemPreview(fullTicket, emailType, context);
+
+    if (!result) return;
+
     elements.previewContent.innerHTML = `
-        <div style="margin-bottom: 15px;"><strong>Subject:</strong> ${subject}</div>
+        <div style="margin-bottom: 15px;"><strong>Subject:</strong> ${escapeHTML(result.subject)}</div>
         <hr style="margin: 20px 0; border: none; border-top: 2px solid #e2e8f0;">
-        ${htmlBody}
+        ${result.htmlBody}
     `;
 }
 
-/**
- * Generate preview for Report template
- * @param {string} fullTicket - Full ticket number (e.g., "NCEL-335674")
- * @param {string} emailType - 'opening' or 'resolved'
- * @returns {object|null} Object with subject and htmlBody, or null if validation fails
- */
 function generateReportPreview(fullTicket, emailType) {
-    let reportName = elements.reportSelect.value;
-    if (reportName === 'other') reportName = elements.customReportInput.value;
-    
-    const reportDateInput = document.getElementById('reportDate').value;
-    
-    if (!reportName || !reportDateInput) {
-        elements.previewContent.innerHTML = '<div class="empty-preview">Fill in all required fields</div>';
+    const reportName = elements.reportSelect.value === 'other'
+        ? elements.customReportInput.value.trim()
+        : elements.reportSelect.value;
+    const reportDate = formatPreviousDate(elements.reportDate.value);
+
+    if (!reportName || !reportDate) {
+        showPreviewMessage('Fill in all required fields');
         return null;
     }
-    
-    const reportDate = formatDate(reportDateInput);
+
     const subject = `${fullTicket} - Critical Notification - The report ${reportName} for ${reportDate} is being delayed`;
-    
-    const htmlBody = emailType === 'opening' 
-        ? generateReportOpeningHTML(reportName, reportDate)
-        : generateReportResolvedHTML(reportName, reportDate);
-    
+    const safeReportName = escapeHTML(reportName);
+    const safeReportDate = escapeHTML(reportDate);
+    const htmlBody = emailType === 'ongoing'
+        ? generateReportOpeningHTML(safeReportName, safeReportDate)
+        : generateReportResolvedHTML(safeReportName, safeReportDate);
+
     return { subject, htmlBody };
 }
 
-/**
- * Generate preview for System Issue template
- * @param {string} fullTicket - Full ticket number (e.g., "NCEL-335674")
- * @param {string} emailType - 'opening' or 'resolved'
- * @param {string} env - Environment code
- * @returns {object|null} Object with subject and htmlBody, or null if validation fails
- */
-function generateSystemPreview(fullTicket, emailType, env) {
-    const issueDescValue = elements.issueSelect.value;
-    
-    if (!issueDescValue) {
-        elements.previewContent.innerHTML = '<div class="empty-preview">Fill in issue description</div>';
+function generateSystemPreview(fullTicket, emailType, context) {
+    if (issueRequiresTarget() && !elements.issueTargetInput.value.trim()) {
+        showPreviewMessage('Enter the provider, processor, or channel');
         return null;
     }
-    
-    let issueText = issueDescValue;
-    let issueTextWithPercentage = issueDescValue; // For Impact Description only
-    
-    // Handle custom issue
-    if (issueDescValue === 'other') {
-        issueText = elements.customIssueInput.value;
-        issueTextWithPercentage = issueText;
-        if (!issueText) {
-            elements.previewContent.innerHTML = '<div class="empty-preview">Fill in custom issue description</div>';
+
+    const issueText = getIssueDescription(context);
+    if (!issueText) {
+        showPreviewMessage('Fill in the issue description');
+        return null;
+    }
+
+    const needsPercentage = issueRequiresPercentage();
+    const percentage = elements.percentageInput.value;
+    if (needsPercentage && percentage === '') {
+        showPreviewMessage('Enter the impact percentage');
+        return null;
+    }
+    const issueWithPercentage = needsPercentage ? `${issueText} (~${percentage}%)` : issueText;
+
+    const rootCause = getRootCause();
+    if (!rootCause) {
+        showPreviewMessage('Select or enter the root cause');
+        return null;
+    }
+
+    const startValue = elements.startTime.value;
+    if (!startValue) {
+        showPreviewMessage('Enter the start time in Israel time');
+        return null;
+    }
+
+    const startInstant = zonedDateTimeToDate(startValue);
+    if (!startInstant) {
+        showPreviewMessage('The start time is not a valid Israel local time');
+        return null;
+    }
+
+    let formattedEndTime = '';
+    if (emailType === 'resolved') {
+        const endValue = elements.endTime.value;
+        if (!endValue) {
+            showPreviewMessage('Enter the end time in Israel time');
             return null;
         }
-    }
-    
-    // Check if issue contains "Decrease in bets" (from dropdown OR custom text)
-    const hasDecrease = issueText.toLowerCase().includes('decrease in bets');
-    
-    if (hasDecrease) {
-        const percentage = elements.percentageInput.value;
-        if (!percentage) {
-            elements.previewContent.innerHTML = '<div class="empty-preview">Please enter percentage for decrease</div>';
+
+        const endInstant = zonedDateTimeToDate(endValue);
+        if (!endInstant) {
+            showPreviewMessage('The end time is not a valid Israel local time');
             return null;
         }
-        
-        // Add percentage ONLY to the impact description version
-        issueTextWithPercentage = `${issueText} (~${percentage}%)`;
+        if (endInstant <= startInstant) {
+            showPreviewMessage('End time must be later than start time');
+            return null;
+        }
+        formattedEndTime = formatDateTime(endValue, context);
     }
-    
-    // Subject and main text use issueText WITHOUT percentage
+
+    const formattedStartTime = formatDateTime(startValue, context);
     const subject = `${fullTicket} - Critical Notification - ${issueText}`;
-    
-    const startTime = document.getElementById('startTime').value;
-    const endTime = document.getElementById('endTime').value;
-    
-    // Get root cause
-    let rootCause = elements.rootCauseSelect.value;
-    if (rootCause === 'other') {
-        rootCause = elements.customRootCauseInput.value;
-    }
-    
-    // Format times with timezone conversion
-    const formattedStartTime = startTime ? formatDateTime(startTime, env) : '';
-    const formattedEndTime = endTime ? formatDateTime(endTime, env) : '';
-    
-    // Pass both versions: issueText (without %) and issueTextWithPercentage (with %)
-    const htmlBody = emailType === 'opening'
-        ? generateSystemOpeningHTML(issueText, issueTextWithPercentage, formattedStartTime, rootCause)
-        : generateSystemResolvedHTML(issueText, issueTextWithPercentage, formattedStartTime, formattedEndTime, rootCause);
-    
+    const safeIssue = escapeHTML(issueText);
+    const safeImpact = escapeHTML(issueWithPercentage);
+    const safeRootCause = escapeHTML(rootCause);
+    const htmlBody = emailType === 'ongoing'
+        ? generateSystemOpeningHTML(safeIssue, safeImpact, formattedStartTime, safeRootCause)
+        : generateSystemResolvedHTML(safeIssue, safeImpact, formattedStartTime, formattedEndTime, safeRootCause);
+
     return { subject, htmlBody };
 }
 
-/**
- * Handle form submission (copy to clipboard)
- * @param {Event} e - Submit event
- */
-function handleFormSubmit(e) {
-    e.preventDefault();
-    
-    // Get only the email content (without preview wrapper styles)
+function handleFormSubmit(event) {
+    event.preventDefault();
+    updatePreview();
+
+    if (elements.previewContent.querySelector('.empty-preview')) return;
+
     const previewHtml = elements.previewContent.innerHTML;
-    
-    // Extract just the email body (skip subject line)
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(previewHtml, 'text/html');
-    
-    // Find the actual email content (after the hr separator)
-    const hrElement = doc.querySelector('hr');
+    const doc = new DOMParser().parseFromString(previewHtml, 'text/html');
+    const separator = doc.querySelector('hr');
     let emailContent = '';
-    
-    if (hrElement) {
-        let node = hrElement.nextSibling;
+
+    if (separator) {
+        let node = separator.nextSibling;
         while (node) {
-            if (node.nodeType === Node.ELEMENT_NODE) {
-                emailContent += node.outerHTML;
-            } else if (node.nodeType === Node.TEXT_NODE) {
-                emailContent += node.textContent;
-            }
+            emailContent += node.nodeType === Node.ELEMENT_NODE ? node.outerHTML : node.textContent;
             node = node.nextSibling;
         }
-    } else {
-        // Fallback: copy everything
-        emailContent = previewHtml;
     }
-    
+
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    const originalText = submitButton.innerHTML;
+    const originalBackground = submitButton.style.background;
+
     copyToClipboard(emailContent, () => {
-        // Visual feedback: change button text and style
-        const submitBtn = e.target.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
-        const originalBg = submitBtn.style.background;
-        
-        submitBtn.innerHTML = '✅ Copied!';
-        submitBtn.style.background = '#48bb78';
-        
-        // Show success message
+        submitButton.innerHTML = '✅ Copied!';
+        submitButton.style.background = '#48bb78';
+        elements.successMessage.textContent = '✅ Email copied! Open Outlook and paste (Ctrl+V)';
+        elements.successMessage.classList.remove('error');
         elements.successMessage.classList.add('show');
-        
-        // Reset after 3 seconds
+
         setTimeout(() => {
-            submitBtn.innerHTML = originalText;
-            submitBtn.style.background = originalBg;
+            submitButton.innerHTML = originalText;
+            submitButton.style.background = originalBackground;
             elements.successMessage.classList.remove('show');
         }, 3000);
+    }, () => {
+        elements.successMessage.textContent = 'Unable to access the clipboard. Run the generator on localhost and try again.';
+        elements.successMessage.classList.add('error', 'show');
     });
 }
 
-/**
- * Setup all event listeners
- */
 function setupEventListeners() {
-    // Environment select
-    elements.envSelect.addEventListener('change', function() {
-        const isOther = this.value === 'other';
-        const isNGL = this.value === 'NGL';
-        
-        elements.customEnvDiv.classList.toggle('show', isOther);
-        elements.customEnvInput.required = isOther;
-        
-        // Show/hide NGL site selector
-        elements.nglSiteGroup.classList.toggle('hidden', !isNGL);
-        elements.nglSiteSelect.required = isNGL;
-        
-        // Clear NGL site if not needed
-        if (!isNGL) {
-            elements.nglSiteSelect.value = '';
-        }
-        
-        updatePreview();
+    elements.envSelect.addEventListener('change', syncEnvironmentControls);
+    elements.nglSiteSelect.addEventListener('change', syncEnvironmentControls);
+
+    elements.reportSelect.addEventListener('change', () => {
+        elements.customReportDiv.classList.toggle('show', elements.reportSelect.value === 'other');
+        syncRequiredFields();
     });
-    
-    // Report name select
-    elements.reportSelect.addEventListener('change', function() {
-        elements.customReportDiv.classList.toggle('show', this.value === 'other');
-        elements.customReportInput.required = this.value === 'other';
-        updatePreview();
+
+    elements.issueSelect.addEventListener('change', () => {
+        syncIssueControls();
+        syncExternalTeamSuggestion();
     });
-    
-    // Issue description select
-    elements.issueSelect.addEventListener('change', function() {
-        const selectedValue = this.value;
-        const isOther = selectedValue === 'other';
-        
-        // Check if selected option contains "decrease in bets"
-        const hasDecrease = selectedValue.toLowerCase().includes('decrease in bets');
-        
-        // Show/hide custom issue field
-        elements.customIssueDiv.classList.toggle('show', isOther);
-        elements.customIssueInput.required = isOther;
-        
-        // Show/hide percentage field if "decrease in bets" is detected
-        elements.percentageGroup.classList.toggle('hidden', !hasDecrease);
-        elements.percentageInput.required = hasDecrease;
-        
-        // Clear percentage if not needed
-        if (!hasDecrease) {
-            elements.percentageInput.value = '';
-        }
-        
-        updatePreview();
+    elements.customIssueInput.addEventListener('input', syncIssueControls);
+    elements.issueTargetInput.addEventListener('input', syncExternalTeamSuggestion);
+    elements.rootCauseSelect.addEventListener('change', syncRootCauseControls);
+    elements.externalTeamInput.addEventListener('input', () => {
+        elements.externalTeamInput.dataset.autoFilled = 'false';
     });
-    
-    // Custom issue input - check for "Decrease in bets" in text
-    elements.customIssueInput.addEventListener('input', function() {
-        const text = this.value.toLowerCase();
-        const hasDecrease = text.includes('decrease in bets');
-        
-        // Show percentage field if text contains "decrease in bets"
-        if (elements.issueSelect.value === 'other') {
-            elements.percentageGroup.classList.toggle('hidden', !hasDecrease);
-            elements.percentageInput.required = hasDecrease;
-            
-            if (!hasDecrease) {
-                elements.percentageInput.value = '';
-            }
-        }
-        
-        updatePreview();
-    });
-    
-    // Root cause select
-    elements.rootCauseSelect.addEventListener('change', function() {
-        elements.customRootCauseDiv.classList.toggle('show', this.value === 'other');
-        elements.customRootCauseInput.required = this.value === 'other';
-        updatePreview();
-    });
-    
-    // Email type radio buttons
+
     document.querySelectorAll('input[name="emailType"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            elements.endTimeGroup.classList.toggle('hidden', this.value !== 'resolved');
-            updatePreview();
-        });
+        radio.addEventListener('change', syncRequiredFields);
     });
-    
-    // All inputs - update preview on change
-    document.querySelectorAll('input, select, textarea').forEach(el => {
-        el.addEventListener('input', updatePreview);
-        el.addEventListener('change', updatePreview);
-    });
-    
-    // NGL site select - update preview
-    elements.nglSiteSelect.addEventListener('change', updatePreview);
-    
-    // Form submission
+
+    elements.form.addEventListener('input', updatePreview);
+    elements.form.addEventListener('change', updatePreview);
     elements.form.addEventListener('submit', handleFormSubmit);
+
+    syncEnvironmentAvailability();
+    syncEnvironmentControls();
+    syncRequiredFields();
 }

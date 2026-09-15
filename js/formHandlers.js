@@ -89,17 +89,41 @@ function selectTemplate(type) {
 function syncEnvironmentAvailability() {
     const isReport = currentTemplate === 'report';
     const isRegulatoryReport = elements.reportSelect.value === 'regulatory';
+    const hasSelectedReport = Boolean(elements.reportSelect.value);
 
     Array.from(elements.envSelect.options).forEach(option => {
         if (!option.value) return;
-        const supportsSelectedReport = isRegulatoryReport
-            ? option.dataset.regulatoryReport === 'true'
-            : option.dataset.reportDelay === 'true';
+        const supportsSelectedReport = !hasSelectedReport
+            ? option.dataset.reportDelay === 'true' || option.dataset.regulatoryReport === 'true'
+            : isRegulatoryReport
+                ? option.dataset.regulatoryReport === 'true'
+                : option.dataset.reportDelay === 'true';
         option.disabled = isReport && !supportsSelectedReport;
     });
 
     const selectedOption = elements.envSelect.selectedOptions[0];
     if (selectedOption?.disabled) elements.envSelect.value = '';
+}
+
+function syncReportTypeFromEnvironment() {
+    if (currentTemplate !== 'report' || elements.reportSelect.value) {
+        syncEnvironmentControls();
+        return;
+    }
+
+    const selectedOption = elements.envSelect.selectedOptions[0];
+    if (selectedOption?.dataset.regulatoryReport === 'true') {
+        elements.reportSelect.value = 'regulatory';
+        syncReportControls();
+        return;
+    }
+    if (selectedOption?.dataset.reportDelay === 'true') {
+        elements.reportSelect.value = 'Activity Summary Daily';
+        syncReportControls();
+        return;
+    }
+
+    syncEnvironmentControls();
 }
 
 function syncRequiredFields() {
@@ -584,7 +608,7 @@ function handleFormSubmit(event) {
 }
 
 function setupEventListeners() {
-    elements.envSelect.addEventListener('change', syncEnvironmentControls);
+    elements.envSelect.addEventListener('change', syncReportTypeFromEnvironment);
     elements.nglSiteSelect.addEventListener('change', syncEnvironmentControls);
 
     elements.reportSelect.addEventListener('change', syncReportControls);

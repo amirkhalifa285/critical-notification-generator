@@ -145,6 +145,36 @@ select:disabled {
     margin-top: 12px;
 }
 
+/* Clear date and time pickers */
+.date-time-section {
+    padding: 16px;
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+}
+
+.date-time-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.date-time-field label {
+    color: #4a5568;
+    font-size: 13px;
+}
+
+.date-time-field input {
+    background: #f7fafc;
+    cursor: pointer;
+}
+
+.date-time-field input:hover {
+    border-color: #a3bffa;
+    background: #ffffff;
+}
+
 /* Customer Recipients */
 .recipient-section {
     margin-bottom: 20px;
@@ -385,5 +415,9 @@ select:disabled {
     
     header h1 {
         font-size: 24px;
+    }
+
+    .date-time-grid {
+        grid-template-columns: 1fr;
     }
 }

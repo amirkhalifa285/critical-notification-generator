@@ -198,16 +198,34 @@
                             <input type="number" id="percentageInput" placeholder="Enter percentage (e.g., 15)" min="0" max="100">
                         </div>
                         
-                        <div class="form-group">
-                            <label for="startTime">Start Time (Israel Time)</label>
-                            <input type="datetime-local" id="startTime">
-                            <small class="field-hint">Automatically converted to the selected lottery's local time.</small>
+                        <div class="form-group date-time-section">
+                            <label>Issue Start (Israel Time)</label>
+                            <div class="date-time-grid">
+                                <div class="date-time-field">
+                                    <label for="startDate">📅 Date</label>
+                                    <input type="date" id="startDate" class="picker-input">
+                                </div>
+                                <div class="date-time-field">
+                                    <label for="startClockTime">🕒 Time</label>
+                                    <input type="time" id="startClockTime" class="picker-input">
+                                </div>
+                            </div>
+                            <small class="field-hint">Choose the Israel date and time. Both are automatically converted to the selected lottery's local time.</small>
                         </div>
                         
-                        <div class="form-group hidden" id="endTimeGroup">
-                            <label for="endTime">End Time (Israel Time)</label>
-                            <input type="datetime-local" id="endTime">
-                            <small class="field-hint">Automatically converted to the selected lottery's local time.</small>
+                        <div class="form-group date-time-section hidden" id="endTimeGroup">
+                            <label>Issue Resolution (Israel Time)</label>
+                            <div class="date-time-grid">
+                                <div class="date-time-field">
+                                    <label for="endDate">📅 Date</label>
+                                    <input type="date" id="endDate" class="picker-input">
+                                </div>
+                                <div class="date-time-field">
+                                    <label for="endClockTime">🕒 Time</label>
+                                    <input type="time" id="endClockTime" class="picker-input">
+                                </div>
+                            </div>
+                            <small class="field-hint">Choose the Israel resolution date and time.</small>
                         </div>
                         
                         <div class="form-group">

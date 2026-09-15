@@ -169,6 +169,17 @@ function formatGMTOffset(offsetMinutes) {
 }
 
 /**
+ * Combine the separate, operator-friendly date and time controls into the
+ * datetime-local value used by the timezone conversion functions.
+ */
+function combineDateAndTime(dateValue, timeValue) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dateValue) || !/^\d{2}:\d{2}$/.test(timeValue)) {
+        return '';
+    }
+    return `${dateValue}T${timeValue}`;
+}
+
+/**
  * Convert an Israel-local input to the selected lottery's local date and time.
  */
 function formatDateTime(datetimeString, lotteryContext) {
@@ -267,6 +278,7 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         LOTTERY_CONFIG,
         SOURCE_TIMEZONE,
+        combineDateAndTime,
         escapeHTML,
         formatDate,
         formatDateTime,

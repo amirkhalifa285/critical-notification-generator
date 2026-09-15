@@ -2,12 +2,19 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const {
+    combineDateAndTime,
     formatDate,
     formatDateTime,
     formatPreviousDate,
     getLotteryContext,
     zonedDateTimeToDate
 } = require('../js/utils');
+
+test('combines the separate date and time picker values', () => {
+    assert.equal(combineDateAndTime('2026-09-15', '16:10'), '2026-09-15T16:10');
+    assert.equal(combineDateAndTime('', '16:10'), '');
+    assert.equal(combineDateAndTime('2026-09-15', ''), '');
+});
 
 test('maps business names to the correct Jira projects', () => {
     assert.equal(getLotteryContext('FK-MI').jiraPrefix, 'FKC');

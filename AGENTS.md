@@ -97,6 +97,7 @@ USLOT selections:
 ## Time and Date Rules
 
 - Operators always enter incident times in **Israel local time** (`Asia/Jerusalem`).
+- System incident start and resolution controls deliberately use separate, clearly labeled Date and Time inputs. Keep this operator-friendly layout; clicking the inputs should open their native pickers.
 - Convert those wall-clock values to the selected customer's IANA timezone, including daylight-saving changes.
 - Never implement conversion with a fixed GMT offset.
 - US customers use `MM/DD/YYYY` and 12-hour time with AM/PM.

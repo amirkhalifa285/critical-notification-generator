@@ -40,8 +40,10 @@ const elements = {
     interruptionDuration: document.getElementById('interruptionDuration'),
     percentageGroup: document.getElementById('percentageGroup'),
     percentageInput: document.getElementById('percentageInput'),
-    startTime: document.getElementById('startTime'),
-    endTime: document.getElementById('endTime'),
+    startDate: document.getElementById('startDate'),
+    startClockTime: document.getElementById('startClockTime'),
+    endDate: document.getElementById('endDate'),
+    endClockTime: document.getElementById('endClockTime'),
     rootCauseSelect: document.getElementById('rootCause'),
     externalTeamDiv: document.getElementById('externalTeamDiv'),
     externalTeamInput: document.getElementById('externalTeam'),
@@ -142,8 +144,10 @@ function syncRequiredFields() {
     elements.reportEndTimeGroup.classList.toggle('hidden', !isRegulatoryReport || !isResolved);
 
     elements.issueSelect.required = isSystem && !getSelectedContext()?.fixedDropInBets;
-    elements.startTime.required = isSystem;
-    elements.endTime.required = isSystem && isResolved;
+    elements.startDate.required = isSystem;
+    elements.startClockTime.required = isSystem;
+    elements.endDate.required = isSystem && isResolved;
+    elements.endClockTime.required = isSystem && isResolved;
     elements.rootCauseSelect.required = isSystem;
     elements.endTimeGroup.classList.toggle('hidden', !isResolved);
 }
@@ -522,9 +526,9 @@ function generateSystemPreview(fullTicket, emailType, context) {
         return null;
     }
 
-    const startValue = elements.startTime.value;
+    const startValue = combineDateAndTime(elements.startDate.value, elements.startClockTime.value);
     if (!startValue) {
-        showPreviewMessage('Enter the start time in Israel time');
+        showPreviewMessage('Choose the issue start date and time in Israel time');
         return null;
     }
 
@@ -536,9 +540,9 @@ function generateSystemPreview(fullTicket, emailType, context) {
 
     let formattedEndTime = '';
     if (emailType === 'resolved') {
-        const endValue = elements.endTime.value;
+        const endValue = combineDateAndTime(elements.endDate.value, elements.endClockTime.value);
         if (!endValue) {
-            showPreviewMessage('Enter the end time in Israel time');
+            showPreviewMessage('Choose the issue resolution date and time in Israel time');
             return null;
         }
 
@@ -622,6 +626,16 @@ function setupEventListeners() {
     elements.rootCauseSelect.addEventListener('change', syncRootCauseControls);
     document.querySelectorAll('.copy-recipient-btn').forEach(button => {
         button.addEventListener('click', () => copyRecipientField(button));
+    });
+    document.querySelectorAll('.picker-input').forEach(input => {
+        input.addEventListener('click', () => {
+            if (typeof input.showPicker !== 'function') return;
+            try {
+                input.showPicker();
+            } catch (error) {
+                // The browser's normal date/time control remains available.
+            }
+        });
     });
     elements.externalTeamInput.addEventListener('input', () => {
         elements.externalTeamInput.dataset.autoFilled = 'false';

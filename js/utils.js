@@ -248,51 +248,7 @@ function htmlToPlainText(htmlContent) {
     return container.innerText;
 }
 
-/**
- * Copy rendered DOM content using the browser's native selection pipeline.
- * Outlook handles this format more reliably than synthetic ClipboardItem HTML.
- */
-function copyRenderedHTML(htmlContent) {
-    const copyContainer = document.createElement('div');
-    copyContainer.setAttribute('contenteditable', 'true');
-    copyContainer.setAttribute('aria-hidden', 'true');
-    copyContainer.style.position = 'fixed';
-    copyContainer.style.left = '-10000px';
-    copyContainer.style.top = '0';
-    copyContainer.style.background = '#ffffff';
-    copyContainer.style.color = '#000000';
-    copyContainer.innerHTML = htmlContent;
-    document.body.appendChild(copyContainer);
-
-    const selection = window.getSelection();
-    const previousRanges = [];
-    for (let index = 0; index < selection.rangeCount; index += 1) {
-        previousRanges.push(selection.getRangeAt(index));
-    }
-
-    const range = document.createRange();
-    range.selectNodeContents(copyContainer);
-    selection.removeAllRanges();
-    selection.addRange(range);
-
-    let copied = false;
-    try {
-        copied = document.execCommand('copy');
-    } finally {
-        selection.removeAllRanges();
-        previousRanges.forEach(previousRange => selection.addRange(previousRange));
-        copyContainer.remove();
-    }
-
-    return copied;
-}
-
 function copyToClipboard(htmlContent, successCallback, errorCallback) {
-    if (copyRenderedHTML(htmlContent)) {
-        successCallback?.();
-        return;
-    }
-
     let copyPromise;
 
     if (typeof ClipboardItem !== 'undefined' && navigator.clipboard?.write) {

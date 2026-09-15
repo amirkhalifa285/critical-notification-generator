@@ -158,8 +158,9 @@ Common approved issue patterns include:
 Business wording rules:
 
 - `Drop` means zero bets and does not require a percentage.
-- `Decrease` requires a percentage, but the percentage appears only in the Impact description—not the subject or detection sentence.
+- `Decrease in bets` requires a percentage, but the percentage appears only in the Impact description—not the subject or detection sentence. This does not apply to the approved-deposit wording described below.
 - Generic processor/provider templates must use placeholders. Never hardcode Paysafe, Brightstar, or another example provider as the default.
+- Rejected and declined deposit incidents require an explicit Yes/No answer to `Are approved deposits affected?` with no default selection. When Yes, append `followed by a decrease in approved deposits` only in the Impact description; keep the subject and detection sentence unchanged. Failed-deposit incidents do not use this question.
 - The interruption template requires approximate frequency and duration in minutes.
 - Interruption impact wording changes tense between Ongoing and Resolved.
 - For an external team root cause, remove a trailing word `team` from operator input before generating `We have reached out to [name] team...` so the result never says `team team`.

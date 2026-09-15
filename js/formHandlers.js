@@ -38,6 +38,8 @@ const elements = {
     interruptionDetailsGroup: document.getElementById('interruptionDetailsGroup'),
     interruptionFrequency: document.getElementById('interruptionFrequency'),
     interruptionDuration: document.getElementById('interruptionDuration'),
+    approvedDepositsGroup: document.getElementById('approvedDepositsGroup'),
+    approvedDepositsInputs: document.querySelectorAll('input[name="approvedDepositsAffected"]'),
     percentageGroup: document.getElementById('percentageGroup'),
     percentageInput: document.getElementById('percentageInput'),
     startDate: document.getElementById('startDate'),
@@ -270,6 +272,11 @@ function isInterruptionIssue() {
         && elements.issueSelect.selectedOptions[0]?.dataset.interruption === 'true';
 }
 
+function issueAsksApprovedDeposits() {
+    return !getSelectedContext()?.fixedDropInBets
+        && elements.issueSelect.selectedOptions[0]?.dataset.approvedDepositsCheck === 'true';
+}
+
 function syncIssueControls() {
     const isSystem = currentTemplate === 'system';
     const context = getSelectedContext();
@@ -281,6 +288,7 @@ function syncIssueControls() {
     const showsTarget = needsTarget || (isSystem && Boolean(optionalTargetLabel));
     const targetLabel = elements.issueSelect.selectedOptions[0]?.dataset.targetLabel || optionalTargetLabel;
     const needsInterruptionDetails = isSystem && isInterruptionIssue();
+    const needsApprovedDepositsAnswer = isSystem && issueAsksApprovedDeposits();
 
     elements.issueSelect.disabled = hasFixedIssue;
     elements.issueSelect.required = isSystem && !hasFixedIssue;
@@ -296,6 +304,11 @@ function syncIssueControls() {
     elements.interruptionDetailsGroup.classList.toggle('show', needsInterruptionDetails);
     elements.interruptionFrequency.required = needsInterruptionDetails;
     elements.interruptionDuration.required = needsInterruptionDetails;
+    elements.approvedDepositsGroup.classList.toggle('hidden', !needsApprovedDepositsAnswer);
+    elements.approvedDepositsInputs.forEach(input => {
+        input.required = needsApprovedDepositsAnswer;
+        if (!needsApprovedDepositsAnswer) input.checked = false;
+    });
     elements.percentageGroup.classList.toggle('hidden', !needsPercentage);
     elements.percentageInput.required = needsPercentage;
 
@@ -510,6 +523,20 @@ function generateSystemPreview(fullTicket, emailType, context) {
     }
     let impactDescription = needsPercentage ? `${issueText} (~${percentage}%)` : issueText;
 
+    if (issueAsksApprovedDeposits()) {
+        const approvedDepositsAnswer = document.querySelector(
+            'input[name="approvedDepositsAffected"]:checked'
+        )?.value;
+        if (!approvedDepositsAnswer) {
+            showPreviewMessage('Choose whether approved deposits are affected');
+            return null;
+        }
+        impactDescription = generateDepositApprovalImpact(
+            issueText,
+            approvedDepositsAnswer === 'yes'
+        );
+    }
+
     if (isInterruptionIssue()) {
         const frequency = elements.interruptionFrequency.value;
         const duration = elements.interruptionDuration.value;
@@ -618,6 +645,9 @@ function setupEventListeners() {
     elements.reportSelect.addEventListener('change', syncReportControls);
 
     elements.issueSelect.addEventListener('change', () => {
+        elements.approvedDepositsInputs.forEach(input => {
+            input.checked = false;
+        });
         syncIssueControls();
         syncExternalTeamSuggestion();
     });

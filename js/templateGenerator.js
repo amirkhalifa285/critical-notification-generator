@@ -35,6 +35,19 @@ function generateInterruptionImpact(issueDescription, frequencyMinutes, duration
 }
 
 /**
+ * Add the approved-deposit effect only to the Impact description while
+ * preserving the shorter issue text used by the subject and detection line.
+ */
+function generateDepositApprovalImpact(issueDescription, approvedDepositsAffected) {
+    if (!approvedDepositsAffected) return issueDescription;
+
+    const viaMatch = /^(.*)\s+via\s+(.+)$/i.exec(issueDescription);
+    if (!viaMatch) return issueDescription;
+
+    return `${viaMatch[1]} followed by a decrease in approved deposits via ${viaMatch[2]}`;
+}
+
+/**
  * Generate HTML for an ongoing Report notification
  * @param {string} reportName - Name of the report
  * @param {string} reportDate - Formatted date of the report
@@ -169,6 +182,7 @@ if (typeof module !== 'undefined' && module.exports) {
         generateSystemOpeningHTML,
         generateSystemResolvedHTML,
         generateInterruptionImpact,
+        generateDepositApprovalImpact,
         generateBannerHTML,
         withPeriod
     };

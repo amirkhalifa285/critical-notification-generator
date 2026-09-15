@@ -171,8 +171,8 @@
                                 <option value="Drop in approved cashouts via {target} processor" data-target-label="Payment processor">Drop in approved cashouts via [Processor]</option>
                                 <option value="Drop in approved deposits via {target} processor" data-target-label="Payment processor">Drop in approved deposits via [Processor]</option>
                                 <option value="Increase in failed deposits via {target} processor" data-target-label="Payment processor">Increase in failed deposits via [Processor]</option>
-                                <option value="Increase in rejected deposits via {target} processor" data-target-label="Payment processor">Increase in rejected deposits via [Processor]</option>
-                                <option value="Increase in declined deposits followed by a drop in approved deposits via {target}" data-target-label="Payment processor">Increase in declined deposits followed by a drop in approved deposits via [Processor]</option>
+                                <option value="Increase in rejected deposits via {target} processor" data-target-label="Payment processor" data-approved-deposits-check="true">Increase in rejected deposits via [Processor]</option>
+                                <option value="Increase in declined deposits via {target} processor" data-target-label="Payment processor" data-approved-deposits-check="true">Increase in declined deposits via [Processor]</option>
                                 <option value="Interruptions in bets" data-optional-target-label="Provider / channel" data-interruption="true">Interruptions in bets [optional provider/channel]</option>
                                 <option value="Hosting website is unavailable">Hosting website is unavailable</option>
                                 <option value="other">Other (Custom)</option>
@@ -191,6 +191,21 @@
                                 <label for="interruptionDuration" class="nested-field-label">Lasts less than approximately (minutes)</label>
                                 <input type="number" id="interruptionDuration" min="1" step="1" placeholder="e.g., 5">
                             </div>
+                        </div>
+
+                        <div class="form-group hidden" id="approvedDepositsGroup">
+                            <label>Are approved deposits affected?</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="approvedDepositsYes" name="approvedDepositsAffected" value="yes">
+                                    <label for="approvedDepositsYes">Yes</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="approvedDepositsNo" name="approvedDepositsAffected" value="no">
+                                    <label for="approvedDepositsNo">No</label>
+                                </div>
+                            </div>
+                            <small class="field-hint">If Yes, the decrease in approved deposits is added only to the Impact description.</small>
                         </div>
                         
                         <div class="form-group hidden" id="percentageGroup">

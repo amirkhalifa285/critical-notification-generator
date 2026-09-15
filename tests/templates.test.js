@@ -2,12 +2,28 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const {
+    generateDepositApprovalImpact,
     generateInterruptionImpact,
     generateRegulatoryReportOpeningHTML,
     generateRegulatoryReportResolvedHTML,
     generateSystemOpeningHTML,
     generateSystemResolvedHTML
 } = require('../js/templateGenerator');
+
+test('approved-deposit effect is added only when selected', () => {
+    const rejectedIssue = 'Increase in rejected deposits via PayWithMyBank processor';
+    const declinedIssue = 'Increase in declined deposits via Paysafe processor';
+
+    assert.equal(
+        generateDepositApprovalImpact(rejectedIssue, true),
+        'Increase in rejected deposits followed by a decrease in approved deposits via PayWithMyBank processor'
+    );
+    assert.equal(generateDepositApprovalImpact(rejectedIssue, false), rejectedIssue);
+    assert.equal(
+        generateDepositApprovalImpact(declinedIssue, true),
+        'Increase in declined deposits followed by a decrease in approved deposits via Paysafe processor'
+    );
+});
 
 test('ongoing regulatory report template lists files on separate lines', () => {
     const output = generateRegulatoryReportOpeningHTML(

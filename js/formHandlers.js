@@ -10,6 +10,12 @@ const elements = {
     customEnvInput: document.getElementById('customEnv'),
     nglSiteGroup: document.getElementById('nglSiteGroup'),
     nglSiteSelect: document.getElementById('nglSite'),
+    recipientSection: document.getElementById('recipientSection'),
+    recipientFields: document.getElementById('recipientFields'),
+    recipientSourceLabel: document.getElementById('recipientSourceLabel'),
+    recipientMissing: document.getElementById('recipientMissing'),
+    toRecipients: document.getElementById('toRecipients'),
+    ccRecipients: document.getElementById('ccRecipients'),
     jiraPrefixHint: document.getElementById('jiraPrefixHint'),
     ticketNumber: document.getElementById('ticketNumber'),
     reportSelect: document.getElementById('reportName'),
@@ -119,10 +125,72 @@ function syncEnvironmentControls() {
         : 'The Jira project prefix is selected automatically.';
 
     syncExternalTeamSuggestion(context);
+    syncRecipientControls();
 
     syncRequiredFields();
     syncIssueControls();
     syncRootCauseControls();
+}
+
+function syncRecipientControls() {
+    const environment = elements.envSelect.value;
+    const nglSite = elements.nglSiteSelect.value;
+    const hasCustomerSelection = environment
+        && environment !== 'other'
+        && (environment !== 'NGL' || nglSite);
+
+    elements.recipientSection.classList.toggle('hidden', !hasCustomerSelection);
+    if (!hasCustomerSelection) {
+        elements.toRecipients.value = '';
+        elements.ccRecipients.value = '';
+        return;
+    }
+
+    const recipients = getRecipientList(environment, nglSite);
+    const context = getSelectedContext();
+    const hasRecipients = Boolean(recipients);
+
+    elements.recipientFields.classList.toggle('hidden', !hasRecipients);
+    elements.recipientMissing.classList.toggle('hidden', hasRecipients);
+
+    if (!hasRecipients) {
+        elements.toRecipients.value = '';
+        elements.ccRecipients.value = '';
+        elements.recipientSourceLabel.textContent = 'No addresses were added.';
+        elements.recipientMissing.textContent = `No To/CC list for ${context.displayName} appears in the provided playbook.`;
+        return;
+    }
+
+    elements.toRecipients.value = formatRecipientList(recipients.to);
+    elements.ccRecipients.value = formatRecipientList(recipients.cc);
+    elements.recipientSourceLabel.textContent = NPI_CUSTOMERS.has(getRecipientKey(environment, nglSite))
+        ? 'Includes the shared NPI list and the customer-specific list.'
+        : 'Exact customer list from the provided playbook.';
+}
+
+async function copyRecipientField(button) {
+    const field = document.getElementById(button.dataset.recipientField);
+    if (!field?.value) return;
+
+    try {
+        if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(field.value);
+        } else {
+            field.focus();
+            field.select();
+            document.execCommand('copy');
+            field.setSelectionRange(0, 0);
+        }
+
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        setTimeout(() => {
+            button.textContent = originalText;
+        }, 1800);
+    } catch (error) {
+        elements.successMessage.textContent = 'Unable to copy the recipient list. Select the field and copy it manually.';
+        elements.successMessage.classList.add('error', 'show');
+    }
 }
 
 function issueRequiresPercentage() {
@@ -429,6 +497,9 @@ function setupEventListeners() {
     elements.customIssueInput.addEventListener('input', syncIssueControls);
     elements.issueTargetInput.addEventListener('input', syncExternalTeamSuggestion);
     elements.rootCauseSelect.addEventListener('change', syncRootCauseControls);
+    document.querySelectorAll('.copy-recipient-btn').forEach(button => {
+        button.addEventListener('click', () => copyRecipientField(button));
+    });
     elements.externalTeamInput.addEventListener('input', () => {
         elements.externalTeamInput.dataset.autoFilled = 'false';
     });

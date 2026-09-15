@@ -13,6 +13,7 @@ const emailImageSources = new Map();
 
 const LOTTERY_CONFIG = {
     'AGLC': { displayName: 'AGLC', jiraPrefix: 'AGLC', timezone: 'America/Edmonton', format: 'us' },
+    'CRO': { displayName: 'CRO', jiraPrefix: 'CRO', timezone: 'Europe/Zagreb', format: 'eu' },
     'FK-MI': { displayName: 'FK-MI', jiraPrefix: 'FKC', timezone: 'America/Detroit', format: 'us' },
     'MASSL': { displayName: 'MASSL', jiraPrefix: 'MASSL', timezone: 'America/New_York', format: 'us' },
     'MSL': { displayName: 'MSL', jiraPrefix: 'MSL', timezone: 'America/Detroit', format: 'us' },
@@ -35,11 +36,7 @@ const LOTTERY_CONFIG = {
     'NGL:Bitalih': { displayName: 'Bitalih', jiraPrefix: 'NGL', timezone: 'Europe/Istanbul', format: 'eu', ngLot: true, fixedDropInBets: true },
     'NGL:Hipodrom': { displayName: 'Hipodrom', jiraPrefix: 'NGL', timezone: 'Europe/Istanbul', format: 'eu', ngLot: true, fixedDropInBets: true },
     'NGL:JSC': { displayName: 'JSC', jiraPrefix: 'NGL', timezone: 'Europe/Lisbon', format: 'eu', ngLot: true, fixedDropInBets: true },
-    'NGL:UNL': { displayName: 'UNL', jiraPrefix: 'UNL', timezone: 'Europe/Kyiv', format: 'eu', ngLot: true, fixedDropInBets: true },
-
-    // Destination timezone still needs business confirmation; retain the old
-    // Israel-time behavior until it is confirmed rather than guessing.
-    'NGL:PariPlay/888': { displayName: 'PariPlay/888', jiraPrefix: 'NGL', timezone: 'Asia/Jerusalem', format: 'eu', ngLot: true, fixedDropInBets: true }
+    'NGL:UNL': { displayName: 'UNL', jiraPrefix: 'UNL', timezone: 'Europe/Kyiv', format: 'eu', ngLot: true, fixedDropInBets: true }
 };
 
 /**

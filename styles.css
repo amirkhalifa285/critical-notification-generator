@@ -145,6 +145,79 @@ select:disabled {
     margin-top: 12px;
 }
 
+/* Customer Recipients */
+.recipient-section {
+    margin-bottom: 20px;
+    padding: 16px;
+    background: #edf2f7;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+}
+
+.recipient-heading {
+    margin-bottom: 12px;
+}
+
+.recipient-heading h3 {
+    color: #2d3748;
+    font-size: 15px;
+    margin-bottom: 3px;
+}
+
+.recipient-heading small {
+    color: #718096;
+    font-size: 12px;
+}
+
+.recipient-field + .recipient-field {
+    margin-top: 12px;
+}
+
+.recipient-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.recipient-label-row label {
+    margin-bottom: 0;
+}
+
+.recipient-field textarea {
+    min-height: 88px;
+    resize: vertical;
+    background: white;
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.copy-recipient-btn {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    background: #667eea;
+    color: white;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.copy-recipient-btn:hover {
+    background: #5a67d8;
+}
+
+.recipient-missing {
+    color: #9c4221;
+    background: #fffaf0;
+    border: 1px solid #fbd38d;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
 /* Radio Buttons */
 .radio-group {
     display: flex;

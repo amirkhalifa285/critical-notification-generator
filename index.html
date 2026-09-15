@@ -35,6 +35,7 @@
                             <option value="">-- Select Lottery / Environment --</option>
                             <optgroup label="Direct Jira Projects">
                                 <option value="AGLC">AGLC — Alberta</option>
+                                <option value="CRO">CRO — Croatia</option>
                                 <option value="FK-MI">FK-MI — Michigan</option>
                                 <option value="MASSL">MASSL — Massachusetts</option>
                                 <option value="MSL">MSL — Michigan</option>
@@ -71,8 +72,31 @@
                             <option value="Hipodrom">Hipodrom (Turkey)</option>
                             <option value="JSC">JSC (Portugal)</option>
                             <option value="UNL">UNL (Ukraine)</option>
-                            <option value="PariPlay/888">PariPlay/888</option>
                         </select>
+                    </div>
+
+                    <div class="recipient-section hidden" id="recipientSection">
+                        <div class="recipient-heading">
+                            <h3>📨 Recipients from NOC playbook</h3>
+                            <small id="recipientSourceLabel"></small>
+                        </div>
+                        <div id="recipientFields">
+                            <div class="recipient-field">
+                                <div class="recipient-label-row">
+                                    <label for="toRecipients">To</label>
+                                    <button type="button" class="copy-recipient-btn" data-recipient-field="toRecipients">Copy To</button>
+                                </div>
+                                <textarea id="toRecipients" rows="4" readonly></textarea>
+                            </div>
+                            <div class="recipient-field">
+                                <div class="recipient-label-row">
+                                    <label for="ccRecipients">CC</label>
+                                    <button type="button" class="copy-recipient-btn" data-recipient-field="ccRecipients">Copy CC</button>
+                                </div>
+                                <textarea id="ccRecipients" rows="4" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="recipient-missing hidden" id="recipientMissing"></div>
                     </div>
                     
                     <div class="form-group">
@@ -208,6 +232,7 @@
     </div>
     
     <script src="js/utils.js"></script>
+    <script src="js/recipientLists.js"></script>
     <script src="js/templateGenerator.js"></script>
     <script src="js/formHandlers.js"></script>
     <script src="js/main.js"></script>

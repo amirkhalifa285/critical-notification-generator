@@ -12,6 +12,8 @@ const {
 test('maps business names to the correct Jira projects', () => {
     assert.equal(getLotteryContext('FK-MI').jiraPrefix, 'FKC');
     assert.equal(getLotteryContext('WV').jiraPrefix, 'WV');
+    assert.equal(getLotteryContext('CRO').jiraPrefix, 'CRO');
+    assert.equal(getLotteryContext('CRO').timezone, 'Europe/Zagreb');
     assert.equal(getLotteryContext('NGL', 'Sisal TR').jiraPrefix, 'NGL');
     assert.equal(getLotteryContext('NGL', 'SzZrt').jiraPrefix, 'HUN');
     assert.equal(getLotteryContext('NGL', 'UNL').jiraPrefix, 'UNL');

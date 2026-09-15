@@ -41,7 +41,7 @@ function generateInterruptionImpact(issueDescription, frequencyMinutes, duration
  * @returns {string} HTML string
  */
 function generateReportOpeningHTML(reportName, reportDate) {
-    return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt;">
+    return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt; background-color: #ffffff; color: #000000;">
         ${generateBannerHTML('ongoing')}
         This is to inform you that our monitoring systems have detected: The report <b>${reportName}</b> for <b>${reportDate}</b> is being delayed.<br><br>
         <u>Impact Description:</u> The report ${reportName} for ${reportDate} is being delayed.<br><br>
@@ -57,7 +57,7 @@ function generateReportOpeningHTML(reportName, reportDate) {
  * @returns {string} HTML string
  */
 function generateReportResolvedHTML(reportName, reportDate) {
-    return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt;">
+    return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt; background-color: #ffffff; color: #000000;">
         ${generateBannerHTML('resolved')}
         This is to inform you that our monitoring systems have detected: The report <b>${reportName}</b> for <b>${reportDate}</b> is being delayed. <b>The issue has been resolved.</b><br><br>
         <u>Impact Description:</u> The report ${reportName} for ${reportDate} is being delayed.<br><br>
@@ -80,7 +80,7 @@ function generateSystemOpeningHTML(issueDescription, issueDescriptionWithPercent
         timeText = `The issue started at ${startTime} and is currently ongoing.<br><br>`;
     }
     
-    return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt;">
+    return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt; background-color: #ffffff; color: #000000;">
         ${generateBannerHTML('ongoing')}
         This is to inform you that our monitoring systems have detected: <b>${withPeriod(issueDescription)}</b><br><br>
         ${timeText}
@@ -111,7 +111,7 @@ function generateSystemResolvedHTML(issueDescription, issueDescriptionWithPercen
         timeSection += '<br>';
     }
     
-    return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt;">
+    return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt; background-color: #ffffff; color: #000000;">
         ${generateBannerHTML('resolved')}
         This is to inform you that our monitoring systems have detected: <b>${withPeriod(issueDescription)}</b><br>
         <b>The issue has been resolved.</b><br><br>

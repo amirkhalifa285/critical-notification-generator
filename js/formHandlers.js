@@ -266,7 +266,7 @@ function updatePreview() {
 
     elements.previewContent.innerHTML = `
         <div style="margin-bottom: 15px;"><strong>Subject:</strong> ${escapeHTML(result.subject)}</div>
-        <hr style="margin: 20px 0; border: none; border-top: 2px solid #e2e8f0;">
+        <hr style="margin: 20px 0; border: none; border-top: 2px solid #e2e8f0; user-select: none;" aria-hidden="true">
         ${result.htmlBody}
     `;
 }

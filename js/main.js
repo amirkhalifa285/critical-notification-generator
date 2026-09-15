@@ -14,6 +14,11 @@ function initApp() {
     
     // Initial preview update
     updatePreview();
+
+    // Embed banner images for reliable rich-HTML copying into Outlook.
+    preloadEmailImages()
+        .then(updatePreview)
+        .catch(error => console.warn('Email banners could not be embedded:', error));
     
     console.log('Application ready!');
 }

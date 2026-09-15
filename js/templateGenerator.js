@@ -12,6 +12,16 @@ function withPeriod(value) {
     return /[.!?]$/.test(trimmedValue) ? trimmedValue : `${trimmedValue}.`;
 }
 
+function generateBannerHTML(emailType) {
+    const isResolved = emailType === 'resolved';
+    const path = isResolved ? 'images/banner-resolved.png' : 'images/banner-opening.png';
+    const width = isResolved ? 828 : 848;
+    const alt = isResolved ? 'Critical Notification - Resolved' : 'Critical Notification';
+    const source = typeof getEmailImageSource === 'function' ? getEmailImageSource(path) : path;
+
+    return `<img src="${source}" alt="${alt}" width="${width}" style="display: block; width: 100%; max-width: ${width}px; height: auto; margin: 0 0 20px 0;">`;
+}
+
 /**
  * Build the impact-only detail used by interruption notifications.
  */
@@ -32,6 +42,7 @@ function generateInterruptionImpact(issueDescription, frequencyMinutes, duration
  */
 function generateReportOpeningHTML(reportName, reportDate) {
     return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt;">
+        ${generateBannerHTML('ongoing')}
         <p style="margin-bottom: 15px;">This is to inform you that our monitoring systems have detected: The report <b>${reportName}</b> for <b>${reportDate}</b> is being delayed.</p>
         <p style="margin-bottom: 15px;"><u>Impact Description:</u> The report ${reportName} for ${reportDate} is being delayed.</p>
         <p style="margin-bottom: 15px;"><u>Root Cause:</u> Under Aristocrat BI team investigation.</p>
@@ -47,6 +58,7 @@ function generateReportOpeningHTML(reportName, reportDate) {
  */
 function generateReportResolvedHTML(reportName, reportDate) {
     return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt;">
+        ${generateBannerHTML('resolved')}
         <p style="margin-bottom: 15px;">This is to inform you that our monitoring systems have detected: The report <b>${reportName}</b> for <b>${reportDate}</b> is being delayed. <b>The issue has been resolved.</b></p>
         <p style="margin-bottom: 15px;"><u>Impact Description:</u> The report ${reportName} for ${reportDate} is being delayed.</p>
         <p style="margin-bottom: 15px;"><u>Root Cause:</u> Under Aristocrat BI team investigation.</p>
@@ -69,6 +81,7 @@ function generateSystemOpeningHTML(issueDescription, issueDescriptionWithPercent
     }
     
     return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt;">
+        ${generateBannerHTML('ongoing')}
         <p style="margin-bottom: 15px;">This is to inform you that our monitoring systems have detected: <b>${withPeriod(issueDescription)}</b></p>
         ${timeText}
         <p style="margin-bottom: 15px;"><u>Impact description:</u> ${withPeriod(issueDescriptionWithPercent)}</p>
@@ -100,6 +113,7 @@ function generateSystemResolvedHTML(issueDescription, issueDescriptionWithPercen
     }
     
     return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt;">
+        ${generateBannerHTML('resolved')}
         <p style="margin-bottom: 15px;">This is to inform you that our monitoring systems have detected: <b>${withPeriod(issueDescription)}</b></p>
         <p style="margin-bottom: 15px;"><b>The issue has been resolved.</b></p>
         ${timeSection}
@@ -116,6 +130,7 @@ if (typeof module !== 'undefined' && module.exports) {
         generateSystemOpeningHTML,
         generateSystemResolvedHTML,
         generateInterruptionImpact,
+        generateBannerHTML,
         withPeriod
     };
 }

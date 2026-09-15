@@ -31,6 +31,7 @@ test('ongoing template keeps the approved structure and omits a sign-off', () =>
 
     assert.match(output, /The issue started at .* and is currently ongoing\./);
     assert.match(output, /Further updates will be provided once available\./);
+    assert.match(output, /banner-opening\.png/);
     assert.doesNotMatch(output, /Regards/);
 });
 
@@ -47,6 +48,7 @@ test('resolved template requires no extra update state or sign-off', () => {
     assert.match(output, /Start time:/);
     assert.match(output, /End time:/);
     assert.match(output, /incident report\./);
+    assert.match(output, /banner-resolved\.png/);
     assert.doesNotMatch(output, /Regards/);
 });
 

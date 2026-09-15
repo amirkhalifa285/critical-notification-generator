@@ -15,6 +15,7 @@ A simple web tool for generating Critical Notification emails with customizable 
 - **NG-LOT Rules**: Applies the correct Jira project and fixed incident wording automatically
 - **Generic Incident Patterns**: Reuses standard wording while operators supply the affected provider or processor
 - **One-Click Copy**: Copy formatted email directly to clipboard
+- **Embedded Status Banners**: Includes the matching ongoing or resolved banner when pasted into Outlook
 
 ---
 

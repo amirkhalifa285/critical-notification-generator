@@ -5,6 +5,11 @@
  */
 
 const SOURCE_TIMEZONE = 'Asia/Jerusalem';
+const EMAIL_IMAGE_PATHS = [
+    'images/banner-opening.png',
+    'images/banner-resolved.png'
+];
+const emailImageSources = new Map();
 
 const LOTTERY_CONFIG = {
     'AGLC': { displayName: 'AGLC', jiraPrefix: 'AGLC', timezone: 'America/Edmonton', format: 'us' },
@@ -212,6 +217,31 @@ function escapeHTML(value) {
         .replaceAll("'", '&#039;');
 }
 
+function blobToDataURL(blob) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => resolve(reader.result));
+        reader.addEventListener('error', () => reject(reader.error));
+        reader.readAsDataURL(blob);
+    });
+}
+
+/**
+ * Preload email images as data URLs so pasted Outlook content contains the
+ * image itself instead of a link back to the generator.
+ */
+async function preloadEmailImages() {
+    await Promise.all(EMAIL_IMAGE_PATHS.map(async path => {
+        const response = await fetch(path);
+        if (!response.ok) throw new Error(`Unable to load email image: ${path}`);
+        emailImageSources.set(path, await blobToDataURL(await response.blob()));
+    }));
+}
+
+function getEmailImageSource(path) {
+    return emailImageSources.get(path) || path;
+}
+
 function htmlToPlainText(htmlContent) {
     const container = document.createElement('div');
     container.innerHTML = htmlContent;
@@ -247,6 +277,7 @@ if (typeof module !== 'undefined' && module.exports) {
         formatGMTOffset,
         getGMTOffsetForTimezone,
         getLotteryContext,
+        getEmailImageSource,
         zonedDateTimeToDate
     };
 }

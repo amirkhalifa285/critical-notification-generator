@@ -3,9 +3,42 @@ const assert = require('node:assert/strict');
 
 const {
     generateInterruptionImpact,
+    generateRegulatoryReportOpeningHTML,
+    generateRegulatoryReportResolvedHTML,
     generateSystemOpeningHTML,
     generateSystemResolvedHTML
 } = require('../js/templateGenerator');
+
+test('ongoing regulatory report template lists files on separate lines', () => {
+    const output = generateRegulatoryReportOpeningHTML(
+        'Daily',
+        ['player_account_summary_report', 'player_activity_report'],
+        'September 14th',
+        '09/15/2026 09:10 AM (GMT-4)'
+    );
+
+    assert.match(output, /Missing Regulatory Reports for September 14th/);
+    assert.match(output, /The issue was detected at 09\/15\/2026 09:10 AM \(GMT-4\) and is ongoing\./);
+    assert.match(output, /The following Daily reports:<br>\s*player_account_summary_report<br>player_activity_report<br>/);
+    assert.match(output, /for September 14th are being delayed\./);
+    assert.match(output, /Under Aristocrat BI team investigation\./);
+});
+
+test('resolved regulatory report template uses resolved timing and impact wording', () => {
+    const output = generateRegulatoryReportResolvedHTML(
+        'Weekly',
+        ['player_account_summary_report'],
+        'September 14th',
+        '09/15/2026 09:10 AM (GMT-4)',
+        '09/15/2026 10:25 AM (GMT-4)'
+    );
+
+    assert.match(output, /The issue has been resolved\./);
+    assert.match(output, /Start time:<\/u> 09\/15\/2026 09:10 AM \(GMT-4\)\./);
+    assert.match(output, /End time:<\/u> 09\/15\/2026 10:25 AM \(GMT-4\)\./);
+    assert.match(output, /The following Weekly reports/);
+    assert.match(output, /for September 14th were delayed\./);
+});
 
 test('interruption impact uses ongoing wording only in the impact description', () => {
     assert.equal(

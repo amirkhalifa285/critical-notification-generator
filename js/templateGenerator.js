@@ -66,6 +66,44 @@ function generateReportResolvedHTML(reportName, reportDate) {
     </div>`;
 }
 
+function formatReportFilesHTML(reports) {
+    return reports.join('<br>');
+}
+
+/**
+ * Generate an ongoing missing-regulatory-reports notification for B2B customers.
+ */
+function generateRegulatoryReportOpeningHTML(frequency, reports, reportDate, detectionTime) {
+    return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt; background-color: #ffffff; color: #000000;">
+        ${generateBannerHTML('ongoing')}
+        This is to inform you that our monitoring systems have detected: <b>Missing Regulatory Reports for ${reportDate}.</b><br><br>
+        The issue was detected at ${detectionTime} and is ongoing.<br><br>
+        <u>Impact description:</u> The following ${frequency} reports:<br>
+        ${formatReportFilesHTML(reports)}<br>
+        for ${reportDate} are being delayed.<br><br>
+        <u>Root Cause:</u> Under Aristocrat BI team investigation.<br><br>
+        Further updates will be provided once available.
+    </div>`;
+}
+
+/**
+ * Generate a resolved missing-regulatory-reports notification for B2B customers.
+ */
+function generateRegulatoryReportResolvedHTML(frequency, reports, reportDate, detectionTime, endTime) {
+    return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt; background-color: #ffffff; color: #000000;">
+        ${generateBannerHTML('resolved')}
+        This is to inform you that our monitoring systems have detected: <b>Missing Regulatory Reports for ${reportDate}.</b><br>
+        <b>The issue has been resolved.</b><br><br>
+        <u>Start time:</u> ${detectionTime}.<br>
+        <u>End time:</u> ${endTime}.<br><br>
+        <u>Impact description:</u> The following ${frequency} reports:<br>
+        ${formatReportFilesHTML(reports)}<br>
+        for ${reportDate} were delayed.<br><br>
+        <u>Root Cause:</u> Under Aristocrat BI team investigation.<br><br>
+        Further updates will be provided in the incident report.
+    </div>`;
+}
+
 /**
  * Generate HTML for an ongoing System Issue notification
  * @param {string} issueDescription - Description of the issue without precentage
@@ -126,6 +164,8 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         generateReportOpeningHTML,
         generateReportResolvedHTML,
+        generateRegulatoryReportOpeningHTML,
+        generateRegulatoryReportResolvedHTML,
         generateSystemOpeningHTML,
         generateSystemResolvedHTML,
         generateInterruptionImpact,

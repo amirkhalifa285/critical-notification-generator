@@ -14,11 +14,11 @@
         </header>
         
         <div class="template-selector">
-            <div class="template-btn active" onclick="selectTemplate('report')" id="reportBtn">
+            <div class="template-btn" onclick="selectTemplate('report')" id="reportBtn">
                 <h3>📊 Report Delay</h3>
                 <p>For delayed reports (Activity Summary, etc.)</p>
             </div>
-            <div class="template-btn" onclick="selectTemplate('system')" id="systemBtn">
+            <div class="template-btn active" onclick="selectTemplate('system')" id="systemBtn">
                 <h3>⚠️ System Issue</h3>
                 <p>For system outages and technical issues</p>
             </div>
@@ -36,12 +36,12 @@
                             <optgroup label="Direct Jira Projects">
                                 <option value="AGLC">AGLC — Alberta</option>
                                 <option value="CRO">CRO — Croatia</option>
-                                <option value="FK-MI">FK-MI — Michigan</option>
+                                <option value="FK-MI" data-regulatory-report="true">FK-MI — Michigan</option>
                                 <option value="MASSL">MASSL — Massachusetts</option>
                                 <option value="MSL">MSL — Michigan</option>
                                 <option value="NCEL" data-report-delay="true">NCEL — North Carolina</option>
                                 <option value="NHL" data-report-delay="true">NHL — New Hampshire</option>
-                                <option value="PL">PL — Pennsylvania</option>
+                                <option value="PL" data-regulatory-report="true">PL — Pennsylvania</option>
                                 <option value="SZ">SZ — Czech Republic</option>
                                 <option value="VAL" data-report-delay="true">VAL — Virginia</option>
                                 <option value="WV">WV — West Virginia</option>
@@ -106,12 +106,13 @@
                     </div>
                     
                     <!-- Report-specific fields -->
-                    <div id="reportFields">
+                    <div id="reportFields" class="hidden">
                         <div class="form-group">
                             <label for="reportName">Report Name</label>
                             <select id="reportName" required>
                                 <option value="">-- Select Report --</option>
                                 <option value="Activity Summary Daily" selected>Activity Summary Daily</option>
+                                <option value="regulatory">Missing Regulatory Reports</option>
                                 <option value="other">Other (Custom)</option>
                             </select>
                             <div class="custom-field" id="customReportDiv">
@@ -122,12 +123,40 @@
                         <div class="form-group">
                             <label for="reportDate">Notification Date (Israel)</label>
                             <input type="date" id="reportDate" required>
-                            <small class="field-hint">The Activity Summary report date is automatically set to the previous day.</small>
+                            <small class="field-hint">The report date in the notification is automatically set to the previous day.</small>
+                        </div>
+
+                        <div id="regulatoryFields" class="hidden">
+                            <div class="form-group">
+                                <label for="reportFrequency">Report Frequency</label>
+                                <select id="reportFrequency">
+                                    <option value="Daily" selected>Daily</option>
+                                    <option value="Weekly">Weekly</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="missingReports">Missing Report Files</label>
+                                <textarea id="missingReports" rows="5" placeholder="Enter one report filename per line, e.g.&#10;player_account_summary_report"></textarea>
+                                <small class="field-hint">Enter each missing report filename on a separate line.</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="reportDetectionTime">Detection Time (Israel)</label>
+                                <input type="time" id="reportDetectionTime" value="16:10">
+                                <small class="field-hint">Defaults to 16:10 and is converted to the selected customer's local time.</small>
+                            </div>
+
+                            <div class="form-group hidden" id="reportEndTimeGroup">
+                                <label for="reportEndTime">Resolved Time (Israel)</label>
+                                <input type="datetime-local" id="reportEndTime">
+                                <small class="field-hint">Automatically converted to the selected customer's local time.</small>
+                            </div>
                         </div>
                     </div>
                     
                     <!-- System Issue fields -->
-                    <div id="systemFields" class="hidden">
+                    <div id="systemFields">
                         <div class="form-group">
                             <label for="issueDescription">Issue Description</label>
                             <select id="issueDescription">

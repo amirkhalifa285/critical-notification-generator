@@ -2,7 +2,7 @@
  * Form interactions, validation, and live preview generation.
  */
 
-let currentTemplate = 'report';
+let currentTemplate = 'system';
 
 const elements = {
     envSelect: document.getElementById('environment'),
@@ -22,6 +22,12 @@ const elements = {
     customReportDiv: document.getElementById('customReportDiv'),
     customReportInput: document.getElementById('customReport'),
     reportDate: document.getElementById('reportDate'),
+    regulatoryFields: document.getElementById('regulatoryFields'),
+    reportFrequency: document.getElementById('reportFrequency'),
+    missingReports: document.getElementById('missingReports'),
+    reportDetectionTime: document.getElementById('reportDetectionTime'),
+    reportEndTimeGroup: document.getElementById('reportEndTimeGroup'),
+    reportEndTime: document.getElementById('reportEndTime'),
     issueSelect: document.getElementById('issueDescription'),
     customIssueDiv: document.getElementById('customIssueDiv'),
     customIssueInput: document.getElementById('customIssue'),
@@ -82,10 +88,14 @@ function selectTemplate(type) {
 
 function syncEnvironmentAvailability() {
     const isReport = currentTemplate === 'report';
+    const isRegulatoryReport = elements.reportSelect.value === 'regulatory';
 
     Array.from(elements.envSelect.options).forEach(option => {
         if (!option.value) return;
-        option.disabled = isReport && option.dataset.reportDelay !== 'true';
+        const supportsSelectedReport = isRegulatoryReport
+            ? option.dataset.regulatoryReport === 'true'
+            : option.dataset.reportDelay === 'true';
+        option.disabled = isReport && !supportsSelectedReport;
     });
 
     const selectedOption = elements.envSelect.selectedOptions[0];
@@ -96,16 +106,35 @@ function syncRequiredFields() {
     const isReport = currentTemplate === 'report';
     const isSystem = currentTemplate === 'system';
     const isResolved = getEmailType() === 'resolved';
+    const isRegulatoryReport = isReport && elements.reportSelect.value === 'regulatory';
 
     elements.reportSelect.required = isReport;
     elements.reportDate.required = isReport;
     elements.customReportInput.required = isReport && elements.reportSelect.value === 'other';
+    elements.reportFrequency.required = isRegulatoryReport;
+    elements.missingReports.required = isRegulatoryReport;
+    elements.reportDetectionTime.required = isRegulatoryReport;
+    elements.reportEndTime.required = isRegulatoryReport && isResolved;
+    elements.reportEndTimeGroup.classList.toggle('hidden', !isRegulatoryReport || !isResolved);
 
     elements.issueSelect.required = isSystem && !getSelectedContext()?.fixedDropInBets;
     elements.startTime.required = isSystem;
     elements.endTime.required = isSystem && isResolved;
     elements.rootCauseSelect.required = isSystem;
     elements.endTimeGroup.classList.toggle('hidden', !isResolved);
+}
+
+function syncReportControls() {
+    const isRegulatoryReport = currentTemplate === 'report'
+        && elements.reportSelect.value === 'regulatory';
+
+    elements.customReportDiv.classList.toggle(
+        'show',
+        currentTemplate === 'report' && elements.reportSelect.value === 'other'
+    );
+    elements.regulatoryFields.classList.toggle('hidden', !isRegulatoryReport);
+    syncEnvironmentAvailability();
+    syncEnvironmentControls();
 }
 
 function syncEnvironmentControls() {
@@ -340,6 +369,10 @@ function updatePreview() {
 }
 
 function generateReportPreview(fullTicket, emailType) {
+    if (elements.reportSelect.value === 'regulatory') {
+        return generateRegulatoryReportPreview(fullTicket, emailType);
+    }
+
     const reportName = elements.reportSelect.value === 'other'
         ? elements.customReportInput.value.trim()
         : elements.reportSelect.value;
@@ -356,6 +389,75 @@ function generateReportPreview(fullTicket, emailType) {
     const htmlBody = emailType === 'ongoing'
         ? generateReportOpeningHTML(safeReportName, safeReportDate)
         : generateReportResolvedHTML(safeReportName, safeReportDate);
+
+    return { subject, htmlBody };
+}
+
+function getMissingReportNames() {
+    return elements.missingReports.value
+        .split(/\r?\n/)
+        .map(report => report.trim())
+        .filter(Boolean);
+}
+
+function generateRegulatoryReportPreview(fullTicket, emailType) {
+    const reportDate = formatPreviousDate(elements.reportDate.value);
+    const frequency = elements.reportFrequency.value;
+    const reports = getMissingReportNames();
+    const detectionTime = elements.reportDetectionTime.value;
+
+    if (!reportDate || !frequency || reports.length === 0 || !detectionTime) {
+        showPreviewMessage('Fill in the report date, frequency, missing files, and detection time');
+        return null;
+    }
+
+    const context = getSelectedContext();
+    const startValue = `${elements.reportDate.value}T${detectionTime}`;
+    const startInstant = zonedDateTimeToDate(startValue);
+    if (!startInstant) {
+        showPreviewMessage('The detection time is not a valid Israel local time');
+        return null;
+    }
+
+    let formattedEndTime = '';
+    if (emailType === 'resolved') {
+        const endValue = elements.reportEndTime.value;
+        if (!endValue) {
+            showPreviewMessage('Enter the resolved time in Israel time');
+            return null;
+        }
+
+        const endInstant = zonedDateTimeToDate(endValue);
+        if (!endInstant) {
+            showPreviewMessage('The resolved time is not a valid Israel local time');
+            return null;
+        }
+        if (endInstant <= startInstant) {
+            showPreviewMessage('Resolved time must be later than the detection time');
+            return null;
+        }
+        formattedEndTime = formatDateTime(endValue, context);
+    }
+
+    const formattedStartTime = formatDateTime(startValue, context);
+    const safeFrequency = escapeHTML(frequency);
+    const safeReportDate = escapeHTML(reportDate);
+    const safeReports = reports.map(escapeHTML);
+    const subject = `${fullTicket} - Critical Notification - Missing Regulatory Reports for ${reportDate}`;
+    const htmlBody = emailType === 'ongoing'
+        ? generateRegulatoryReportOpeningHTML(
+            safeFrequency,
+            safeReports,
+            safeReportDate,
+            formattedStartTime
+        )
+        : generateRegulatoryReportResolvedHTML(
+            safeFrequency,
+            safeReports,
+            safeReportDate,
+            formattedStartTime,
+            formattedEndTime
+        );
 
     return { subject, htmlBody };
 }
@@ -485,10 +587,7 @@ function setupEventListeners() {
     elements.envSelect.addEventListener('change', syncEnvironmentControls);
     elements.nglSiteSelect.addEventListener('change', syncEnvironmentControls);
 
-    elements.reportSelect.addEventListener('change', () => {
-        elements.customReportDiv.classList.toggle('show', elements.reportSelect.value === 'other');
-        syncRequiredFields();
-    });
+    elements.reportSelect.addEventListener('change', syncReportControls);
 
     elements.issueSelect.addEventListener('change', () => {
         syncIssueControls();

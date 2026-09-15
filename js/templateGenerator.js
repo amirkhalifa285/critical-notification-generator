@@ -43,10 +43,10 @@ function generateInterruptionImpact(issueDescription, frequencyMinutes, duration
 function generateReportOpeningHTML(reportName, reportDate) {
     return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt;">
         ${generateBannerHTML('ongoing')}
-        <p style="margin-bottom: 15px;">This is to inform you that our monitoring systems have detected: The report <b>${reportName}</b> for <b>${reportDate}</b> is being delayed.</p>
-        <p style="margin-bottom: 15px;"><u>Impact Description:</u> The report ${reportName} for ${reportDate} is being delayed.</p>
-        <p style="margin-bottom: 15px;"><u>Root Cause:</u> Under Aristocrat BI team investigation.</p>
-        <p style="margin-bottom: 15px;">Further updates will be provided once available.</p>
+        This is to inform you that our monitoring systems have detected: The report <b>${reportName}</b> for <b>${reportDate}</b> is being delayed.<br><br>
+        <u>Impact Description:</u> The report ${reportName} for ${reportDate} is being delayed.<br><br>
+        <u>Root Cause:</u> Under Aristocrat BI team investigation.<br><br>
+        Further updates will be provided once available.
     </div>`;
 }
 
@@ -59,10 +59,10 @@ function generateReportOpeningHTML(reportName, reportDate) {
 function generateReportResolvedHTML(reportName, reportDate) {
     return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt;">
         ${generateBannerHTML('resolved')}
-        <p style="margin-bottom: 15px;">This is to inform you that our monitoring systems have detected: The report <b>${reportName}</b> for <b>${reportDate}</b> is being delayed. <b>The issue has been resolved.</b></p>
-        <p style="margin-bottom: 15px;"><u>Impact Description:</u> The report ${reportName} for ${reportDate} is being delayed.</p>
-        <p style="margin-bottom: 15px;"><u>Root Cause:</u> Under Aristocrat BI team investigation.</p>
-        <p style="margin-bottom: 15px;">More details will be provided in the incident report.</p>
+        This is to inform you that our monitoring systems have detected: The report <b>${reportName}</b> for <b>${reportDate}</b> is being delayed. <b>The issue has been resolved.</b><br><br>
+        <u>Impact Description:</u> The report ${reportName} for ${reportDate} is being delayed.<br><br>
+        <u>Root Cause:</u> Under Aristocrat BI team investigation.<br><br>
+        More details will be provided in the incident report.
     </div>`;
 }
 
@@ -77,16 +77,16 @@ function generateReportResolvedHTML(reportName, reportDate) {
 function generateSystemOpeningHTML(issueDescription, issueDescriptionWithPercent, startTime, rootCause) {
     let timeText = '';
     if (startTime) {
-        timeText = `<p style="margin-bottom: 15px;">The issue started at ${startTime} and is currently ongoing.</p>`;
+        timeText = `The issue started at ${startTime} and is currently ongoing.<br><br>`;
     }
     
     return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt;">
         ${generateBannerHTML('ongoing')}
-        <p style="margin-bottom: 15px;">This is to inform you that our monitoring systems have detected: <b>${withPeriod(issueDescription)}</b></p>
+        This is to inform you that our monitoring systems have detected: <b>${withPeriod(issueDescription)}</b><br><br>
         ${timeText}
-        <p style="margin-bottom: 15px;"><u>Impact description:</u> ${withPeriod(issueDescriptionWithPercent)}</p>
-        <p style="margin-bottom: 15px;"><u>Root cause:</u> ${withPeriod(rootCause || 'Under investigation')}</p>
-        <p style="margin-bottom: 15px;">Further updates will be provided once available.</p>
+        <u>Impact description:</u> ${withPeriod(issueDescriptionWithPercent)}<br><br>
+        <u>Root cause:</u> ${withPeriod(rootCause || 'Under investigation')}<br><br>
+        Further updates will be provided once available.
     </div>`;
 }
 
@@ -102,24 +102,23 @@ function generateSystemOpeningHTML(issueDescription, issueDescriptionWithPercent
 function generateSystemResolvedHTML(issueDescription, issueDescriptionWithPercent, startTime, endTime, rootCause) {
     let timeSection = '';
     if (startTime || endTime) {
-        timeSection = '<div style="margin-bottom: 15px;">';
         if (startTime) {
-            timeSection += `<p style="margin-bottom: 5px;"><u>Start time:</u> ${startTime}.</p>`;
+            timeSection += `<u>Start time:</u> ${startTime}.<br>`;
         }
         if (endTime) {
-            timeSection += `<p style="margin-bottom: 5px;"><u>End time:</u> ${endTime}.</p>`;
+            timeSection += `<u>End time:</u> ${endTime}.<br>`;
         }
-        timeSection += '</div>';
+        timeSection += '<br>';
     }
     
     return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt;">
         ${generateBannerHTML('resolved')}
-        <p style="margin-bottom: 15px;">This is to inform you that our monitoring systems have detected: <b>${withPeriod(issueDescription)}</b></p>
-        <p style="margin-bottom: 15px;"><b>The issue has been resolved.</b></p>
+        This is to inform you that our monitoring systems have detected: <b>${withPeriod(issueDescription)}</b><br>
+        <b>The issue has been resolved.</b><br><br>
         ${timeSection}
-        <p style="margin-bottom: 15px;"><u>Impact description:</u> ${withPeriod(issueDescriptionWithPercent)}</p>
-        <p style="margin-bottom: 15px;"><u>Root cause:</u> ${withPeriod(rootCause || 'Under investigation')}</p>
-        <p style="margin-bottom: 15px;">Further updates will be provided in the incident report.</p>
+        <u>Impact description:</u> ${withPeriod(issueDescriptionWithPercent)}<br><br>
+        <u>Root cause:</u> ${withPeriod(rootCause || 'Under investigation')}<br><br>
+        Further updates will be provided in the incident report.
     </div>`;
 }
 

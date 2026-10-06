@@ -173,6 +173,22 @@ function generateSystemResolvedHTML(issueDescription, issueDescriptionWithPercen
     </div>`;
 }
 
+/**
+ * Generate the outreach email sent to a vendor or lottery when an external
+ * team is contacted. It has no banner; the NOC engineer adds any error-log
+ * findings and requests below the generated lines.
+ */
+function generateVendorOutreachHTML(issueDescription, startTime) {
+    return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt; background-color: #ffffff; color: #000000;">
+        This is to inform you that our monitoring systems have detected: <b>${withPeriod(issueDescription)}</b><br><br>
+        The issue started at ${startTime} and is currently ongoing.<br><br>
+    </div>`;
+}
+
+function generateVendorOutreachSubject(environmentName, issueDescription) {
+    return `Aristocrat NOC - ${environmentName} - ${issueDescription}`;
+}
+
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         generateReportOpeningHTML,
@@ -184,6 +200,8 @@ if (typeof module !== 'undefined' && module.exports) {
         generateInterruptionImpact,
         generateDepositApprovalImpact,
         generateBannerHTML,
+        generateVendorOutreachHTML,
+        generateVendorOutreachSubject,
         withPeriod
     };
 }

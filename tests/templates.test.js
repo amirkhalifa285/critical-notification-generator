@@ -7,7 +7,9 @@ const {
     generateRegulatoryReportOpeningHTML,
     generateRegulatoryReportResolvedHTML,
     generateSystemOpeningHTML,
-    generateSystemResolvedHTML
+    generateSystemResolvedHTML,
+    generateVendorOutreachHTML,
+    generateVendorOutreachSubject
 } = require('../js/templateGenerator');
 
 test('approved-deposit effect is added only when selected', () => {
@@ -110,4 +112,20 @@ test('custom text that already has punctuation does not get a double period', ()
     );
 
     assert.doesNotMatch(output, /\.\./);
+});
+
+test('vendor outreach email uses the lottery name and has no banner', () => {
+    assert.equal(
+        generateVendorOutreachSubject('Sisal TR', 'Drop in bets via Sisal TR'),
+        'Aristocrat NOC - Sisal TR - Drop in bets via Sisal TR'
+    );
+
+    const html = generateVendorOutreachHTML(
+        'Drop in approved cashouts via Paysafe unity processor',
+        '09/06/2026 02:50 AM (GMT-6)'
+    );
+    assert.match(html, /have detected: <b>Drop in approved cashouts via Paysafe unity processor\.<\/b>/);
+    assert.match(html, /The issue started at 09\/06\/2026 02:50 AM \(GMT-6\) and is currently ongoing\./);
+    assert.doesNotMatch(html, /<img/);
+    assert.doesNotMatch(html, /Impact description|Root cause/);
 });

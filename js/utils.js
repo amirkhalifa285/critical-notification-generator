@@ -35,6 +35,11 @@ const LOTTERY_CONFIG = {
     'NGL:SzZrt': { displayName: 'SzZrt', jiraPrefix: 'HUN', timezone: 'Europe/Budapest', format: 'eu', ngLot: true, fixedDropInBets: true },
     'NGL:Bitalih': { displayName: 'Bitalih', jiraPrefix: 'NGL', timezone: 'Europe/Istanbul', format: 'eu', ngLot: true, fixedDropInBets: true },
     'NGL:Hipodrom': { displayName: 'Hipodrom', jiraPrefix: 'NGL', timezone: 'Europe/Istanbul', format: 'eu', ngLot: true, fixedDropInBets: true },
+    'NGL:Sisal Misli': { displayName: 'Sisal Misli', jiraPrefix: 'NGL', timezone: 'Europe/Istanbul', format: 'eu', ngLot: true, fixedDropInBets: true },
+    'NGL:Sisal Nesine': { displayName: 'Sisal Nesine', jiraPrefix: 'NGL', timezone: 'Europe/Istanbul', format: 'eu', ngLot: true, fixedDropInBets: true },
+    'NGL:Sisal Bilyoner': { displayName: 'Sisal Bilyoner', jiraPrefix: 'NGL', timezone: 'Europe/Istanbul', format: 'eu', ngLot: true, fixedDropInBets: true },
+    'NGL:Sisal Atili Ganyan': { displayName: 'Sisal Atili Ganyan', jiraPrefix: 'NGL', timezone: 'Europe/Istanbul', format: 'eu', ngLot: true, fixedDropInBets: true },
+    'NGL:Sisal At Yarisi': { displayName: 'Sisal At Yarisi', jiraPrefix: 'NGL', timezone: 'Europe/Istanbul', format: 'eu', ngLot: true, fixedDropInBets: true },
     'NGL:JSC': { displayName: 'JSC', jiraPrefix: 'NGL', timezone: 'Europe/Lisbon', format: 'eu', ngLot: true, fixedDropInBets: true },
     'NGL:UNL': { displayName: 'UNL', jiraPrefix: 'UNL', timezone: 'Europe/Kyiv', format: 'eu', ngLot: true, fixedDropInBets: true }
 };

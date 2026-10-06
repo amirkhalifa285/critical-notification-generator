@@ -72,6 +72,26 @@ const NGL_TURKEY_STANDARD_CC = emailList(`
     daniel.odonoghue@aristocrat.com
 `);
 
+// Alessandro Galli has two addresses; the operator confirmed both are used
+// for each Turkish Sisal group.
+const NGL_SISAL_SPORTS_TO = emailList(`
+    gloria.balestreri@fluttersea.com
+    evren.kiragasi@sisalsans.com
+    emre.celik@sisalsans.com
+    alessandro.galli@fluttersea.com
+    alessandro.galli@sisal.it
+    francesca.iannibelli@fluttersea.com
+`);
+
+const NGL_SISAL_HORSE_RACING_TO = emailList(`
+    emre.celik@sisalsans.com
+    gloria.balestreri@fluttersea.com
+    alessandro.centaro@fluttersea.com
+    alessandro.galli@sisal.it
+    alessandro.galli@sisal.it
+    alessandro.galli@fluttersea.com
+`);
+
 const RECIPIENT_LISTS = {
     'MASSL': {
         to: emailList(`
@@ -383,6 +403,11 @@ const RECIPIENT_LISTS = {
         `),
         cc: NGL_TURKEY_STANDARD_CC
     },
+    'NGL:Sisal Misli': { to: NGL_SISAL_SPORTS_TO, cc: NGL_TURKEY_STANDARD_CC },
+    'NGL:Sisal Nesine': { to: NGL_SISAL_SPORTS_TO, cc: NGL_TURKEY_STANDARD_CC },
+    'NGL:Sisal Bilyoner': { to: NGL_SISAL_SPORTS_TO, cc: NGL_TURKEY_STANDARD_CC },
+    'NGL:Sisal Atili Ganyan': { to: NGL_SISAL_HORSE_RACING_TO, cc: NGL_TURKEY_STANDARD_CC },
+    'NGL:Sisal At Yarisi': { to: NGL_SISAL_HORSE_RACING_TO, cc: NGL_TURKEY_STANDARD_CC },
     'NGL:JSC': {
         to: emailList(`
             anastacia.benshalom@aristocrat.com

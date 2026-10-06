@@ -22,6 +22,12 @@ test('maps business names to the correct Jira projects', () => {
     assert.equal(getLotteryContext('CRO').jiraPrefix, 'CRO');
     assert.equal(getLotteryContext('CRO').timezone, 'Europe/Zagreb');
     assert.equal(getLotteryContext('NGL', 'Sisal TR').jiraPrefix, 'NGL');
+    for (const site of ['Sisal Misli', 'Sisal Nesine', 'Sisal Bilyoner', 'Sisal Atili Ganyan', 'Sisal At Yarisi']) {
+        const context = getLotteryContext('NGL', site);
+        assert.equal(context.jiraPrefix, 'NGL', site);
+        assert.equal(context.timezone, 'Europe/Istanbul', site);
+        assert.equal(context.fixedDropInBets, true, site);
+    }
     assert.equal(getLotteryContext('NGL', 'SzZrt').jiraPrefix, 'HUN');
     assert.equal(getLotteryContext('NGL', 'UNL').jiraPrefix, 'UNL');
     assert.equal(getLotteryContext('Atlantic City').jiraPrefix, 'ALC');

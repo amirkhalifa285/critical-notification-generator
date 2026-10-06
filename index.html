@@ -294,12 +294,53 @@
                         Fill in the form to see preview
                     </div>
                 </div>
+
+                <div class="outreach-section hidden" id="outreachSection">
+                    <h2>📨 Vendor / Lottery Outreach Email</h2>
+                    <small class="field-hint">Sent once when the external team is contacted. Add any error-log findings after pasting.</small>
+
+                    <div class="form-group outreach-target-group">
+                        <label for="outreachTarget">Send To</label>
+                        <select id="outreachTarget"></select>
+                    </div>
+
+                    <div class="recipient-section">
+                        <div id="outreachRecipientFields">
+                            <div class="recipient-field">
+                                <div class="recipient-label-row">
+                                    <label for="outreachTo">To</label>
+                                    <button type="button" class="copy-recipient-btn" data-recipient-field="outreachTo">Copy To</button>
+                                </div>
+                                <textarea id="outreachTo" rows="2" readonly></textarea>
+                            </div>
+                            <div class="recipient-field">
+                                <div class="recipient-label-row">
+                                    <label for="outreachCc">CC</label>
+                                    <button type="button" class="copy-recipient-btn" data-recipient-field="outreachCc">Copy CC</button>
+                                </div>
+                                <textarea id="outreachCc" rows="2" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="recipient-missing hidden" id="outreachMissing"></div>
+                        <div class="recipient-field">
+                            <div class="recipient-label-row">
+                                <label for="outreachSubject">Subject</label>
+                                <button type="button" class="copy-recipient-btn" data-recipient-field="outreachSubject">Copy Subject</button>
+                            </div>
+                            <input type="text" id="outreachSubject" readonly>
+                        </div>
+                    </div>
+
+                    <div class="preview-content outreach-preview" id="outreachPreview"></div>
+                    <button type="button" class="btn" id="copyOutreachBtn">📋 Copy Outreach Email</button>
+                </div>
             </div>
         </div>
     </div>
     
     <script src="js/utils.js"></script>
     <script src="js/recipientLists.js"></script>
+    <script src="js/vendorContacts.js"></script>
     <script src="js/templateGenerator.js"></script>
     <script src="js/formHandlers.js"></script>
     <script src="js/main.js"></script>

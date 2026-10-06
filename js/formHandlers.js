@@ -56,8 +56,19 @@ const elements = {
     previewContent: document.getElementById('previewContent'),
     reportFields: document.getElementById('reportFields'),
     systemFields: document.getElementById('systemFields'),
-    endTimeGroup: document.getElementById('endTimeGroup')
+    endTimeGroup: document.getElementById('endTimeGroup'),
+    outreachSection: document.getElementById('outreachSection'),
+    outreachTarget: document.getElementById('outreachTarget'),
+    outreachRecipientFields: document.getElementById('outreachRecipientFields'),
+    outreachMissing: document.getElementById('outreachMissing'),
+    outreachTo: document.getElementById('outreachTo'),
+    outreachCc: document.getElementById('outreachCc'),
+    outreachSubject: document.getElementById('outreachSubject'),
+    outreachPreview: document.getElementById('outreachPreview'),
+    copyOutreachBtn: document.getElementById('copyOutreachBtn')
 };
+
+let currentOutreachHTML = '';
 
 function getSelectedContext() {
     return getLotteryContext(
@@ -371,27 +382,35 @@ function getRootCause(emailType) {
 }
 
 function updatePreview() {
+    updateOutreachSection(renderCriticalPreview());
+}
+
+/**
+ * Render the critical notification preview. Returns the generated result, or
+ * null when required fields are missing.
+ */
+function renderCriticalPreview() {
     const environment = elements.envSelect.value;
     if (!environment) {
         showPreviewMessage('Fill in all required fields');
-        return;
+        return null;
     }
 
     if (environment === 'NGL' && !elements.nglSiteSelect.value) {
         showPreviewMessage('Please select an NG-LOT lottery');
-        return;
+        return null;
     }
 
     const context = getSelectedContext();
     if (!context) {
         showPreviewMessage('Enter a custom Jira project prefix');
-        return;
+        return null;
     }
 
     const ticketNumber = elements.ticketNumber.value.trim();
     if (!/^\d+$/.test(ticketNumber)) {
         showPreviewMessage('Enter a numeric Jira ticket number');
-        return;
+        return null;
     }
 
     const fullTicket = `${context.jiraPrefix}-${ticketNumber}`;
@@ -400,13 +419,14 @@ function updatePreview() {
         ? generateReportPreview(fullTicket, emailType)
         : generateSystemPreview(fullTicket, emailType, context);
 
-    if (!result) return;
+    if (!result) return null;
 
     elements.previewContent.innerHTML = `
         <div style="margin-bottom: 15px;"><strong>Subject:</strong> ${escapeHTML(result.subject)}</div>
         <hr style="margin: 20px 0; border: none; border-top: 2px solid #e2e8f0; user-select: none;" aria-hidden="true">
         ${result.htmlBody}
     `;
+    return result;
 }
 
 function generateReportPreview(fullTicket, emailType) {
@@ -594,7 +614,112 @@ function generateSystemPreview(fullTicket, emailType, context) {
         ? generateSystemOpeningHTML(safeIssue, safeImpact, formattedStartTime, safeRootCause)
         : generateSystemResolvedHTML(safeIssue, safeImpact, formattedStartTime, formattedEndTime, safeRootCause);
 
-    return { subject, htmlBody };
+    return { subject, htmlBody, issueText, formattedStartTime, context };
+}
+
+function isOutreachApplicable() {
+    return currentTemplate === 'system'
+        && elements.rootCauseSelect.value === 'external'
+        && getEmailType() === 'ongoing';
+}
+
+/**
+ * Rebuild the Send To options for the selected environment. NG-LOT and USLOT
+ * lotteries are contacted directly, so they get a lottery option first.
+ */
+function syncOutreachTargetOptions(context) {
+    const lotteryLabel = context?.fixedDropInBets ? `Lottery: ${context.displayName}` : '';
+    const optionsKey = `${lotteryLabel}|vendors`;
+    if (elements.outreachTarget.dataset.optionsKey === optionsKey) return;
+
+    const previousValue = elements.outreachTarget.value;
+    const options = [new Option('-- Select vendor / lottery --', '')];
+    if (lotteryLabel) options.push(new Option(lotteryLabel, 'lottery'));
+    Object.entries(VENDOR_CONTACTS).forEach(([id, vendor]) => {
+        options.push(new Option(vendor.label, id));
+    });
+
+    elements.outreachTarget.replaceChildren(...options);
+    elements.outreachTarget.dataset.optionsKey = optionsKey;
+    elements.outreachTarget.dataset.manual = 'false';
+    if (options.some(option => option.value === previousValue)) {
+        elements.outreachTarget.value = previousValue;
+    }
+}
+
+function syncOutreachTargetSuggestion(context) {
+    if (elements.outreachTarget.dataset.manual === 'true') return;
+
+    elements.outreachTarget.value = context?.fixedDropInBets
+        ? 'lottery'
+        : suggestVendor(getExternalPartyName(), elements.envSelect.value);
+}
+
+function getOutreachRecipients() {
+    const target = elements.outreachTarget.value;
+    if (!target) return null;
+    if (target === 'lottery') {
+        return getLotteryOutreachRecipients(elements.envSelect.value, elements.nglSiteSelect.value);
+    }
+    return getVendorRecipients(target);
+}
+
+function showOutreachMessage(message) {
+    currentOutreachHTML = '';
+    elements.outreachSubject.value = '';
+    elements.outreachPreview.innerHTML = `<div class="empty-preview">${escapeHTML(message)}</div>`;
+}
+
+function updateOutreachSection(criticalResult) {
+    const isApplicable = isOutreachApplicable();
+    elements.outreachSection.classList.toggle('hidden', !isApplicable);
+    if (!isApplicable) return;
+
+    const context = getSelectedContext();
+    syncOutreachTargetOptions(context);
+    syncOutreachTargetSuggestion(context);
+
+    const target = elements.outreachTarget.value;
+    const recipients = getOutreachRecipients();
+    const hasRecipients = Boolean(recipients);
+    elements.outreachRecipientFields.classList.toggle('hidden', !hasRecipients);
+    elements.outreachMissing.classList.toggle('hidden', hasRecipients || !target);
+    elements.outreachTo.value = hasRecipients ? formatRecipientList(recipients.to) : '';
+    elements.outreachCc.value = hasRecipients ? formatRecipientList(recipients.cc) : '';
+    if (!hasRecipients && target) {
+        elements.outreachMissing.textContent = `No contact list for ${context?.displayName || 'this lottery'} was provided. Add the recipients manually.`;
+    }
+
+    if (!criticalResult?.formattedStartTime) {
+        showOutreachMessage('Complete the critical notification to generate the outreach email');
+        return;
+    }
+
+    elements.outreachSubject.value = generateVendorOutreachSubject(
+        criticalResult.context.displayName,
+        criticalResult.issueText
+    );
+    currentOutreachHTML = generateVendorOutreachHTML(
+        escapeHTML(criticalResult.issueText),
+        criticalResult.formattedStartTime
+    );
+    elements.outreachPreview.innerHTML = currentOutreachHTML;
+}
+
+function copyOutreachEmail() {
+    if (!currentOutreachHTML) return;
+
+    const button = elements.copyOutreachBtn;
+    const originalText = button.innerHTML;
+    copyToClipboard(currentOutreachHTML, () => {
+        button.innerHTML = '✅ Copied!';
+        setTimeout(() => {
+            button.innerHTML = originalText;
+        }, 1800);
+    }, () => {
+        elements.successMessage.textContent = 'Unable to access the clipboard. Run the generator on localhost and try again.';
+        elements.successMessage.classList.add('error', 'show');
+    });
 }
 
 function handleFormSubmit(event) {
@@ -670,6 +795,17 @@ function setupEventListeners() {
     elements.externalTeamInput.addEventListener('input', () => {
         elements.externalTeamInput.dataset.autoFilled = 'false';
     });
+    elements.envSelect.addEventListener('change', () => {
+        elements.outreachTarget.dataset.manual = 'false';
+    });
+    elements.nglSiteSelect.addEventListener('change', () => {
+        elements.outreachTarget.dataset.manual = 'false';
+    });
+    elements.outreachTarget.addEventListener('change', () => {
+        elements.outreachTarget.dataset.manual = elements.outreachTarget.value ? 'true' : 'false';
+        updatePreview();
+    });
+    elements.copyOutreachBtn.addEventListener('click', copyOutreachEmail);
 
     document.querySelectorAll('input[name="emailType"]').forEach(radio => {
         radio.addEventListener('change', syncRequiredFields);

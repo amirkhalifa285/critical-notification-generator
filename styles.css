@@ -384,6 +384,41 @@ select:disabled {
     font-size: 16px;
 }
 
+/* Vendor / Lottery Outreach */
+.outreach-section {
+    margin-top: 30px;
+    padding-top: 24px;
+    border-top: 2px solid #e2e8f0;
+}
+
+.outreach-section > .field-hint {
+    display: block;
+    margin: -12px 0 16px;
+}
+
+.outreach-section .recipient-missing + .recipient-field,
+#outreachRecipientFields + .recipient-missing + .recipient-field {
+    margin-top: 12px;
+}
+
+.outreach-target-group {
+    margin-bottom: 16px;
+}
+
+.recipient-field input[readonly] {
+    background: white;
+    font-size: 12px;
+}
+
+.outreach-preview {
+    min-height: 0;
+    margin-bottom: 16px;
+}
+
+.outreach-preview .empty-preview {
+    height: 80px;
+}
+
 /* Utility Classes */
 .hidden {
     display: none !important;

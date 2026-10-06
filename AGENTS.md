@@ -189,6 +189,12 @@ Safety rules:
 
 Some entries may look suspicious but are intentionally copied exactly from the playbook, including `it.operations@ALC.ca` for Atlantic City and `oleksandr.astakhov@neogames` for SzZrt. Do not silently repair them.
 
+Turkish Sisal lotteries (added from the operator's list, not the PDF playbook):
+
+- Sisal Misli, Sisal Nesine, and Sisal Bilyoner share one To list; Sisal Atili Ganyan and Sisal At Yarisi share another. There is no third lottery in the second group.
+- Both groups use the existing Turkey standard CC list, which matched the supplied CC exactly.
+- Alessandro Galli has two addresses (`@fluttersea.com` and `@sisal.it`). The operator confirmed both belong in both groups. The duplicated `alessandro.galli@sisal.it` in the second group is preserved from the source.
+
 The original source was named `NOC-😇How to use critical notification templates-150926-141738.pdf` and was supplied outside the repository. It may not be present in future clones, so the checked-in recipient configuration and tests are the maintainable source unless the user supplies an updated playbook.
 
 ## Vendor / Lottery Outreach Email
@@ -202,6 +208,8 @@ When an external team is contacted, NOC also emails that vendor or lottery to co
 - NG-LOT and USLOT lotteries default to the lottery's own contacts. Lotteries without a dedicated outreach list fall back to their critical To list; OPAP has neither and shows a no-contacts message.
 - Other environments get a vendor suggestion from the external team name. Brightstar and Gambyt have environment-specific lists (Brightstar MSL; Gambyt MSL/NHL vs MASSL). The operator's manual selection is kept until the environment changes.
 - Vendor and lottery addresses follow the same exact-copy rules as the playbook recipients.
+- Operator-confirmed decisions: "the NOC email" in the outreach CC is `noc-ng@aristocrat.com`; Gambyt's "MAL" list in the source refers to MASSL; error-log wording is never generated.
+- Contacts live in `js/vendorContacts.js` (`VENDOR_CONTACTS`, `LOTTERY_OUTREACH_CONTACTS`). To add a vendor, add an entry with lowercase `matches` keywords, plus `environments` only when the vendor has lottery-specific lists, and update `tests/vendorContacts.test.js`.
 
 ## Email Preview and Clipboard Behavior
 

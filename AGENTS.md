@@ -24,13 +24,14 @@ The application is a static site using HTML, CSS, and vanilla JavaScript. There 
 - `js/main.js`: application initialization and banner preloading.
 - `js/utils.js`: lottery configuration, Jira mappings, timezones, date formatting, banner embedding, and clipboard utilities.
 - `js/recipientLists.js`: authoritative To/CC data and recipient composition rules.
+- `js/vendorContacts.js`: vendor and lottery contacts for the outreach email, plus vendor suggestion from the external team name.
 - `js/templateGenerator.js`: approved Ongoing and Resolved email HTML.
 - `js/formHandlers.js`: dynamic form state, validation, preview generation, and copy actions.
 - `tests/`: Node built-in test suite for templates, recipients, configuration, and time conversion.
 - `images/banner-opening.png`: ongoing notification banner.
 - `images/banner-resolved.png`: resolved notification banner.
 
-Browser script order matters. `utils.js` and `recipientLists.js` must load before the template and form scripts that use them.
+Browser script order matters. `utils.js`, `recipientLists.js`, and `vendorContacts.js` (in that order) must load before the template and form scripts that use them.
 
 `README.md` is a general project overview and may lag behind current business behavior. If it conflicts with this guide, the checked-in code/tests and this `AGENTS.md` are authoritative.
 
@@ -84,6 +85,8 @@ NG-LOT selections:
 - SzZrt/Hungary → Jira `HUN`
 - Bitalih → Jira `NGL`
 - Hipodrom → Jira `NGL`
+- Sisal Misli, Sisal Nesine, Sisal Bilyoner → Jira `NGL`, `Europe/Istanbul`
+- Sisal Atili Ganyan, Sisal At Yarisi → Jira `NGL`, `Europe/Istanbul`
 - JSC → Jira `NGL`
 - UNL → Jira `UNL`
 
@@ -188,6 +191,18 @@ Some entries may look suspicious but are intentionally copied exactly from the p
 
 The original source was named `NOC-😇How to use critical notification templates-150926-141738.pdf` and was supplied outside the repository. It may not be present in future clones, so the checked-in recipient configuration and tests are the maintainable source unless the user supplies an updated playbook.
 
+## Vendor / Lottery Outreach Email
+
+When an external team is contacted, NOC also emails that vendor or lottery to confirm whether the issue is on their side and to request a root cause.
+
+- Shown only for **System Issue** + root cause **External team contacted** + **Ongoing**. It is sent once; there is no resolved version.
+- Subject: `Aristocrat NOC - [lottery name] - [issue description]`. Use the lottery's display name (for example `Sisal TR`), never `NG-LOT`.
+- Body: only the detection line and the start-time line from the critical email, in the lottery's local time. No banner, impact, or root cause. The NOC engineer adds error-log findings after pasting; do not generate error-log wording.
+- CC is always `NOCShiftLeaders@aristocrat.com` and `noc-ng@aristocrat.com`.
+- NG-LOT and USLOT lotteries default to the lottery's own contacts. Lotteries without a dedicated outreach list fall back to their critical To list; OPAP has neither and shows a no-contacts message.
+- Other environments get a vendor suggestion from the external team name. Brightstar and Gambyt have environment-specific lists (Brightstar MSL; Gambyt MSL/NHL vs MASSL). The operator's manual selection is kept until the environment changes.
+- Vendor and lottery addresses follow the same exact-copy rules as the playbook recipients.
+
 ## Email Preview and Clipboard Behavior
 
 - `Copy Email to Clipboard` copies the email body as rich HTML and plain text.
@@ -216,6 +231,7 @@ node --check js/formHandlers.js
 node --check js/templateGenerator.js
 node --check js/utils.js
 node --check js/recipientLists.js
+node --check js/vendorContacts.js
 git diff --check
 ```
 

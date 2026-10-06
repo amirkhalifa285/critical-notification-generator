@@ -14,6 +14,7 @@ A simple web tool for generating Critical Notification emails with customizable 
 - **Timezone Conversion**: Converts Israel-local input to the lottery's local time, including DST
 - **NG-LOT Rules**: Applies the correct Jira project and fixed incident wording automatically
 - **Generic Incident Patterns**: Reuses standard wording while operators supply the affected provider or processor
+- **Vendor / Lottery Outreach Email**: When an external team is contacted, generates the separate email to the vendor or lottery with its own recipients and subject
 - **One-Click Copy**: Copy formatted email directly to clipboard
 - **Embedded Status Banners**: Includes the matching ongoing or resolved banner when pasted into Outlook
 
@@ -57,6 +58,7 @@ A simple web tool for generating Critical Notification emails with customizable 
 5. Choose Ongoing or Resolved; resolved notifications also require an end time
 6. Click **Copy Email to Clipboard**
 7. Paste in Outlook and send
+8. If the root cause is an external team, use the **Vendor / Lottery Outreach Email** panel to copy its To, CC, Subject, and body, then add any error-log findings before sending
 
 Report Delay is available for NCEL, NHL, and VAL. The selected notification date is Israel-local; the generated Activity Summary report date is the previous calendar day.
 
@@ -71,6 +73,8 @@ critical-notification-email-generator/
 ├── js/
 │   ├── main.js            # App initialization
 │   ├── utils.js           # Date/time utilities
+│   ├── recipientLists.js  # Critical notification To/CC lists
+│   ├── vendorContacts.js  # Vendor/lottery outreach contacts
 │   ├── templateGenerator.js # Email templates
 │   └── formHandlers.js    # Form logic
 └── images/

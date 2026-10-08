@@ -203,12 +203,12 @@ When an external team is contacted, NOC also emails that vendor or lottery to co
 
 - Shown only for **System Issue** + root cause **External team contacted** + **Ongoing**. It is sent once; there is no resolved version.
 - Subject: `Aristocrat NOC - [lottery name] - [issue description]`. Use the lottery's display name (for example `Sisal TR`), never `NG-LOT`.
-- Body: only the detection line and the start-time line from the critical email, in the lottery's local time. No banner, impact, or root cause. The NOC engineer adds error-log findings after pasting; do not generate error-log wording.
+- Body: the detection line and the start-time line from the critical email, in the lottery's local time, followed by the operator-approved fixed line: "We have not found any errors or issues on our side. Please check on your side and let us know if there is any maintenance or planned work that may be related." No banner, impact, or root cause. The NOC engineer adds specific error-log findings after pasting; do not generate error-log details.
 - CC is always `NOCShiftLeaders@aristocrat.com` and `noc-ng@aristocrat.com`.
 - NG-LOT and USLOT lotteries default to the lottery's own contacts. Lotteries without a dedicated outreach list fall back to their critical To list; OPAP has neither and shows a no-contacts message.
 - Other environments get a vendor suggestion from the external team name. Brightstar and Gambyt have environment-specific lists (Brightstar MSL and VAL; Gambyt MSL/NHL vs MASSL). Brightstar VAL and MSL both include the five-address Brightstar escalation path (`BRIGHTSTAR_ESCALATION`); MSL also keeps `michigan.ops@`. Other environments use the general `REN.Ops@` list. The operator's manual selection is kept until the environment changes.
 - Vendor and lottery addresses follow the same exact-copy rules as the playbook recipients.
-- Operator-confirmed decisions: "the NOC email" in the outreach CC is `noc-ng@aristocrat.com`; Gambyt's "MAL" list in the source refers to MASSL; error-log wording is never generated.
+- Operator-confirmed decisions: "the NOC email" in the outreach CC is `noc-ng@aristocrat.com`; Gambyt's "MAL" list in the source refers to MASSL; specific error-log details are never generated (the fixed "no errors on our side" line was approved on 2026-10-08).
 - Contacts live in `js/vendorContacts.js` (`VENDOR_CONTACTS`, `LOTTERY_OUTREACH_CONTACTS`). To add a vendor, add an entry with lowercase `matches` keywords, plus `environments` only when the vendor has lottery-specific lists, and update `tests/vendorContacts.test.js`.
 
 ## Email Preview and Clipboard Behavior

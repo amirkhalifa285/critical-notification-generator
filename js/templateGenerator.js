@@ -182,6 +182,7 @@ function generateVendorOutreachHTML(issueDescription, startTime) {
     return `<div style="font-family: Calibri, Arial, sans-serif; font-size: 11pt; background-color: #ffffff; color: #000000;">
         This is to inform you that our monitoring systems have detected: <b>${withPeriod(issueDescription)}</b><br><br>
         The issue started at ${startTime} and is currently ongoing.<br><br>
+        We have not found any errors or issues on our side. Please check on your side and let us know if there is any maintenance or planned work that may be related.<br><br>
     </div>`;
 }
 

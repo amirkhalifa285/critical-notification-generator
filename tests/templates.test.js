@@ -126,6 +126,7 @@ test('vendor outreach email uses the lottery name and has no banner', () => {
     );
     assert.match(html, /have detected: <b>Drop in approved cashouts via Paysafe unity processor\.<\/b>/);
     assert.match(html, /The issue started at 09\/06\/2026 02:50 AM \(GMT-6\) and is currently ongoing\./);
+    assert.match(html, /We have not found any errors or issues on our side\. Please check on your side and let us know if there is any maintenance or planned work that may be related\./);
     assert.doesNotMatch(html, /<img/);
     assert.doesNotMatch(html, /Impact description|Root cause/);
 });

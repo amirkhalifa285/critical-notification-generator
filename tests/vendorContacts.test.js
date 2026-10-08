@@ -22,7 +22,8 @@ test('keeps the operator-supplied vendor list counts', () => {
         PayPal: 3,
         'Gambyt MSL/NHL': 4,
         'Gambyt MASSL': 4,
-        'Brightstar MSL': 1,
+        'Brightstar MSL': 6,
+        'Brightstar VAL': 5,
         Brightstar: 1,
         Evolution: 1
     };
@@ -55,10 +56,25 @@ test('uses dedicated lottery contacts, falling back to the critical To list', ()
     assert.equal(getLotteryOutreachRecipients('NGL', 'OPAP'), null);
 });
 
+test('includes the Brightstar escalation path for VAL and MSL', () => {
+    const escalation = [
+        'Emma.Murray@brightstarlottery.com',
+        'Patrick.Cody@brightstarlottery.com',
+        'REN.ops@brightstarlottery.com',
+        'amanda.johns@brightstarlottery.com',
+        'soumya.bhattacharya@brightstarlottery.com'
+    ];
+    assert.deepEqual(getVendorRecipients('Brightstar VAL').to, escalation);
+    assert.deepEqual(getVendorRecipients('Brightstar MSL').to,
+        ['michigan.ops@brightstarlottery.com', ...escalation]);
+    assert.deepEqual(getVendorRecipients('Brightstar').to, ['REN.Ops@brightstarlottery.com']);
+});
+
 test('suggests vendors from the external team name and environment', () => {
     assert.equal(suggestVendor('Paysafe unity support', 'AGLC'), 'Paysafe');
     assert.equal(suggestVendor('Brightstar', 'MSL'), 'Brightstar MSL');
     assert.equal(suggestVendor('Brighstar', 'MSL'), 'Brightstar MSL');
+    assert.equal(suggestVendor('Brightstar', 'VAL'), 'Brightstar VAL');
     assert.equal(suggestVendor('Brightstar', 'NCEL'), 'Brightstar');
     assert.equal(suggestVendor('Gambyt', 'MASSL'), 'Gambyt MASSL');
     assert.equal(suggestVendor('Gambyt', 'NHL'), 'Gambyt MSL/NHL');

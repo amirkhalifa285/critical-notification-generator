@@ -14,6 +14,15 @@ const OUTREACH_CC = [
     'noc-ng@aristocrat.com'
 ];
 
+// Brightstar escalation path for VAL and MSL incidents.
+const BRIGHTSTAR_ESCALATION = [
+    'Emma.Murray@brightstarlottery.com',
+    'Patrick.Cody@brightstarlottery.com',
+    'REN.ops@brightstarlottery.com',
+    'amanda.johns@brightstarlottery.com',
+    'soumya.bhattacharya@brightstarlottery.com'
+];
+
 // `matches` are lowercase keywords looked up in the external team name.
 // `environments` restricts a variant to specific lotteries when one vendor
 // has several contact lists.
@@ -79,7 +88,16 @@ const VENDOR_CONTACTS = {
         label: 'Brightstar (MSL)',
         matches: ['brightstar', 'brighstar'],
         environments: ['MSL'],
-        to: ['michigan.ops@brightstarlottery.com']
+        to: [
+            'michigan.ops@brightstarlottery.com',
+            ...BRIGHTSTAR_ESCALATION
+        ]
+    },
+    'Brightstar VAL': {
+        label: 'Brightstar (VAL)',
+        matches: ['brightstar', 'brighstar'],
+        environments: ['VAL'],
+        to: [...BRIGHTSTAR_ESCALATION]
     },
     'Brightstar': {
         label: 'Brightstar (general)',

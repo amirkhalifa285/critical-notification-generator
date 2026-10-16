@@ -237,7 +237,7 @@ When an external team is contacted, NOC also emails that vendor or lottery to co
 - Names match ignoring case, spaces, and punctuation.
 - `internalProviders` (Fusion) are Aristocrat platforms in every environment: the root cause is set automatically to `Under Aristocrat teams investigation` and no outreach email is shown. The automatic root cause is undone when the provider changes, unless the operator chose the root cause by hand.
 - The Provider / channel input suggests the selected environment's providers and subproviders; free text still works, and unmapped environments behave as before.
-- WCLC (AGLC) has no outreach contacts yet: the operator's address was ambiguous and must be confirmed.
+- Outreach contacts for Pollard, EQL, and WCLC were supplied by the operator on 2026-10-16.
 
 ## Email Preview and Clipboard Behavior
 

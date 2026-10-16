@@ -172,6 +172,15 @@
         "tech-support@eqlgames.com",
         "Michelle@eqlgames.com"
       ]
+    },
+    "WCLC": {
+      "label": "WCLC",
+      "matches": [
+        "wclc"
+      ],
+      "to": [
+        "gameops@wclc.com"
+      ]
     }
   },
   "lotteryOutreach": {

@@ -1,0 +1,246 @@
+{
+  "EGT": {
+    "source": "EGT / Amusnet",
+    "to": [
+      "support@amusnet.com"
+    ],
+    "channel": "Email"
+  },
+  "Hacksaw": {
+    "source": "Hacksaw",
+    "to": [
+      "support@hacksawgaming.com"
+    ],
+    "channel": "Email / Portal"
+  },
+  "Pragmatic": {
+    "source": "Pragmatic Play",
+    "to": [
+      "support@pragmaticplay.com",
+      "integrations@pragmaticplay.com",
+      "andrew.corris@pragmaticplay.com"
+    ],
+    "cc": [
+      "harry@pragmaticplay.com",
+      "wayne@pragmaticplay.com"
+    ],
+    "note": "Integrations new accounts; Harry GIB, Wayne rest of EU; Andrew AGLC UAT configuration",
+    "channel": "Email / Portal"
+  },
+  "Endorphina": {
+    "source": "Endorphina",
+    "to": [
+      "support@endorphina.com"
+    ],
+    "note": "Raise new email, not thread",
+    "channel": "Email"
+  },
+  "Thunderkick": {
+    "source": "Thunderkick",
+    "to": [
+      "support@thunderkick.com"
+    ],
+    "channel": "Email"
+  },
+  "Fazi": {
+    "source": "Fazi",
+    "to": [
+      "onlinesupport@fazi.rs"
+    ],
+    "note": "Marked latest email",
+    "channel": "Email / Portal"
+  },
+  "Wazdan": {
+    "source": "Wazdan",
+    "to": [
+      "lt@wazdan.com",
+      "b2b@wazdan.com"
+    ],
+    "channel": "Email"
+  },
+  "CT Interactive": {
+    "source": "Casino Technology / CT Interactive",
+    "to": [
+      "support@ct-interactive.com"
+    ],
+    "channel": "Email"
+  },
+  "Tom Horn": {
+    "source": "Tom Horn",
+    "to": [
+      "support@tomhorngaming.com"
+    ],
+    "channel": "Email"
+  },
+  "1x2 Network": {
+    "source": "1x2 Gaming",
+    "to": [
+      "support@1x2gaming.com"
+    ],
+    "channel": "Email"
+  },
+  "Spinfinity": {
+    "source": "Spinfinity",
+    "to": [
+      "support@spinfinitygames.com"
+    ],
+    "channel": "Email"
+  },
+  "Greentube": {
+    "source": "Greentube / Novomatic",
+    "to": [
+      "noc@greentube.com"
+    ],
+    "channel": "Email / Portal"
+  },
+  "Allodium": {
+    "source": "Allodium",
+    "to": [
+      "support@allodiumgames.com"
+    ],
+    "channel": "Email / Portal"
+  },
+  "Fennica": {
+    "source": "Fennica Gaming",
+    "to": [
+      "support@fennicagaming.com"
+    ],
+    "note": "First and second tier same service-desk email",
+    "channel": "Email"
+  },
+  "NetEnt": {
+    "source": "Evolution / BTG / NetEnt / Red Tiger / NoLimit City",
+    "to": [
+      "servicedesk@evolution.com",
+      "psus@evolution.com",
+      "acruz2@evolution.com",
+      "mercedes.lang@netent.com"
+    ],
+    "note": "Evolution Service Desk is primary; psus North America; NetEnt account contact; Red Tiger and NoLimit moved under Evolution. NoLimit old email prohibited",
+    "channel": "Portal preferred"
+  },
+  "Red Tiger Casino": {
+    "source": "Evolution / BTG / NetEnt / Red Tiger / NoLimit City",
+    "to": [
+      "servicedesk@evolution.com",
+      "psus@evolution.com",
+      "acruz2@evolution.com",
+      "mercedes.lang@netent.com"
+    ],
+    "note": "Evolution Service Desk is primary; psus North America; NetEnt account contact; Red Tiger and NoLimit moved under Evolution. NoLimit old email prohibited",
+    "channel": "Portal preferred"
+  },
+  "Big Time Gaming": {
+    "source": "Evolution / BTG / NetEnt / Red Tiger / NoLimit City",
+    "to": [
+      "servicedesk@evolution.com",
+      "psus@evolution.com",
+      "acruz2@evolution.com",
+      "mercedes.lang@netent.com"
+    ],
+    "note": "Evolution Service Desk is primary; psus North America; NetEnt account contact; Red Tiger and NoLimit moved under Evolution. NoLimit old email prohibited",
+    "channel": "Portal preferred"
+  },
+  "Games Global": {
+    "source": "Games Global / Microgaming",
+    "to": [
+      "support@gamesglobal.com",
+      "neil.holland@gamesglobal.com"
+    ],
+    "note": "Support email; Neil for access. Assist ticket portal available",
+    "channel": "Email / Portal"
+  },
+  "AGS": {
+    "source": "AGS",
+    "to": [
+      "rmg-support@playags.com"
+    ],
+    "channel": "Email / Portal"
+  },
+  "Light & Wonder": {
+    "source": "Light & Wonder / LnW",
+    "to": [
+      "tsd@lnw.com"
+    ],
+    "note": "LnW iGaming support portal",
+    "channel": "Email / Portal"
+  },
+  "Konami": {
+    "source": "Konami",
+    "to": [
+      "newcase@konamigaming.com",
+      "wolkoff1103@konamigaming.com",
+      "ponzio1117@konamigaming.com",
+      "elashqar0131@konamigaming.com"
+    ],
+    "note": "Technical/product escalation personnel",
+    "channel": "Email / Portal"
+  },
+  "Inspired": {
+    "source": "Inspired",
+    "to": [
+      "ro2@inseinc.com"
+    ],
+    "note": "Source recommends email; older portal credentials not relevant",
+    "channel": "Email"
+  },
+  "High5": {
+    "source": "High 5 Games",
+    "to": [
+      "B2BSupport@high5games.com"
+    ],
+    "channel": "Email / Portal"
+  },
+  "Everi": {
+    "source": "Everi / IGT",
+    "to": [
+      "rgs-support@igt.com",
+      "supportoperations@everi.com",
+      "nicholas.bartshe@everi.com",
+      "jordan.brent@everi.com",
+      "juan.colindrez@everi.com"
+    ],
+    "note": "New IGT address for general Everi inquiries; Everi portal for escalations. Nick for Betty/Broadway/Play Alberta games; Juan for PlayLive",
+    "channel": "Portal preferred / Email"
+  },
+  "Ainsworth": {
+    "source": "Ainsworth Game Technology",
+    "to": [
+      "RGSSupport@agtslots.com"
+    ],
+    "cc": [
+      "SKhullar@agtslots.com"
+    ],
+    "note": "Source has conflicting portal/email workflow instructions; use Jira for escalations, email for LATAM nonresponses",
+    "channel": "Jira / Email exception"
+  },
+  "EQL": {
+    "source": "EQL / Lougeek",
+    "to": [
+      "support@lougeek.com",
+      "tech-support@eqlgames.com",
+      "Michelle@eqlgames.com"
+    ],
+    "note": "Production: Lougeek TO, others CC; UAT/general: EQL technical and Michelle only",
+    "channel": "Email / Portal"
+  },
+  "Scientific Games": {
+    "source": "Scientific Games / SGI",
+    "to": [
+      "interactive-servicedesk@scientificgames.com",
+      "enterprisedevtools@scientificgames.com",
+      "lauren.walker@scientificgames.com",
+      "Joseph.Tkach@scientificgames.com",
+      "valentin.blaj@scientificgames.com",
+      "indian.agarwal@scientificgames.com",
+      "rajvinder.mahil@scientificgames.com",
+      "krystalyn.malbon@scientificgames.com",
+      "Kara.L'Esperance@scientificgames.com"
+    ],
+    "cc": [
+      "gareth.taylor@sg-gaming.com"
+    ],
+    "note": "Portal transitioning; source also says temporary Airtable and P1 escalation contacts",
+    "channel": "Portal / Email"
+  }
+}

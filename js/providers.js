@@ -40,6 +40,32 @@ function resolveProvider(environmentKey, name) {
     return { provider, internal };
 }
 
+/*
+ * Subprovider contacts from the Fusion team's vendor list
+ * (data/subproviderContacts.json). Shown to the NOC engineer as a reference
+ * only; they are never added to any generated email.
+ */
+const SUBPROVIDER_CONTACTS = {};
+
+function setSubproviderContactData(data) {
+    Object.keys(SUBPROVIDER_CONTACTS).forEach(key => delete SUBPROVIDER_CONTACTS[key]);
+    Object.assign(SUBPROVIDER_CONTACTS, data);
+}
+
+function getSubproviderContactHint(name) {
+    const wanted = normalizeProviderName(name || '');
+    const entry = Object.entries(SUBPROVIDER_CONTACTS)
+        .find(([subprovider]) => normalizeProviderName(subprovider) === wanted);
+    if (!wanted || !entry) return '';
+
+    const [subprovider, contact] = entry;
+    const details = [`📇 ${subprovider} contact (Fusion team list, reference only, not added to the email): ${contact.to.join('; ')}`];
+    if (contact.cc?.length) details.push(`CC: ${contact.cc.join('; ')}`);
+    if (contact.note) details.push(`Note: ${contact.note}`);
+    if (contact.channel) details.push(`Channel: ${contact.channel}`);
+    return details.join('\n');
+}
+
 /** Providers and subproviders of an environment, for the input suggestions. */
 function getProviderSuggestions(environmentKey) {
     const providers = PROVIDER_DATA.environments[environmentKey] || {};
@@ -67,13 +93,16 @@ function parseProviderLines(text) {
 
 if (typeof module !== 'undefined' && module.exports) {
     setProviderData(require('../data/providers.json'));
+    setSubproviderContactData(require('../data/subproviderContacts.json'));
     module.exports = {
         INTERNAL_ROOT_CAUSE,
         PROVIDER_DATA,
         formatProviderLines,
         getProviderSuggestions,
+        getSubproviderContactHint,
         parseProviderLines,
         resolveProvider,
-        setProviderData
+        setProviderData,
+        setSubproviderContactData
     };
 }

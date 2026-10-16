@@ -579,3 +579,11 @@ body.admin-mode .admin-only {
         padding-right: 90px;
     }
 }
+
+.reference-hint {
+    white-space: pre-line;
+}
+
+#outreachContactHint {
+    margin-top: 12px;
+}

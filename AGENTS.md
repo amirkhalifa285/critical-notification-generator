@@ -238,6 +238,7 @@ When an external team is contacted, NOC also emails that vendor or lottery to co
 - `internalProviders` (Fusion) are Aristocrat platforms in every environment: the root cause is set automatically to `Under Aristocrat teams investigation` and no outreach email is shown. The automatic root cause is undone when the provider changes, unless the operator chose the root cause by hand.
 - The Provider / channel input suggests the selected environment's providers and subproviders; free text still works, and unmapped environments behave as before.
 - Outreach contacts for Pollard, EQL, and WCLC were supplied by the operator on 2026-10-16.
+- `data/subproviderContacts.json` holds subprovider contacts from the Fusion team's Confluence vendor list (`updated_vendor_contacts.csv`, supplied 2026-10-16), keyed by the subprovider names in `data/providers.json`; `source` names the CSV row. They are a **reference hint only** and are never added to an email or used as an outreach target, because NOC contacts the provider (or nobody, for Fusion). The hint appears below the outreach email, or under Provider / channel for Fusion subproviders since their outreach is hidden. Subproviders without an email in that list (portal-only or absent) show no hint.
 
 ## Email Preview and Clipboard Behavior
 

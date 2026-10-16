@@ -37,6 +37,7 @@ const elements = {
     issueTargetInput: document.getElementById('issueTarget'),
     providerOptions: document.getElementById('providerOptions'),
     providerHint: document.getElementById('providerHint'),
+    outreachContactHint: document.getElementById('outreachContactHint'),
     interruptionDetailsGroup: document.getElementById('interruptionDetailsGroup'),
     interruptionFrequency: document.getElementById('interruptionFrequency'),
     interruptionDuration: document.getElementById('interruptionDuration'),
@@ -390,6 +391,8 @@ function syncProviderControls() {
     let hint = '';
     if (resolved?.internal) {
         hint = `${resolved.provider} is an Aristocrat platform: root cause is set to “${INTERNAL_ROOT_CAUSE}”.`;
+        const contactHint = isSubprovider ? getSubproviderContactHint(target) : '';
+        if (contactHint) hint += `\n${contactHint}`;
     } else if (isSubprovider) {
         hint = `${target} is a subprovider of ${resolved.provider}: contact ${resolved.provider}.`;
     }
@@ -777,6 +780,11 @@ function updateOutreachSection(criticalResult) {
     const context = getSelectedContext();
     syncOutreachTargetOptions(context);
     syncOutreachTargetSuggestion(context);
+
+    const provider = getProviderResolution();
+    const contactHint = provider.isSubprovider ? getSubproviderContactHint(provider.target) : '';
+    elements.outreachContactHint.textContent = contactHint;
+    elements.outreachContactHint.classList.toggle('hidden', !contactHint);
 
     const target = elements.outreachTarget.value;
     const recipients = getOutreachRecipients();

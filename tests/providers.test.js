@@ -55,3 +55,20 @@ test('round-trips the admin provider text format', () => {
     assert.equal(formatProviderLines(providers), 'IsoftBet: Adell, Tom Horn\nIWG');
     assert.deepEqual(parseProviderLines('IsoftBet: Adell, Tom Horn\n\nIWG\n'), providers);
 });
+
+test('shows the Fusion team contact of a subprovider as a reference', () => {
+    const { getSubproviderContactHint } = require('../js/providers');
+    const hint = getSubproviderContactHint('fazi');
+    assert.match(hint, /^📇 Fazi contact .*: onlinesupport@fazi\.rs/);
+    assert.match(hint, /Note: Marked latest email/);
+    assert.match(getSubproviderContactHint('Ainsworth'), /CC: SKhullar@agtslots\.com/);
+    assert.equal(getSubproviderContactHint('Adell'), '');
+});
+
+test('links every subprovider contact to a mapped subprovider', () => {
+    const { PROVIDER_DATA } = require('../js/providers');
+    const contacts = require('../data/subproviderContacts.json');
+    const subproviders = new Set(Object.values(PROVIDER_DATA.environments)
+        .flatMap(providers => Object.values(providers).flat()));
+    Object.keys(contacts).forEach(name => assert.ok(subproviders.has(name), name));
+});

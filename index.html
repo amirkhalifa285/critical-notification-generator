@@ -167,29 +167,20 @@
                     <!-- System Issue fields -->
                     <div id="systemFields">
                         <div class="form-group">
-                            <label for="issueDescription">Issue Description</label>
+                            <div class="recipient-label-row">
+                                <label for="issueDescription">Issue Description</label>
+                                <button type="button" class="admin-edit-btn admin-only" id="editIssuesBtn">✏️ Edit issues</button>
+                            </div>
                             <select id="issueDescription">
                                 <option value="">-- Select Issue --</option>
-                                <option value="Drop in bets via {target}" data-target-label="Provider / channel">Drop in bets via [Provider / channel]</option>
-                                <option value="Decrease in bets via {target}" data-target-label="Provider / channel" data-requires-percentage="true">Decrease in bets via [Provider / channel]</option>
-                                <option value="Drop in bets via mobile">Drop in bets via mobile</option>
-                                <option value="Drop in bets via application platform">Drop in bets via application platform</option>
-                                <option value="Drop in bets via web platform">Drop in bets via web platform</option>
-                                <option value="Increase in failed logins followed by decrease in bets" data-requires-percentage="true">Increase in failed logins followed by decrease in bets</option>
-                                <option value="Increase in failed logins followed by drop in bets">Increase in failed logins followed by drop in bets</option>
-                                <option value="Decrease in bets via application platform" data-requires-percentage="true">Decrease in bets via application platform</option>
-                                <option value="Drop in approved cashouts via {target} processor" data-target-label="Payment processor">Drop in approved cashouts via [Processor]</option>
-                                <option value="Drop in approved deposits via {target} processor" data-target-label="Payment processor">Drop in approved deposits via [Processor]</option>
-                                <option value="Increase in failed deposits via {target} processor" data-target-label="Payment processor">Increase in failed deposits via [Processor]</option>
-                                <option value="Increase in rejected deposits via {target} processor" data-target-label="Payment processor" data-approved-deposits-check="true">Increase in rejected deposits via [Processor]</option>
-                                <option value="Increase in declined deposits via {target} processor" data-target-label="Payment processor" data-approved-deposits-check="true">Increase in declined deposits via [Processor]</option>
-                                <option value="Interruptions in bets" data-optional-target-label="Provider / channel" data-interruption="true">Interruptions in bets [optional provider/channel]</option>
-                                <option value="Hosting website is unavailable">Hosting website is unavailable</option>
                                 <option value="other">Other (Custom)</option>
                             </select>
                             <small class="field-hint hidden" id="nglIssueHint"></small>
                             <div class="custom-field" id="issueTargetGroup">
-                                <label for="issueTarget" id="issueTargetLabel">Provider / channel</label>
+                                <div class="recipient-label-row">
+                                    <label for="issueTarget" id="issueTargetLabel">Provider / channel</label>
+                                    <button type="button" class="admin-edit-btn admin-only" id="editProvidersBtn">✏️ Edit providers</button>
+                                </div>
                                 <input type="text" id="issueTarget" placeholder="Enter provider, processor, or channel" autocomplete="off">
                                 <datalist id="providerOptions"></datalist>
                                 <small class="field-hint hidden" id="providerHint"></small>
@@ -353,6 +344,7 @@
     <script src="js/recipientLists.js"></script>
     <script src="js/vendorContacts.js"></script>
     <script src="js/providers.js"></script>
+    <script src="js/issues.js"></script>
     <script src="js/templateGenerator.js"></script>
     <script src="js/formHandlers.js"></script>
     <script src="js/admin.js"></script>

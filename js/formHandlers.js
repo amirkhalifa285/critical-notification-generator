@@ -329,6 +329,31 @@ function syncIssueControls() {
     syncProviderControls();
 }
 
+/**
+ * Build the Issue Description options from ISSUE_LIST, keeping the current
+ * selection when it still exists.
+ */
+function renderIssueOptions() {
+    const previousValue = elements.issueSelect.value;
+    const options = ISSUE_LIST.map(issue => {
+        const option = new Option(issue.label, issue.value);
+        if (issue.targetLabel) option.dataset.targetLabel = issue.targetLabel;
+        if (issue.optionalTargetLabel) option.dataset.optionalTargetLabel = issue.optionalTargetLabel;
+        if (issue.requiresPercentage) option.dataset.requiresPercentage = 'true';
+        if (issue.interruption) option.dataset.interruption = 'true';
+        if (issue.approvedDepositsCheck) option.dataset.approvedDepositsCheck = 'true';
+        return option;
+    });
+    elements.issueSelect.replaceChildren(
+        new Option('-- Select Issue --', ''),
+        ...options,
+        new Option('Other (Custom)', 'other')
+    );
+    if ([...elements.issueSelect.options].some(option => option.value === previousValue)) {
+        elements.issueSelect.value = previousValue;
+    }
+}
+
 function getSelectedEnvironmentKey() {
     return getRecipientKey(elements.envSelect.value, elements.nglSiteSelect.value);
 }

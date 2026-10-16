@@ -9,6 +9,8 @@ const ADMIN_BRANCH = 'main';
 const ADMIN_TOKEN_KEY = 'cng-admin-token';
 const RECIPIENTS_PATH = 'data/recipients.json';
 const VENDORS_PATH = 'data/vendors.json';
+const PROVIDERS_PATH = 'data/providers.json';
+const ISSUES_PATH = 'data/issues.json';
 
 /**
  * Pull addresses out of pasted text. Accepts one per line or Outlook-style
@@ -115,7 +117,7 @@ const adminDialog = {
 };
 
 /**
- * Open the dialog with a list of fields: { id, label, value, type, rows }.
+ * Open the dialog with a list of fields: { id, label, value, type, rows, noWrap }.
  * `onSave(values)` runs on submit; throwing shows the error in the dialog.
  */
 function openAdminDialog({ title, hint = '', fields = [], saveLabel = 'Save', onSave }) {
@@ -136,6 +138,7 @@ function openAdminDialog({ title, hint = '', fields = [], saveLabel = 'Save', on
         control.id = `admin-${field.id}`;
         control.name = field.id;
         if (field.rows) control.rows = field.rows;
+        if (field.noWrap) control.wrap = 'off';
         else control.type = field.type || 'text';
         control.value = field.value || '';
         control.autocomplete = 'off';
@@ -318,6 +321,65 @@ function openOutreachEditor() {
     else showAdminMessage('Select a vendor or lottery in Send To first, or use ➕ New vendor.');
 }
 
+/* ---------- Providers and subproviders ---------- */
+
+function openProviderEditor() {
+    const key = getSelectedEnvironmentKey();
+    const context = getSelectedContext();
+    if (!context || context.custom) {
+        showAdminMessage('Select an environment first.');
+        return;
+    }
+    const name = context.displayName;
+
+    openAdminDialog({
+        title: `Edit ${name} providers`,
+        hint: 'One provider per line, followed by its subproviders: "IsoftBet: Adell, Tom Horn". '
+            + 'A provider without subproviders is just its name. Outreach contacts are matched by the provider name (vendor keywords).',
+        fields: [
+            { id: 'providers', label: `Providers for ${name}`, value: formatProviderLines(PROVIDER_DATA.environments[key]), rows: 12 },
+            { id: 'internal', label: 'Internal providers, all environments (comma separated)', value: PROVIDER_DATA.internalProviders.join(', ') }
+        ],
+        onSave: async values => {
+            const providers = parseProviderLines(values.providers);
+            const internal = values.internal.split(',').map(item => item.trim()).filter(Boolean);
+            const data = await commitDataChange(PROVIDERS_PATH, file => {
+                if (Object.keys(providers).length) file.environments[key] = providers;
+                else delete file.environments[key];
+                file.internalProviders = internal;
+            }, `Admin: update ${name} providers`);
+            setProviderData(data);
+            syncProviderControls();
+            syncExternalTeamSuggestion();
+            updatePreview();
+            return SAVED_MESSAGE;
+        }
+    });
+}
+
+/* ---------- Issue descriptions ---------- */
+
+function openIssueEditor() {
+    openAdminDialog({
+        title: 'Edit issue descriptions',
+        hint: 'One issue per line, in dropdown order. [Provider / channel] or [Payment processor] marks where the operator\'s input goes. '
+            + 'Options after "|": % (asks for a percentage), interruption, ask approved deposits. "Other (Custom)" is always added.',
+        fields: [{ id: 'issues', label: 'Issues', value: formatIssueLines(ISSUE_LIST), rows: 16, noWrap: true }],
+        onSave: async values => {
+            const issues = parseIssueLines(values.issues, ISSUE_LIST);
+            if (!issues.length) throw new Error('Keep at least one issue.');
+            const data = await commitDataChange(ISSUES_PATH, file => {
+                file.splice(0, file.length, ...parseIssueLines(values.issues, file));
+            }, 'Admin: update issue descriptions');
+            setIssueData(data);
+            renderIssueOptions();
+            syncIssueControls();
+            updatePreview();
+            return SAVED_MESSAGE;
+        }
+    });
+}
+
 /* ---------- Setup ---------- */
 
 function setupAdmin() {
@@ -325,6 +387,8 @@ function setupAdmin() {
     document.getElementById('editRecipientsBtn').addEventListener('click', openRecipientEditor);
     document.getElementById('editOutreachBtn').addEventListener('click', openOutreachEditor);
     document.getElementById('addVendorBtn').addEventListener('click', () => openVendorEditor());
+    document.getElementById('editProvidersBtn').addEventListener('click', openProviderEditor);
+    document.getElementById('editIssuesBtn').addEventListener('click', openIssueEditor);
     document.getElementById('adminForm').addEventListener('submit', handleAdminSubmit);
     document.getElementById('adminCancelBtn').addEventListener('click', () => adminDialog.dialog.close());
     setAdminToken(getAdminToken());

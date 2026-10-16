@@ -13,14 +13,16 @@ async function loadAppData() {
         if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
         return response.json();
     };
-    const [recipients, vendors, providers] = await Promise.all([
+    const [recipients, vendors, providers, issues] = await Promise.all([
         fetchJSON('data/recipients.json'),
         fetchJSON('data/vendors.json'),
-        fetchJSON('data/providers.json')
+        fetchJSON('data/providers.json'),
+        fetchJSON('data/issues.json')
     ]);
     setRecipientData(recipients);
     setVendorData(vendors);
     setProviderData(providers);
+    setIssueData(issues);
 }
 
 function showDataLoadError(error) {
@@ -45,6 +47,8 @@ async function initApp() {
         return;
     }
     
+    renderIssueOptions();
+
     // Setup all event listeners
     setupEventListeners();
     setupAdmin();

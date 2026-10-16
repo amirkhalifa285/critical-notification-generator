@@ -19,7 +19,7 @@ Important product rules:
 
 The application is a static site using HTML, CSS, and vanilla JavaScript. There is no build step and no framework.
 
-- `index.html`: form controls, environment options, issue/report choices, and script loading order.
+- `index.html`: form controls, environment options, report choices, and script loading order. Issue options are built from `data/issues.json` (`js/issues.js`).
 - `styles.css`: application UI and copy-safe preview styling.
 - `js/main.js`: application initialization, contact-data loading, and banner preloading.
 - `data/recipients.json`: authoritative To/CC lists (`lists`, keyed like `NHL` or `NGL:Sisal TR`) and the NPI common recipients (`npiCommon`).
@@ -224,6 +224,8 @@ When an external team is contacted, NOC also emails that vendor or lottery to co
 - Save reads the latest file from GitHub, applies the change, and commits it straight to `main` with an `Admin: ...` message. GitHub Pages then redeploys. There is no review step or pre-save test run.
 - Pasted text is parsed by `parseAddressList`, which keeps order, spelling, and duplicates exactly and accepts Outlook `Name <address>` lists.
 - Recipient editing covers only the customer-specific lists; the NPI common list and the `NOCShiftLeaders@` rule stay in code. Clearing a list deletes that key. An empty lottery outreach list falls back to the critical To list.
+- **✏️ Edit issues** (next to Issue Description) edits `data/issues.json` as one issue per line: `[Provider / channel]` or `[Payment processor]` marks the operator input, and options after `|` are `%`, `interruption`, and `ask approved deposits`. Existing labels are kept; `Other (Custom)` is always added in code. The approved-deposits impact wording relies on the issue ending in `via ... processor`.
+- **✏️ Edit providers** (next to Provider / channel) edits the selected environment's providers and subproviders as `Provider: Sub A, Sub B` lines, plus the global internal-provider list.
 - Editing a vendor keeps extra fields such as `environments`. Shared-list copies (Turkish Sisal, Brightstar escalation) are not updated together.
 
 ## Providers and Subproviders

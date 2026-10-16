@@ -365,23 +365,28 @@ function getSelectedEnvironmentKey() {
  * cause. The automatic root cause is undone when the provider changes, unless
  * the operator picked the root cause by hand.
  */
-function syncProviderControls() {
+function getProviderResolution() {
     const context = getSelectedContext();
     const usesProviders = currentTemplate === 'system'
         && !context?.fixedDropInBets
         && elements.issueTargetGroup.classList.contains('show')
         && elements.issueTargetLabel.textContent === 'Provider / channel';
     const key = getSelectedEnvironmentKey();
+    const target = elements.issueTargetInput.value.trim();
+    const resolved = usesProviders ? resolveProvider(key, target) : null;
+    const isSubprovider = Boolean(resolved)
+        && resolved.provider.toLowerCase() !== target.toLowerCase();
+    return { usesProviders, key, target, resolved, isSubprovider };
+}
+
+function syncProviderControls() {
+    const { usesProviders, key, target, resolved, isSubprovider } = getProviderResolution();
 
     const suggestions = usesProviders ? getProviderSuggestions(key) : [];
     elements.providerOptions.replaceChildren(...suggestions.map(name => new Option(name, name)));
     if (suggestions.length) elements.issueTargetInput.setAttribute('list', 'providerOptions');
     else elements.issueTargetInput.removeAttribute('list');
 
-    const target = elements.issueTargetInput.value.trim();
-    const resolved = usesProviders ? resolveProvider(key, target) : null;
-    const isSubprovider = resolved
-        && resolved.provider.toLowerCase() !== target.toLowerCase();
     let hint = '';
     if (resolved?.internal) {
         hint = `${resolved.provider} is an Aristocrat platform: root cause is set to “${INTERNAL_ROOT_CAUSE}”.`;
@@ -437,15 +442,26 @@ function syncExternalTeamSuggestion(context = getSelectedContext()) {
     }
 }
 
-function getIssueDescription(context) {
+function getIssueDescription(context, target = elements.issueTargetInput.value.trim()) {
     if (context.fixedDropInBets) return `Drop in bets via ${context.displayName}`;
 
     const issueTemplate = elements.issueSelect.value === 'other'
         ? elements.customIssueInput.value.trim()
         : elements.issueSelect.value;
-    const target = elements.issueTargetInput.value.trim();
     if (isInterruptionIssue() && target) return `${issueTemplate} via ${target}`;
     return issueTemplate.replace('{target}', target);
+}
+
+/**
+ * The Impact description names the provider for a subprovider issue
+ * ("Decrease in bets via IsoftBet sub-provider Adell"); the subject and
+ * detection line keep the shorter issue text.
+ */
+function getImpactIssueDescription(context, issueText) {
+    const { target, resolved, isSubprovider } = getProviderResolution();
+    return isSubprovider
+        ? getIssueDescription(context, `${resolved.provider} sub-provider ${target}`)
+        : issueText;
 }
 
 function getExternalPartyName() {
@@ -623,7 +639,8 @@ function generateSystemPreview(fullTicket, emailType, context) {
         showPreviewMessage('Enter the impact percentage');
         return null;
     }
-    let impactDescription = needsPercentage ? `${issueText} (~${percentage}%)` : issueText;
+    const impactIssueText = getImpactIssueDescription(context, issueText);
+    let impactDescription = needsPercentage ? `${impactIssueText} (~${percentage}%)` : impactIssueText;
 
     if (issueAsksApprovedDeposits()) {
         const approvedDepositsAnswer = document.querySelector(
@@ -646,7 +663,7 @@ function generateSystemPreview(fullTicket, emailType, context) {
             showPreviewMessage('Enter the interruption frequency and duration');
             return null;
         }
-        impactDescription = generateInterruptionImpact(issueText, frequency, duration, emailType);
+        impactDescription = generateInterruptionImpact(impactIssueText, frequency, duration, emailType);
     }
 
     const rootCause = getRootCause(emailType);

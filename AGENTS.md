@@ -232,7 +232,7 @@ When an external team is contacted, NOC also emails that vendor or lottery to co
 
 `data/providers.json` lists, per environment, the providers NOC contacts and their subproviders (from the operator's list, with names cleaned up). `js/providers.js` resolves the Provider / channel input.
 
-- NOC contacts the provider, never the subprovider. The subject and impact keep the typed subprovider (`Decrease in bets via Adell`), while the external team, root cause, and outreach use the provider (IsoftBet).
+- NOC contacts the provider, never the subprovider. The subject and detection line keep the typed subprovider (`Decrease in bets via Adell`); the Impact description names both (`Decrease in bets via IsoftBet sub-provider Adell (~40%).`); the external team, root cause, and outreach use the provider (IsoftBet). This also applies to Fusion subproviders and to the optional provider of Interruptions.
 - Mappings are per environment: the same studio can belong to different providers (Hacksaw is IsoftBet in SZ, Fusion in AGLC).
 - Names match ignoring case, spaces, and punctuation.
 - `internalProviders` (Fusion) are Aristocrat platforms in every environment: the root cause is set automatically to `Under Aristocrat teams investigation` and no outreach email is shown. The automatic root cause is undone when the provider changes, unless the operator chose the root cause by hand.

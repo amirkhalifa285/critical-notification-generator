@@ -391,8 +391,6 @@ function syncProviderControls() {
     let hint = '';
     if (resolved?.internal) {
         hint = `${resolved.provider} is an Aristocrat platform: root cause is set to “${INTERNAL_ROOT_CAUSE}”.`;
-        const contactHint = isSubprovider ? getSubproviderContactHint(target) : '';
-        if (contactHint) hint += `\n${contactHint}`;
     } else if (isSubprovider) {
         hint = `${target} is a subprovider of ${resolved.provider}: contact ${resolved.provider}.`;
     }

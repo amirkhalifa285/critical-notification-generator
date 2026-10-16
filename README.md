@@ -15,6 +15,8 @@ A simple web tool for generating Critical Notification emails with customizable 
 - **NG-LOT Rules**: Applies the correct Jira project and fixed incident wording automatically
 - **Generic Incident Patterns**: Reuses standard wording while operators supply the affected provider or processor
 - **Vendor / Lottery Outreach Email**: When an external team is contacted, generates the separate email to the vendor or lottery with its own recipients and subject
+- **Admin Mode**: The owner edits recipients, vendors, issues, and providers from the page; saves commit to GitHub and redeploy
+- **Subprovider Escalation**: A subprovider is escalated to its provider (Adell → IsoftBet); Fusion is treated as internal
 - **One-Click Copy**: Copy formatted email directly to clipboard
 - **Embedded Status Banners**: Includes the matching ongoing or resolved banner when pasted into Outlook
 
@@ -68,7 +70,10 @@ critical-notification-email-generator/
 ├── index.html              # Main page
 ├── data/
 │   ├── recipients.json    # Critical notification To/CC lists
-│   └── vendors.json       # Vendor/lottery outreach contacts
+│   ├── vendors.json       # Vendor/lottery outreach contacts
+│   ├── providers.json     # Providers and subproviders per environment
+│   ├── issues.json        # System issue descriptions
+│   └── subproviderContacts.json # Reference-only subprovider contacts
 ├── styles.css              # Styling
 ├── js/
 │   ├── main.js            # App initialization

@@ -24,18 +24,24 @@ The application is a static site using HTML, CSS, and vanilla JavaScript. There 
 - `js/main.js`: application initialization, contact-data loading, and banner preloading.
 - `data/recipients.json`: authoritative To/CC lists (`lists`, keyed like `NHL` or `NGL:Sisal TR`) and the NPI common recipients (`npiCommon`).
 - `data/vendors.json`: vendor outreach contacts (`vendors`) and dedicated lottery outreach lists (`lotteryOutreach`).
+- `data/providers.json`: per-environment providers and their subproviders, plus `internalProviders` (Fusion).
+- `data/issues.json`: System Issue dropdown entries and their behavior flags.
+- `data/subproviderContacts.json`: reference-only subprovider contacts from the Fusion team's vendor list.
+- `js/providers.js`: subprovider → provider resolution, input suggestions, and the subprovider contact hint.
+- `js/issues.js`: issue list plus the admin text format for issues.
+- `js/admin.js`: admin mode (GitHub token login, edit dialogs, commit-to-main saving).
 - `js/utils.js`: lottery configuration, Jira mappings, timezones, date formatting, banner embedding, and clipboard utilities.
 - `js/recipientLists.js`: recipient composition rules (NPI merge, required CC).
 - `js/vendorContacts.js`: outreach recipient rules and vendor suggestion from the external team name.
 - `js/templateGenerator.js`: approved Ongoing and Resolved email HTML.
 - `js/formHandlers.js`: dynamic form state, validation, preview generation, and copy actions.
-- `tests/`: Node built-in test suite for templates, recipients, configuration, and time conversion.
+- `tests/`: Node built-in test suite for templates, recipients, vendors, providers, issues, admin parsing, configuration, and time conversion.
 - `images/banner-opening.png`: ongoing notification banner.
 - `images/banner-resolved.png`: resolved notification banner.
 
-Contact data is fetched as JSON at startup (with `cache: 'no-cache'`), so the page must be served over HTTP; opening `index.html` via `file://` shows a load error. Lists that used to be shared constants (the Turkish Sisal To lists, `BRIGHTSTAR_ESCALATION`) are now stored as separate copies per key, so change every copy when one changes.
+All `data/*.json` files are fetched at startup (with `cache: 'no-cache'`), so the page must be served over HTTP; opening `index.html` via `file://` shows a load error. Lists that used to be shared constants (the Turkish Sisal To lists, `BRIGHTSTAR_ESCALATION`) are now stored as separate copies per key, so change every copy when one changes.
 
-Browser script order matters. `utils.js`, `recipientLists.js`, and `vendorContacts.js` (in that order) must load before the template and form scripts that use them.
+Browser script order matters: `utils.js`, `recipientLists.js`, `vendorContacts.js`, `providers.js`, `issues.js`, `templateGenerator.js`, `formHandlers.js`, `admin.js`, then `main.js`, which loads the JSON and starts the app.
 
 `README.md` is a general project overview and may lag behind current business behavior. If it conflicts with this guide, the checked-in code/tests and this `AGENTS.md` are authoritative.
 
@@ -151,9 +157,10 @@ Selecting the report type first also filters the environments correctly.
 
 System Issue is the default template tab.
 
-Common approved issue patterns include:
+The dropdown is built from `data/issues.json` and can be edited in admin mode. Common approved issue patterns include:
 
 - Drop in bets via a provider, processor, mobile, application platform, or web platform.
+- Decrease in bets via a provider/channel (requires a percentage; added 2026-10-16).
 - Increase in failed logins followed by decrease in bets.
 - Increase in failed logins followed by drop in bets.
 - Decrease in bets via application platform.
@@ -264,11 +271,7 @@ node --test
 Also run syntax and whitespace checks when touching JavaScript or preparing a commit:
 
 ```bash
-node --check js/formHandlers.js
-node --check js/templateGenerator.js
-node --check js/utils.js
-node --check js/recipientLists.js
-node --check js/vendorContacts.js
+for f in js/*.js; do node --check "$f"; done
 git diff --check
 ```
 
@@ -288,11 +291,40 @@ When adding a customer or environment:
 
 1. Add the option to `index.html` with the appropriate report capability data attributes if applicable.
 2. Add the Jira prefix, IANA timezone, and date format to `LOTTERY_CONFIG`.
-3. Add an exact playbook recipient entry only when an authoritative list exists.
+3. Add an exact playbook recipient entry only when an authoritative list exists (via admin mode or `data/recipients.json`).
 4. Decide explicitly whether it is a direct project, NG-LOT, USLOT, or NPI customer. Never infer this.
-5. Add mapping, time conversion, recipient, and template tests as appropriate.
-6. Test Ongoing and Resolved output.
-7. Verify both clipboard-copy paths if template HTML changed.
-8. Push `main` only when authorized and verify the GitHub Pages build.
+5. If it has providers/subproviders, add them to `data/providers.json` (or via ✏️ Edit providers).
+6. Add mapping, time conversion, recipient, and template tests as appropriate.
+7. Test Ongoing and Resolved output.
+8. Verify both clipboard-copy paths if template HTML changed.
+9. Push `main` only when authorized and verify the GitHub Pages build.
 
 When updating wording, compare generated output with an approved real example. Small changes in tense, punctuation, capitalization, percentage placement, provider naming, or date format can make a notification operationally incorrect.
+
+## Working With Admin Mode Commits
+
+- The owner saves changes from the live page (often from a phone), and each save is a commit on `main` titled `Admin: ...`. **Always `git pull` before local work**; otherwise the local branch falls behind `origin/main` and the push is rejected.
+- Admin saves do not run tests. After pulling, run `node --test`. The tests check data structure, not exact list contents, so legitimate edits should pass.
+- The token is a fine-grained GitHub token (this repo only, Contents read/write) stored in the owner's browser. When it expires, saves fail with "The token is invalid or expired"; the owner creates a new one and logs in again.
+- To undo an admin change, revert its commit.
+
+## Change History and Open Items
+
+2026-10-16 session (all deployed; last commit `43993a1`):
+
+- Contact data moved from JS into `data/recipients.json` and `data/vendors.json` (output verified identical for all 68 lists).
+- Admin mode added to the existing page (single user, commits straight to `main`, chosen for speed over review). First real save: `G.S.Hughes@lottery.nh.gov` added to NHL To.
+- New issue `Decrease in bets via [Provider / channel]`; issues moved to `data/issues.json` with an admin editor.
+- Provider/subprovider mapping per environment from the operator's `PROVIDERSSUBPROVIDERS.txt`, names cleaned up with approval (`Endrophina` corrected to `Endorphina`). Fusion is internal everywhere.
+- Impact line names the provider: `... via IsoftBet sub-provider Adell`; the subject and detection line keep `via Adell`.
+- New outreach vendors: Pollard `toc@pbl.ca`, EQL (3 addresses), WCLC `gameops@wclc.com`.
+- Reference hint below the outreach email: `FYI this is the contact email for the subprovider: X, feel free to add them to the outreach email` (15px). Shown only when there is an outreach email and a contact; nothing for Fusion or subproviders without one.
+- Exact contact-count tests replaced with structure checks.
+
+Open items (not done; wait for the owner):
+
+- The Fusion team CSV lists different contacts than the tool for IsoftBet, Evolution, IWG, EQL (wants Lougeek in To and EQL addresses in CC), Pollard (`pbl@service-now.com`), and Brightstar. None were applied. A per-vendor CC would need a code change because outreach CC is fixed.
+- Not linked to a CSV contact because the match was uncertain: Inspired Sports (vs Inspired), Synot Playtech (vs Playtech).
+- Brand aliases (BTG, Microgaming, Amusnet, Playzido) were proposed but not requested.
+- No admin editor for `data/subproviderContacts.json`; edit it on GitHub.
+- The Admin button is visible to anyone with the link; it is harmless without the token.

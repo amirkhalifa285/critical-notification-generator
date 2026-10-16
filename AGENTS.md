@@ -226,6 +226,17 @@ When an external team is contacted, NOC also emails that vendor or lottery to co
 - Recipient editing covers only the customer-specific lists; the NPI common list and the `NOCShiftLeaders@` rule stay in code. Clearing a list deletes that key. An empty lottery outreach list falls back to the critical To list.
 - Editing a vendor keeps extra fields such as `environments`. Shared-list copies (Turkish Sisal, Brightstar escalation) are not updated together.
 
+## Providers and Subproviders
+
+`data/providers.json` lists, per environment, the providers NOC contacts and their subproviders (from the operator's list, with names cleaned up). `js/providers.js` resolves the Provider / channel input.
+
+- NOC contacts the provider, never the subprovider. The subject and impact keep the typed subprovider (`Decrease in bets via Adell`), while the external team, root cause, and outreach use the provider (IsoftBet).
+- Mappings are per environment: the same studio can belong to different providers (Hacksaw is IsoftBet in SZ, Fusion in AGLC).
+- Names match ignoring case, spaces, and punctuation.
+- `internalProviders` (Fusion) are Aristocrat platforms in every environment: the root cause is set automatically to `Under Aristocrat teams investigation` and no outreach email is shown. The automatic root cause is undone when the provider changes, unless the operator chose the root cause by hand.
+- The Provider / channel input suggests the selected environment's providers and subproviders; free text still works, and unmapped environments behave as before.
+- WCLC (AGLC) has no outreach contacts yet: the operator's address was ambiguous and must be confirmed.
+
 ## Email Preview and Clipboard Behavior
 
 - `Copy Email to Clipboard` copies the email body as rich HTML and plain text.
@@ -266,7 +277,7 @@ python3 -m http.server 8000
 
 Then open <http://localhost:8000/>.
 
-When changing business mappings, add or update tests. Recipient tests intentionally verify source-list counts, selected unusual addresses, NPI scope, missing OPAP contacts, and the universal NOC Shift Leaders alias.
+When changing business mappings, add or update tests. Contact data changes through admin mode, so tests check its structure rather than exact list counts, plus selected unusual addresses and duplicates, NPI scope, missing OPAP contacts, and the universal NOC Shift Leaders alias.
 
 ## Maintenance Checklist
 

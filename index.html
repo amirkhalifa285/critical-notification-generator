@@ -190,7 +190,9 @@
                             <small class="field-hint hidden" id="nglIssueHint"></small>
                             <div class="custom-field" id="issueTargetGroup">
                                 <label for="issueTarget" id="issueTargetLabel">Provider / channel</label>
-                                <input type="text" id="issueTarget" placeholder="Enter provider, processor, or channel">
+                                <input type="text" id="issueTarget" placeholder="Enter provider, processor, or channel" autocomplete="off">
+                                <datalist id="providerOptions"></datalist>
+                                <small class="field-hint hidden" id="providerHint"></small>
                             </div>
                             <div class="custom-field" id="customIssueDiv">
                                 <input type="text" id="customIssue" placeholder="Enter custom issue description">
@@ -350,6 +352,7 @@
     <script src="js/utils.js"></script>
     <script src="js/recipientLists.js"></script>
     <script src="js/vendorContacts.js"></script>
+    <script src="js/providers.js"></script>
     <script src="js/templateGenerator.js"></script>
     <script src="js/formHandlers.js"></script>
     <script src="js/admin.js"></script>

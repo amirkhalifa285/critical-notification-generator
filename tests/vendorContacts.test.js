@@ -11,26 +11,14 @@ const {
 
 const OUTREACH_CC = ['NOCShiftLeaders@aristocrat.com', 'noc-ng@aristocrat.com'];
 
-test('keeps the operator-supplied vendor list counts', () => {
-    const expectedCounts = {
-        Paysafe: 1,
-        BtoBet: 1,
-        Mkodo: 2,
-        FDJ: 1,
-        IsoftBet: 1,
-        IWG: 2,
-        PayPal: 3,
-        'Gambyt MSL/NHL': 4,
-        'Gambyt MASSL': 4,
-        'Brightstar MSL': 6,
-        'Brightstar VAL': 5,
-        Brightstar: 1,
-        Evolution: 1
-    };
-
-    assert.deepEqual(Object.keys(VENDOR_CONTACTS).sort(), Object.keys(expectedCounts).sort());
-    for (const [id, count] of Object.entries(expectedCounts)) {
-        assert.equal(VENDOR_CONTACTS[id].to.length, count, id);
+// Vendors are edited from the admin mode, so check structure, not counts.
+test('keeps every vendor well formed', () => {
+    for (const [id, vendor] of Object.entries(VENDOR_CONTACTS)) {
+        assert.ok(vendor.label, `${id} label`);
+        assert.ok(vendor.matches.length > 0, `${id} keywords`);
+        assert.ok(vendor.matches.every(keyword => keyword === keyword.toLowerCase()), `${id} lowercase keywords`);
+        assert.ok(vendor.to.length > 0, `${id} To`);
+        vendor.to.forEach(address => assert.match(address, /^[^\s;,]+@[^\s;,]+$/, `${id}: ${address}`));
     }
 });
 

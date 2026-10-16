@@ -152,6 +152,26 @@
       "to": [
         "SERVICEDESK@EVOLUTION.COM"
       ]
+    },
+    "Pollard": {
+      "label": "Pollard",
+      "matches": [
+        "pollard"
+      ],
+      "to": [
+        "toc@pbl.ca"
+      ]
+    },
+    "EQL": {
+      "label": "EQL",
+      "matches": [
+        "eql"
+      ],
+      "to": [
+        "support@lougeek.com",
+        "tech-support@eqlgames.com",
+        "Michelle@eqlgames.com"
+      ]
     }
   },
   "lotteryOutreach": {

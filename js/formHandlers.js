@@ -35,6 +35,8 @@ const elements = {
     issueTargetGroup: document.getElementById('issueTargetGroup'),
     issueTargetLabel: document.getElementById('issueTargetLabel'),
     issueTargetInput: document.getElementById('issueTarget'),
+    providerOptions: document.getElementById('providerOptions'),
+    providerHint: document.getElementById('providerHint'),
     interruptionDetailsGroup: document.getElementById('interruptionDetailsGroup'),
     interruptionFrequency: document.getElementById('interruptionFrequency'),
     interruptionDuration: document.getElementById('interruptionDuration'),
@@ -324,6 +326,60 @@ function syncIssueControls() {
     elements.percentageInput.required = needsPercentage;
 
     if (!needsPercentage) elements.percentageInput.value = '';
+    syncProviderControls();
+}
+
+function getSelectedEnvironmentKey() {
+    return getRecipientKey(elements.envSelect.value, elements.nglSiteSelect.value);
+}
+
+/**
+ * Provider / channel suggestions for the selected environment, plus the
+ * subprovider and internal-provider rules: a subprovider is escalated to its
+ * provider, and an internal provider (Fusion) always uses the internal root
+ * cause. The automatic root cause is undone when the provider changes, unless
+ * the operator picked the root cause by hand.
+ */
+function syncProviderControls() {
+    const context = getSelectedContext();
+    const usesProviders = currentTemplate === 'system'
+        && !context?.fixedDropInBets
+        && elements.issueTargetGroup.classList.contains('show')
+        && elements.issueTargetLabel.textContent === 'Provider / channel';
+    const key = getSelectedEnvironmentKey();
+
+    const suggestions = usesProviders ? getProviderSuggestions(key) : [];
+    elements.providerOptions.replaceChildren(...suggestions.map(name => new Option(name, name)));
+    if (suggestions.length) elements.issueTargetInput.setAttribute('list', 'providerOptions');
+    else elements.issueTargetInput.removeAttribute('list');
+
+    const target = elements.issueTargetInput.value.trim();
+    const resolved = usesProviders ? resolveProvider(key, target) : null;
+    const isSubprovider = resolved
+        && resolved.provider.toLowerCase() !== target.toLowerCase();
+    let hint = '';
+    if (resolved?.internal) {
+        hint = `${resolved.provider} is an Aristocrat platform: root cause is set to “${INTERNAL_ROOT_CAUSE}”.`;
+    } else if (isSubprovider) {
+        hint = `${target} is a subprovider of ${resolved.provider}: contact ${resolved.provider}.`;
+    }
+    elements.providerHint.textContent = hint;
+    elements.providerHint.classList.toggle('hidden', !hint);
+
+    const rootCause = elements.rootCauseSelect;
+    let rootCauseChanged = false;
+    if (resolved?.internal) {
+        if (rootCause.value !== INTERNAL_ROOT_CAUSE) {
+            rootCause.value = INTERNAL_ROOT_CAUSE;
+            rootCause.dataset.autoInternal = 'true';
+            rootCauseChanged = true;
+        }
+    } else if (rootCause.dataset.autoInternal === 'true') {
+        rootCause.value = 'external';
+        rootCause.dataset.autoInternal = 'false';
+        rootCauseChanged = true;
+    }
+    if (rootCauseChanged) syncRootCauseControls();
 }
 
 function syncRootCauseControls() {
@@ -341,9 +397,10 @@ function syncRootCauseControls() {
 function syncExternalTeamSuggestion(context = getSelectedContext()) {
     if (elements.rootCauseSelect.value !== 'external') return;
 
+    const target = elements.issueTargetInput.value.trim();
     const suggestion = context?.fixedDropInBets
         ? context.displayName
-        : elements.issueTargetInput.value.trim();
+        : resolveProvider(getSelectedEnvironmentKey(), target)?.provider || target;
     const wasAutoFilled = elements.externalTeamInput.dataset.autoFilled === 'true';
 
     if (suggestion && (!elements.externalTeamInput.value || wasAutoFilled)) {
@@ -777,8 +834,14 @@ function setupEventListeners() {
         syncExternalTeamSuggestion();
     });
     elements.customIssueInput.addEventListener('input', syncIssueControls);
-    elements.issueTargetInput.addEventListener('input', syncExternalTeamSuggestion);
-    elements.rootCauseSelect.addEventListener('change', syncRootCauseControls);
+    elements.issueTargetInput.addEventListener('input', () => {
+        syncProviderControls();
+        syncExternalTeamSuggestion();
+    });
+    elements.rootCauseSelect.addEventListener('change', () => {
+        elements.rootCauseSelect.dataset.autoInternal = 'false';
+        syncRootCauseControls();
+    });
     document.querySelectorAll('.copy-recipient-btn').forEach(button => {
         button.addEventListener('click', () => copyRecipientField(button));
     });

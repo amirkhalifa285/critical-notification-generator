@@ -1,0 +1,96 @@
+{
+  "internalProviders": [
+    "Fusion"
+  ],
+  "environments": {
+    "SZ": {
+      "IsoftBet": [
+        "Tech4bet",
+        "Egaming",
+        "Synottech Synot",
+        "Adell",
+        "Apollo",
+        "EGT",
+        "Casimi",
+        "Hacksaw",
+        "Pragmatic",
+        "Endrophina",
+        "Thunderkick",
+        "Fazi",
+        "Wazdan",
+        "CT Interactive",
+        "Tom Horn",
+        "1x2 Network",
+        "Beefee Games"
+      ],
+      "Fusion": [
+        "Synottech Kajot",
+        "Spinfinity",
+        "Greentube",
+        "Synot ABX Play",
+        "Synottech Deep Gaming",
+        "Allodium",
+        "Wizard",
+        "Synot Playtech",
+        "Fennica"
+      ],
+      "Evolution": [
+        "NetEnt",
+        "Red Tiger Casino"
+      ]
+    },
+    "AGLC": {
+      "Evolution": [
+        "Red Tiger Casino",
+        "NetEnt",
+        "Big Time Gaming"
+      ],
+      "WCLC": [],
+      "Fusion": [
+        "Games Global",
+        "Wizard",
+        "AGS",
+        "Hacksaw",
+        "Light & Wonder",
+        "Pragmatic",
+        "Konami",
+        "Spinberry",
+        "Inspired",
+        "High5",
+        "Everi",
+        "Ainsworth",
+        "Slotmill"
+      ],
+      "BtoBet": [],
+      "Brightstar": []
+    },
+    "NCEL": {
+      "IWG": [],
+      "Fusion": [],
+      "Pollard": []
+    },
+    "MSL": {
+      "IWG": [],
+      "Brightstar": [],
+      "EQL": []
+    },
+    "NHL": {
+      "IWG": []
+    },
+    "VAL": {
+      "IWG": [],
+      "Fusion": [
+        "AGS",
+        "EQL",
+        "Inspired Sports",
+        "Scientific Games"
+      ]
+    },
+    "FK-MI": {
+      "Fusion": []
+    },
+    "PL": {
+      "Fusion": []
+    }
+  }
+}

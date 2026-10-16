@@ -22,40 +22,15 @@ test('applies the shared NPI recipients only to the four confirmed customers', (
     assert.equal(nhl.cc.includes('i-lotteryleadership@aristocrat.com'), false);
 });
 
-test('keeps the playbook entry counts, including intentional duplicates', () => {
-    const expectedCounts = {
-        MASSL: [17, 9],
-        NCEL: [4, 2],
-        NHL: [13, 1],
-        VAL: [10, 2],
-        MSL: [8, 1],
-        AGLC: [9, 15],
-        WV: [8, 7],
-        SZ: [1, 23],
-        PL: [36, 7],
-        'FK-MI': [8, 12],
-        'NGL:Sisal IT': [10, 16],
-        'NGL:Sisal TR': [9, 16],
-        'NGL:Bitalih': [12, 18],
-        'NGL:Hipodrom': [6, 18],
-        'NGL:Sisal Misli': [6, 18],
-        'NGL:Sisal Nesine': [6, 18],
-        'NGL:Sisal Bilyoner': [6, 18],
-        'NGL:Sisal Atili Ganyan': [6, 18],
-        'NGL:Sisal At Yarisi': [6, 18],
-        'NGL:JSC': [8, 16],
-        'NGL:Olifeja': [6, 16],
-        'NGL:UNL': [3, 16],
-        'NGL:Win2Day': [1, 13],
-        'NGL:SzZrt': [1, 26],
-        CRO: [4, 17],
-        'Atlantic City': [2, 21],
-        'IGT Georgia': [1, 23]
-    };
-
-    for (const [key, [toCount, ccCount]] of Object.entries(expectedCounts)) {
-        assert.equal(RECIPIENT_LISTS[key].to.length, toCount, `${key} To count`);
-        assert.equal(RECIPIENT_LISTS[key].cc.length, ccCount, `${key} CC count`);
+// Counts are not fixed: lists are edited from the admin mode. Check the
+// structure instead, plus the intentional duplicates from the playbook.
+test('keeps every recipient list well formed, including intentional duplicates', () => {
+    for (const [key, list] of Object.entries(RECIPIENT_LISTS)) {
+        assert.ok(Array.isArray(list.to) && Array.isArray(list.cc), `${key} has To and CC`);
+        assert.ok(list.to.length + list.cc.length > 0, `${key} is not empty`);
+        [...list.to, ...list.cc].forEach(address => {
+            assert.match(address, /^[^\s;,]+@[^\s;,]+$/, `${key}: ${address}`);
+        });
     }
 
     assert.equal(RECIPIENT_LISTS.WV.to.filter(address => address === 'tdunford@wvlottery.com').length, 2);

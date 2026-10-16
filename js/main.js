@@ -13,12 +13,14 @@ async function loadAppData() {
         if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
         return response.json();
     };
-    const [recipients, vendors] = await Promise.all([
+    const [recipients, vendors, providers] = await Promise.all([
         fetchJSON('data/recipients.json'),
-        fetchJSON('data/vendors.json')
+        fetchJSON('data/vendors.json'),
+        fetchJSON('data/providers.json')
     ]);
     setRecipientData(recipients);
     setVendorData(vendors);
+    setProviderData(providers);
 }
 
 function showDataLoadError(error) {

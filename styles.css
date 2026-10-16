@@ -590,3 +590,13 @@ body.admin-mode .admin-only {
 #outreachContactHint {
     margin-top: 12px;
 }
+
+#issueDescription optgroup {
+    font-weight: 700;
+    font-style: normal;
+    color: #2d3748;
+}
+
+#issueDescription option {
+    font-weight: 400;
+}

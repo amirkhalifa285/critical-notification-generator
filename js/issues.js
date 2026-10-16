@@ -10,7 +10,8 @@ function setIssueData(data) {
 }
 
 /*
- * Admin text format, one issue per line:
+ * Admin text format, one issue per line, grouped under "# Category" lines:
+ *   # Activity
  *   Drop in bets via [Provider / channel]
  *   Decrease in bets via [Provider / channel] | %
  *   Increase in rejected deposits via [Payment processor] processor | ask approved deposits
@@ -24,14 +25,21 @@ const ISSUE_FLAGS = {
 };
 
 function formatIssueLines(issues) {
-    return issues.map(issue => {
+    let currentCategory;
+    return issues.flatMap(issue => {
+        const lines = [];
+        if (issue.category !== currentCategory) {
+            currentCategory = issue.category;
+            if (currentCategory) lines.push(`# ${currentCategory}`);
+        }
         const text = issue.targetLabel
             ? issue.value.replace('{target}', `[${issue.targetLabel}]`)
             : issue.value;
         const flags = Object.entries(ISSUE_FLAGS)
             .filter(([, property]) => issue[property])
             .map(([flag]) => flag);
-        return [text, ...flags].join(' | ');
+        lines.push([text, ...flags].join(' | '));
+        return lines;
     }).join('\n');
 }
 
@@ -40,7 +48,12 @@ function formatIssueLines(issues) {
  * so the dropdown wording stays as before.
  */
 function parseIssueLines(text, previousIssues = []) {
-    return text.split('\n').map(line => line.trim()).filter(Boolean).map(line => {
+    let category = '';
+    return text.split('\n').map(line => line.trim()).filter(Boolean).flatMap(line => {
+        if (line.startsWith('#')) {
+            category = line.replace(/^#+/, '').trim();
+            return [];
+        }
         const [wording, ...flagParts] = line.split('|').map(part => part.trim());
         const issue = {};
         const targetMatch = /\[([^\]]+)\]/.exec(wording);
@@ -66,7 +79,7 @@ function parseIssueLines(text, previousIssues = []) {
             ? `${issue.value} [optional provider/channel]`
             : wording);
         const { value, ...options } = issue;
-        return { value, label, ...options };
+        return [{ value, label, ...(category ? { category } : {}), ...options }];
     });
 }
 

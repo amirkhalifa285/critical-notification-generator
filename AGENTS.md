@@ -231,7 +231,7 @@ When an external team is contacted, NOC also emails that vendor or lottery to co
 - Save reads the latest file from GitHub, applies the change, and commits it straight to `main` with an `Admin: ...` message. GitHub Pages then redeploys. There is no review step or pre-save test run.
 - Pasted text is parsed by `parseAddressList`, which keeps order, spelling, and duplicates exactly and accepts Outlook `Name <address>` lists.
 - Recipient editing covers only the customer-specific lists; the NPI common list and the `NOCShiftLeaders@` rule stay in code. Clearing a list deletes that key. An empty lottery outreach list falls back to the critical To list.
-- **✏️ Edit issues** (next to Issue Description) edits `data/issues.json` as one issue per line: `[Provider / channel]` or `[Payment processor]` marks the operator input, and options after `|` are `%`, `interruption`, and `ask approved deposits`. Existing labels are kept; `Other (Custom)` is always added in code. The approved-deposits impact wording relies on the issue ending in `via ... processor`.
+- **✏️ Edit issues** (next to Issue Description) edits `data/issues.json` as one issue per line, grouped under `# Category` lines that become bold dropdown headers (`<optgroup>`; currently Activity, Cashouts/Deposits, Hosting): `[Provider / channel]` or `[Payment processor]` marks the operator input, and options after `|` are `%`, `interruption`, and `ask approved deposits`. Existing labels are kept; `Other (Custom)` is always added in code. The approved-deposits impact wording relies on the issue ending in `via ... processor`.
 - **✏️ Edit providers** (next to Provider / channel) edits the selected environment's providers and subproviders as `Provider: Sub A, Sub B` lines, plus the global internal-provider list.
 - Editing a vendor keeps extra fields such as `environments`. Shared-list copies (Turkish Sisal, Brightstar escalation) are not updated together.
 
@@ -320,6 +320,7 @@ When updating wording, compare generated output with an approved real example. S
 - New outreach vendors: Pollard `toc@pbl.ca`, EQL (3 addresses), WCLC `gameops@wclc.com`.
 - Reference hint below the outreach email: `FYI this is the contact email for the subprovider: X, feel free to add them to the outreach email` (15px). Shown only when there is an outreach email and a contact; nothing for Fusion or subproviders without one.
 - Exact contact-count tests replaced with structure checks.
+- Issue Description dropdown grouped into Activity, Cashouts/Deposits, and Hosting (Interruptions moved into Activity).
 
 Open items (not done; wait for the owner):
 

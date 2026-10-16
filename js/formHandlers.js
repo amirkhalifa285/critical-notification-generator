@@ -331,23 +331,39 @@ function syncIssueControls() {
 }
 
 /**
- * Build the Issue Description options from ISSUE_LIST, keeping the current
- * selection when it still exists.
+ * Build the Issue Description options from ISSUE_LIST, grouped by category
+ * (bold, unselectable headers), keeping the current selection when it still
+ * exists.
  */
 function renderIssueOptions() {
     const previousValue = elements.issueSelect.value;
-    const options = ISSUE_LIST.map(issue => {
+    const groups = [];
+    ISSUE_LIST.forEach(issue => {
         const option = new Option(issue.label, issue.value);
         if (issue.targetLabel) option.dataset.targetLabel = issue.targetLabel;
         if (issue.optionalTargetLabel) option.dataset.optionalTargetLabel = issue.optionalTargetLabel;
         if (issue.requiresPercentage) option.dataset.requiresPercentage = 'true';
         if (issue.interruption) option.dataset.interruption = 'true';
         if (issue.approvedDepositsCheck) option.dataset.approvedDepositsCheck = 'true';
-        return option;
+
+        const category = issue.category || '';
+        let group = groups.find(item => item.category === category);
+        if (!group) {
+            group = { category, options: [] };
+            groups.push(group);
+        }
+        group.options.push(option);
+    });
+    const groupElements = groups.flatMap(({ category, options }) => {
+        if (!category) return options;
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = category;
+        optgroup.append(...options);
+        return [optgroup];
     });
     elements.issueSelect.replaceChildren(
         new Option('-- Select Issue --', ''),
-        ...options,
+        ...groupElements,
         new Option('Other (Custom)', 'other')
     );
     if ([...elements.issueSelect.options].some(option => option.value === previousValue)) {

@@ -2,75 +2,90 @@
   {
     "value": "Drop in bets via {target}",
     "label": "Drop in bets via [Provider / channel]",
+    "category": "Activity",
     "targetLabel": "Provider / channel"
   },
   {
     "value": "Decrease in bets via {target}",
     "label": "Decrease in bets via [Provider / channel]",
+    "category": "Activity",
     "targetLabel": "Provider / channel",
     "requiresPercentage": true
   },
   {
     "value": "Drop in bets via mobile",
-    "label": "Drop in bets via mobile"
+    "label": "Drop in bets via mobile",
+    "category": "Activity"
   },
   {
     "value": "Drop in bets via application platform",
-    "label": "Drop in bets via application platform"
+    "label": "Drop in bets via application platform",
+    "category": "Activity"
   },
   {
     "value": "Drop in bets via web platform",
-    "label": "Drop in bets via web platform"
+    "label": "Drop in bets via web platform",
+    "category": "Activity"
   },
   {
     "value": "Increase in failed logins followed by decrease in bets",
     "label": "Increase in failed logins followed by decrease in bets",
+    "category": "Activity",
     "requiresPercentage": true
   },
   {
     "value": "Increase in failed logins followed by drop in bets",
-    "label": "Increase in failed logins followed by drop in bets"
+    "label": "Increase in failed logins followed by drop in bets",
+    "category": "Activity"
   },
   {
     "value": "Decrease in bets via application platform",
     "label": "Decrease in bets via application platform",
+    "category": "Activity",
     "requiresPercentage": true
+  },
+  {
+    "value": "Interruptions in bets",
+    "label": "Interruptions in bets [optional provider/channel]",
+    "category": "Activity",
+    "interruption": true,
+    "optionalTargetLabel": "Provider / channel"
   },
   {
     "value": "Drop in approved cashouts via {target} processor",
     "label": "Drop in approved cashouts via [Processor]",
+    "category": "Cashouts/Deposits",
     "targetLabel": "Payment processor"
   },
   {
     "value": "Drop in approved deposits via {target} processor",
     "label": "Drop in approved deposits via [Processor]",
+    "category": "Cashouts/Deposits",
     "targetLabel": "Payment processor"
   },
   {
     "value": "Increase in failed deposits via {target} processor",
     "label": "Increase in failed deposits via [Processor]",
+    "category": "Cashouts/Deposits",
     "targetLabel": "Payment processor"
   },
   {
     "value": "Increase in rejected deposits via {target} processor",
     "label": "Increase in rejected deposits via [Processor]",
+    "category": "Cashouts/Deposits",
     "targetLabel": "Payment processor",
     "approvedDepositsCheck": true
   },
   {
     "value": "Increase in declined deposits via {target} processor",
     "label": "Increase in declined deposits via [Processor]",
+    "category": "Cashouts/Deposits",
     "targetLabel": "Payment processor",
     "approvedDepositsCheck": true
   },
   {
-    "value": "Interruptions in bets",
-    "label": "Interruptions in bets [optional provider/channel]",
-    "optionalTargetLabel": "Provider / channel",
-    "interruption": true
-  },
-  {
     "value": "Hosting website is unavailable",
-    "label": "Hosting website is unavailable"
+    "label": "Hosting website is unavailable",
+    "category": "Hosting"
   }
 ]

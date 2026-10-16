@@ -31,3 +31,17 @@ test('gives new interruption issues the optional provider field', () => {
 test('rejects unknown options', () => {
     assert.throws(() => parseIssueLines('Drop in bets | sometimes'), /Unknown option/);
 });
+
+test('groups issues into Activity, Cashouts/Deposits, and Hosting', () => {
+    const categories = [...new Set(ISSUE_LIST.map(issue => issue.category))];
+    assert.deepEqual(categories, ['Activity', 'Cashouts/Deposits', 'Hosting']);
+    assert.equal(ISSUE_LIST.find(issue => issue.value === 'Interruptions in bets').category, 'Activity');
+});
+
+test('reads "# Category" lines in the admin text format', () => {
+    const text = formatIssueLines(ISSUE_LIST);
+    assert.ok(text.startsWith('# Activity\nDrop in bets via [Provider / channel]'));
+    assert.match(text, /\n# Hosting\nHosting website is unavailable$/);
+    const [issue] = parseIssueLines('# Hosting\nHosting website is unavailable');
+    assert.equal(issue.category, 'Hosting');
+});

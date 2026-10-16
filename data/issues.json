@@ -76,8 +76,14 @@
     "targetLabel": "Payment processor"
   },
   {
-    "value": "Increase in failed deposits via {target} processor",
-    "label": "Increase in failed deposits via [Processor]",
+    "value": "Decrease in approved cashouts via {target} processor",
+    "label": "Decrease in approved cashouts via [Payment processor] processor",
+    "category": "Cashouts/Deposits",
+    "targetLabel": "Payment processor"
+  },
+  {
+    "value": "Decrease in approved deposits via {target} processor",
+    "label": "Decrease in approved deposits via [Payment processor] processor",
     "category": "Cashouts/Deposits",
     "targetLabel": "Payment processor"
   },

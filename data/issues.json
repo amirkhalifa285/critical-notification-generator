@@ -45,6 +45,18 @@
     "requiresPercentage": true
   },
   {
+    "value": "Decrease in bets via mobile platform",
+    "label": "Decrease in bets via mobile platform",
+    "category": "Activity",
+    "requiresPercentage": true
+  },
+  {
+    "value": "Decrease in bets via web platform",
+    "label": "Decrease in bets via web platform",
+    "category": "Activity",
+    "requiresPercentage": true
+  },
+  {
     "value": "Interruptions in bets",
     "label": "Interruptions in bets [optional provider/channel]",
     "category": "Activity",

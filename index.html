@@ -9,6 +9,7 @@
 <body>
     <div class="container">
         <header>
+            <button type="button" class="admin-toggle-btn" id="adminToggleBtn">🔒 Admin</button>
             <h1>📧 Critical Notification Generator</h1>
             <p class="subtitle">Choose template type and fill in the details</p>
         </header>
@@ -82,7 +83,10 @@
 
                     <div class="recipient-section hidden" id="recipientSection">
                         <div class="recipient-heading">
-                            <h3>📨 Recipients from NOC playbook</h3>
+                            <div class="recipient-label-row">
+                                <h3>📨 Recipients from NOC playbook</h3>
+                                <button type="button" class="admin-edit-btn admin-only" id="editRecipientsBtn">✏️ Edit</button>
+                            </div>
                             <small id="recipientSourceLabel"></small>
                         </div>
                         <div id="recipientFields">
@@ -302,6 +306,10 @@
                     <div class="form-group outreach-target-group">
                         <label for="outreachTarget">Send To</label>
                         <select id="outreachTarget"></select>
+                        <div class="admin-only admin-inline-actions">
+                            <button type="button" class="admin-edit-btn" id="editOutreachBtn">✏️ Edit contacts</button>
+                            <button type="button" class="admin-edit-btn" id="addVendorBtn">➕ New vendor</button>
+                        </div>
                     </div>
 
                     <div class="recipient-section">
@@ -343,6 +351,19 @@
     <script src="js/vendorContacts.js"></script>
     <script src="js/templateGenerator.js"></script>
     <script src="js/formHandlers.js"></script>
+    <script src="js/admin.js"></script>
     <script src="js/main.js"></script>
+    <dialog class="admin-dialog" id="adminDialog">
+        <form id="adminForm">
+            <h2 id="adminTitle"></h2>
+            <small class="field-hint" id="adminHint"></small>
+            <div id="adminFields"></div>
+            <div class="admin-status" id="adminStatus"></div>
+            <div class="admin-actions">
+                <button type="button" class="admin-cancel-btn" id="adminCancelBtn">Cancel</button>
+                <button type="submit" class="btn" id="adminSaveBtn">Save</button>
+            </div>
+        </form>
+    </dialog>
 </body>
 </html>

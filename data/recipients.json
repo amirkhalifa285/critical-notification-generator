@@ -1,0 +1,775 @@
+{
+  "npiCommon": {
+    "to": [
+      "Jennifer.Ekholtz@aristocrat.com"
+    ],
+    "cc": [
+      "i-lotteryleadership@aristocrat.com",
+      "TechOps@aristocrat.com",
+      "noc-ng@aristocrat.com",
+      "BATeam@aristocrat.com",
+      "NG_TechOps@aristocrat.com",
+      "NG_ServiceOps@aristocrat.com",
+      "NOCShiftLeaders@aristocrat.com",
+      "Chris.Shaban@aristocrat.com",
+      "Trish.Parker@aristocrat.com",
+      "daniel.odonoghue@aristocrat.com"
+    ]
+  },
+  "lists": {
+    "MASSL": {
+      "to": [
+        "daniel.odonoghue@aristocrat.com",
+        "mbracken@masslottery.com",
+        "cteja@masslottery.com",
+        "shawn.thorp@aristocrat.com",
+        "Brian.Smith@aristocrat.com",
+        "anna.pavlenko@aristocrat.com",
+        "MarisaLourdes.Polanco@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "mark.page@aristocrat.com",
+        "Ryan.Eddy@Aristocrat.com",
+        "nate.sullivan@aristocrat.com",
+        "jessie.teague@aristocrat.com",
+        "jrinkacs@masslottery.com",
+        "fcarreiro@masslottery.com",
+        "lgiffen@masslottery.com",
+        "smartins@masslottery.com",
+        "Savannah.Plaisted@aristocrat.com"
+      ],
+      "cc": [
+        "i-lotteryleadership@aristocrat.com",
+        "TechOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "BATeam@aristocrat.com",
+        "NG_TechOps@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Trish.Parker@aristocrat.com"
+      ]
+    },
+    "NCEL": {
+      "to": [
+        "Anat.Landes@aristocrat.com",
+        "GamingSupport@lotterync.net",
+        "npicriticalnotification@neopollard.com",
+        "daniel.odonoghue@aristocrat.com"
+      ],
+      "cc": [
+        "Randy.Spielman@lotterync.net",
+        "DBGAlerts@aristocrat.com"
+      ]
+    },
+    "NHL": {
+      "to": [
+        "david.mildenberg@aristocrat.com",
+        "NHiLotteryCriticalIncidentNotification@lottery.nh.gov",
+        "Jenny.Aharonov@aristocrat.com",
+        "Mark.Page@aristocrat.com",
+        "NHLeadership@aristocrat.com",
+        "playersupport@aristocrat.com",
+        "complianceoperations@aristocrat.com",
+        "NHLeadership@aristocrat.com",
+        "playersupport@aristocrat.com",
+        "complianceoperations@aristocrat.com",
+        "Daniel.Silverman@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ],
+      "cc": [
+        "DBGAlerts@aristocrat.com"
+      ]
+    },
+    "VAL": {
+      "to": [
+        "lena.benel@aristocrat.com",
+        "Meirav.Hershkovitz@aristocrat.com",
+        "criticalincidentNPi@VALottery.com",
+        "Anat.Landes@aristocrat.com",
+        "andrew.eckard@neopollard.com",
+        "IDSMonitoring@VALOTTERY.COM",
+        "NPiCriticalNotification@neopollard.com",
+        "Ronen.Irani@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ],
+      "cc": [
+        "SCleaton@VALOTTERY.COM",
+        "DBGAlerts@aristocrat.com"
+      ]
+    },
+    "MSL": {
+      "to": [
+        "liat.horev@aristocrat.com",
+        "lena.benel@aristocrat.com",
+        "Critical.Issues@michiganlottery.com",
+        "millera17@michigan.gov",
+        "heather.calahan@aristocrat.com",
+        "critical.issues@michiganlottery.gov",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ],
+      "cc": [
+        "DBGAlerts@aristocrat.com"
+      ]
+    },
+    "AGLC": {
+      "to": [
+        "NPiNotifications@aglc.ca",
+        "yana.todosiienko@aristocrat.com",
+        "liat.horev@aristocrat.com",
+        "sport-ilottery-criticalnotification@aristocrat.com",
+        "NPiCriticalNotification@neopollard.com",
+        "AGLCchangemanagement@neopollard.com",
+        "Ronen.Irani@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ],
+      "cc": [
+        "audrey.medalsy@neopollard.com",
+        "nolan.beck@neopollard.com",
+        "ohad.shlomoff@aristocrat.com",
+        "yaniv.brosh@aristocrat.com",
+        "daniel.silverman@aristocrat.com",
+        "olga.dmytrenko@aristocrat.com",
+        "vitalii.kuznietsov@aristocrat.com",
+        "alexandr.tatarikov@aristocrat.com",
+        "serhiy.stetsyk@aristocrat.com",
+        "dmytro.lykov@aristocrat.com",
+        "maksym.diachenko@aristocrat.com",
+        "noc@pariplayltd.com",
+        "rebecca.avrahami@aristocrat.com",
+        "ofer.cherkez@aristocrat.com",
+        "Ilan.Probak@aristocrat.com"
+      ]
+    },
+    "WV": {
+      "to": [
+        "tdunford@wvlottery.com",
+        "mkline@wvlottery.com",
+        "dlamar@wvlottery.com",
+        "dstroup@wvlottery.com",
+        "rburnside@wvlottery.com",
+        "dbradley@wvlottery.com",
+        "tdunford@wvlottery.com",
+        "dstroup@wvlottery.com"
+      ],
+      "cc": [
+        "TechOps@aristocrat.com",
+        "Ilan.Probak@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "NOC-NG@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "SZ": {
+      "to": [
+        "sazkanotification@aristocrat.com"
+      ],
+      "cc": [
+        "liudmyla.korniienko@aristocrat.com",
+        "oleksii.basov@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "bogdan.oliinyk@aristocrat.com",
+        "oleksandr.astakhov@aristocrat.com",
+        "maryna.skliar@aristocrat.com",
+        "NG_TechOps@aristocrat.com",
+        "aida.bachner@aristocrat.com",
+        "tomer.ozeri@aristocrat.com",
+        "anastacia.benshalom@aristocrat.com",
+        "Ilan.Probak@aristocrat.com",
+        "kyrylo.plyhunov@aristocrat.com",
+        "kyrylo.filimonov@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "TechOps@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Ronen.Irani@aristocrat.com",
+        "Jennifer.Ekholtz@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "PL": {
+      "to": [
+        "Travis.Clutter@aristocrat.com",
+        "operations@playlive.com",
+        "tajbik.sheikh@livech.com",
+        "steve.nathan@livech.com",
+        "heidi.hamers@livech.com",
+        "erin.youngblood@livech.com",
+        "colleen.richarts@livech.com",
+        "amanda.delizzio@livech.com",
+        "B2B-OPS@aristocrat.com",
+        "Anton.Grinberg@aristocrat.com",
+        "Asif.Rot@aristocrat.com",
+        "Bogdan.Shmorgun@aristocrat.com",
+        "Chen.Dudu@aristocrat.com",
+        "NG_TechOps@aristocrat.com",
+        "Dimitri.DiGiacomo@btobet.com",
+        "Doron.Mor@aristocrat.com",
+        "Ihor.Khoroshok@aristocrat.com",
+        "Ilan.Probak@aristocrat.com",
+        "Ivan.Mekhed@aristocrat.com",
+        "Kostiantyn.Maslovskyi@aristocrat.com",
+        "NOC@aristocrat.com",
+        "Ofer.Moldovan@aristocrat.com",
+        "Oz.Goldberg@aristocrat.com",
+        "Quincy.Raven@aristocrat.com",
+        "Rostyslav.Malakhovskyi@aristocrat.com",
+        "Sagi.Lavian@aristocrat.com",
+        "Stanislav.Sokolov@aristocrat.com",
+        "Vadym.Savchuk@aristocrat.com",
+        "cs-playlive@aristocrat.com",
+        "max.henning@livech.com",
+        "Jeremy.Mumford@aristocrat.com",
+        "Jesus.Menjibar@aristocrat.com",
+        "Ronen.Irani@aristocrat.com",
+        "PlayLive-CriticalNotifications@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "Trish.Parker@aristocrat.com"
+      ],
+      "cc": [
+        "TechOps@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "eitan.shein@aristocrat.com",
+        "adi.chemerinsky@aristocrat.com",
+        "lee.azran@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "FK-MI": {
+      "to": [
+        "FKC-Critical-Incident@aristocrat.com",
+        "DL-Firekeepers-Critical-Incident@aristocrat.com",
+        "bjbouschor@firekc.com",
+        "CJHays@firekc.com",
+        "dgarcia@firekc.com",
+        "jkopka@firekc.com",
+        "jwise@firekc.com",
+        "dploehn@firekc.com"
+      ],
+      "cc": [
+        "TechOps@aristocrat.com",
+        "Ilan.Probak@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "anton.kohutiak@aristocrat.com",
+        "adi.chemerinsky@aristocrat.com",
+        "lee.azran@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "NG_TechOps@aristocrat.com",
+        "B2B-OPS@aristocrat.com",
+        "Ronen.Irani@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "NGL:Sisal IT": {
+      "to": [
+        "sjopemi@sisal.it",
+        "svope@sisal.it",
+        "frontend_dgs@sisal.it",
+        "_dlbeintegration@sisal.it",
+        "IT_OPS_Application_Deployment@sisal.it",
+        "IT_OPS_Application_Deployment@sisal.it",
+        "IT_OPS_Content_Delivery@sisal.it",
+        "IT_OPS_Content_Delivery@sisal.it",
+        "IT_OPS_B2C-DSA@sisal.it",
+        "IT_OPS_B2C-DSA@sisal.it"
+      ],
+      "cc": [
+        "NG_TechOps@aristocrat.com",
+        "liudmyla.korniienko@aristocrat.com",
+        "tomer.ozeri@aristocrat.com",
+        "oleksii.basov@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "bogdan.oliinyk@aristocrat.com",
+        "galit.morash@aristocrat.com",
+        "oleksandr.astakhov@aristocrat.com",
+        "maryna.skliar@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "NGL:Sisal TR": {
+      "to": [
+        "valentina.agostini@sisal.it",
+        "aurelio.curiale@sisal.it",
+        "lavinia.pecelli@sisal.it",
+        "dario.castronovo@sisal.it",
+        "nese.ciddi@sisalsans.com",
+        "seren.bilge@sisalsans.com",
+        "emre.celik@sisalsans.com",
+        "berfu.kuskonmaz@sisalsans.com",
+        "Ron.Tsadikov@aristocrat.com"
+      ],
+      "cc": [
+        "NG_TechOps@aristocrat.com",
+        "liudmyla.korniienko@aristocrat.com",
+        "tomer.ozeri@aristocrat.com",
+        "oleksii.basov@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "bogdan.oliinyk@aristocrat.com",
+        "galit.morash@aristocrat.com",
+        "oleksandr.astakhov@aristocrat.com",
+        "maryna.skliar@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "NGL:Bitalih": {
+      "to": [
+        "francesca.iannibelli@sisal.it",
+        "michele.roncaglia@sisal.it",
+        "rahman@bitalih.com",
+        "valentina.agostini@sisal.it",
+        "aurelio.curiale@sisal.it",
+        "lavinia.pecelli@sisal.it",
+        "dario.castronovo@sisal.it",
+        "nese.ciddi@sisalsans.com",
+        "seren.bilge@sisalsans.com",
+        "emre.celik@sisalsans.com",
+        "berfu.kuskonmaz@sisalsans.com",
+        "Ron.Tsadikov@aristocrat.com"
+      ],
+      "cc": [
+        "NG_TechOps@aristocrat.com",
+        "Liudmyla.Korniienko@aristocrat.com",
+        "Tomer.Ozeri@aristocrat.com",
+        "oleksii.basov@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Galit.Morash@aristocrat.com",
+        "Yuliia.Poltavets@aristocrat.com",
+        "Oleksandr.Astakhov@aristocrat.com",
+        "maryna.skliar@aristocrat.com",
+        "Aida.Bachner@aristocrat.com",
+        "Oleksandr.Astakhov@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "NGL:Hipodrom": {
+      "to": [
+        "firstline@hipodrom.com",
+        "gokalp.tufekli@hipodrom.com",
+        "aysu.kirimli@hipodrom.com",
+        "emre.celik@sisalsans.com",
+        "berfu.kuskonmaz@sisalsans.com",
+        "Ron.Tsadikov@aristocrat.com"
+      ],
+      "cc": [
+        "NG_TechOps@aristocrat.com",
+        "Liudmyla.Korniienko@aristocrat.com",
+        "Tomer.Ozeri@aristocrat.com",
+        "oleksii.basov@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Galit.Morash@aristocrat.com",
+        "Yuliia.Poltavets@aristocrat.com",
+        "Oleksandr.Astakhov@aristocrat.com",
+        "maryna.skliar@aristocrat.com",
+        "Aida.Bachner@aristocrat.com",
+        "Oleksandr.Astakhov@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "NGL:Sisal Misli": {
+      "to": [
+        "gloria.balestreri@fluttersea.com",
+        "evren.kiragasi@sisalsans.com",
+        "emre.celik@sisalsans.com",
+        "alessandro.galli@fluttersea.com",
+        "alessandro.galli@sisal.it",
+        "francesca.iannibelli@fluttersea.com"
+      ],
+      "cc": [
+        "NG_TechOps@aristocrat.com",
+        "Liudmyla.Korniienko@aristocrat.com",
+        "Tomer.Ozeri@aristocrat.com",
+        "oleksii.basov@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Galit.Morash@aristocrat.com",
+        "Yuliia.Poltavets@aristocrat.com",
+        "Oleksandr.Astakhov@aristocrat.com",
+        "maryna.skliar@aristocrat.com",
+        "Aida.Bachner@aristocrat.com",
+        "Oleksandr.Astakhov@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "NGL:Sisal Nesine": {
+      "to": [
+        "gloria.balestreri@fluttersea.com",
+        "evren.kiragasi@sisalsans.com",
+        "emre.celik@sisalsans.com",
+        "alessandro.galli@fluttersea.com",
+        "alessandro.galli@sisal.it",
+        "francesca.iannibelli@fluttersea.com"
+      ],
+      "cc": [
+        "NG_TechOps@aristocrat.com",
+        "Liudmyla.Korniienko@aristocrat.com",
+        "Tomer.Ozeri@aristocrat.com",
+        "oleksii.basov@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Galit.Morash@aristocrat.com",
+        "Yuliia.Poltavets@aristocrat.com",
+        "Oleksandr.Astakhov@aristocrat.com",
+        "maryna.skliar@aristocrat.com",
+        "Aida.Bachner@aristocrat.com",
+        "Oleksandr.Astakhov@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "NGL:Sisal Bilyoner": {
+      "to": [
+        "gloria.balestreri@fluttersea.com",
+        "evren.kiragasi@sisalsans.com",
+        "emre.celik@sisalsans.com",
+        "alessandro.galli@fluttersea.com",
+        "alessandro.galli@sisal.it",
+        "francesca.iannibelli@fluttersea.com"
+      ],
+      "cc": [
+        "NG_TechOps@aristocrat.com",
+        "Liudmyla.Korniienko@aristocrat.com",
+        "Tomer.Ozeri@aristocrat.com",
+        "oleksii.basov@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Galit.Morash@aristocrat.com",
+        "Yuliia.Poltavets@aristocrat.com",
+        "Oleksandr.Astakhov@aristocrat.com",
+        "maryna.skliar@aristocrat.com",
+        "Aida.Bachner@aristocrat.com",
+        "Oleksandr.Astakhov@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "NGL:Sisal Atili Ganyan": {
+      "to": [
+        "emre.celik@sisalsans.com",
+        "gloria.balestreri@fluttersea.com",
+        "alessandro.centaro@fluttersea.com",
+        "alessandro.galli@sisal.it",
+        "alessandro.galli@sisal.it",
+        "alessandro.galli@fluttersea.com"
+      ],
+      "cc": [
+        "NG_TechOps@aristocrat.com",
+        "Liudmyla.Korniienko@aristocrat.com",
+        "Tomer.Ozeri@aristocrat.com",
+        "oleksii.basov@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Galit.Morash@aristocrat.com",
+        "Yuliia.Poltavets@aristocrat.com",
+        "Oleksandr.Astakhov@aristocrat.com",
+        "maryna.skliar@aristocrat.com",
+        "Aida.Bachner@aristocrat.com",
+        "Oleksandr.Astakhov@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "NGL:Sisal At Yarisi": {
+      "to": [
+        "emre.celik@sisalsans.com",
+        "gloria.balestreri@fluttersea.com",
+        "alessandro.centaro@fluttersea.com",
+        "alessandro.galli@sisal.it",
+        "alessandro.galli@sisal.it",
+        "alessandro.galli@fluttersea.com"
+      ],
+      "cc": [
+        "NG_TechOps@aristocrat.com",
+        "Liudmyla.Korniienko@aristocrat.com",
+        "Tomer.Ozeri@aristocrat.com",
+        "oleksii.basov@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Galit.Morash@aristocrat.com",
+        "Yuliia.Poltavets@aristocrat.com",
+        "Oleksandr.Astakhov@aristocrat.com",
+        "maryna.skliar@aristocrat.com",
+        "Aida.Bachner@aristocrat.com",
+        "Oleksandr.Astakhov@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "NGL:JSC": {
+      "to": [
+        "anastacia.benshalom@aristocrat.com",
+        "celia.godinho@scml.pt",
+        "patricia.silva@scml.pt",
+        "susana.c.rodrigues@scml.pt",
+        "nuno.valentim@scml.pt",
+        "luis.m.tavares@scml.pt",
+        "aida.bachner@aristocrat.com",
+        "sac@nossaaposta.pt"
+      ],
+      "cc": [
+        "NG_TechOps@aristocrat.com",
+        "liudmyla.korniienko@aristocrat.com",
+        "tomer.ozeri@aristocrat.com",
+        "oleksii.basov@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "bogdan.oliinyk@aristocrat.com",
+        "galit.morash@aristocrat.com",
+        "oleksandr.astakhov@aristocrat.com",
+        "maryna.skliar@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "NGL:Olifeja": {
+      "to": [
+        "augusta.gikaite@perlasnetwork.lt",
+        "indre.kvikliene@perlasnetwork.lt",
+        "galit.morash@aristocrat.com",
+        "tomas.norusis@perlasnetwork.lt",
+        "Tsvetomir.Sabkov@aristocrat.com",
+        "aida.bachner@aristocrat.com"
+      ],
+      "cc": [
+        "NG_TechOps@aristocrat.com",
+        "liudmyla.korniienko@aristocrat.com",
+        "tomer.ozeri@aristocrat.com",
+        "oleksii.basov@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "bogdan.oliinyk@aristocrat.com",
+        "galit.morash@aristocrat.com",
+        "oleksandr.astakhov@aristocrat.com",
+        "maryna.skliar@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "NGL:UNL": {
+      "to": [
+        "pavel.solovyov@unl.ua",
+        "igor.shashkov@unl.ua",
+        "kimunitex@gmail.com"
+      ],
+      "cc": [
+        "NG_TechOps@aristocrat.com",
+        "liudmyla.korniienko@aristocrat.com",
+        "tomer.ozeri@aristocrat.com",
+        "oleksii.basov@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "bogdan.oliinyk@aristocrat.com",
+        "galit.morash@aristocrat.com",
+        "oleksandr.astakhov@aristocrat.com",
+        "maryna.skliar@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "NGL:Win2Day": {
+      "to": [
+        "operations@win2day.at"
+      ],
+      "cc": [
+        "wolfgang.volgger@win2day.at",
+        "valentin.suetzl@win2day.at",
+        "fabian.sieghart@win2day.at",
+        "christoph.wehofer@lotterien.at",
+        "NOCShiftLeaders@aristocrat.com",
+        "NG_TechOps@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "Tsvetomir.Sabkov@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "NGL:SzZrt": {
+      "to": [
+        "it_incmen@szerencsejatek.hu"
+      ],
+      "cc": [
+        "ohad.shlomoff@aristocrat.com",
+        "alexeyd@aristocrat.com",
+        "NG_TechOps@aristocrat.com",
+        "oleksii.basov@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "oleksandr.astakhov@neogames",
+        "yevhen.kuzmin@aristocrat.com",
+        "kateryna.kharchenko@aristocrat.com",
+        "ron.tsadikov@aristocrat.com",
+        "liudmyla.korniienko@aristocrat.com",
+        "yaniv.brosh@aristocrat.com",
+        "aida.bachner@aristocrat.com",
+        "guy.haimovich@aristocrat.com",
+        "avi.cohen@aristocrat.com",
+        "BATeam@aristocrat.com",
+        "tomer.ozeri@aristocrat.com",
+        "yuliia.poltavets@aristocrat.com",
+        "jenny.aharonov@aristocrat.com",
+        "galit.morash@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "CRO": {
+      "to": [
+        "Ivana.Vuletic@lutrija.hr",
+        "Natasa.Bosanac@lutrija.hr",
+        "anastacia.benshalom@aristocrat.com",
+        "aida.bachner@aristocrat.com"
+      ],
+      "cc": [
+        "NG_TechOps@aristocrat.com",
+        "liudmyla.korniienko@aristocrat.com",
+        "tomer.ozeri@aristocrat.com",
+        "oleksii.basov@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "bogdan.oliinyk@aristocrat.com",
+        "galit.morash@aristocrat.com",
+        "oleksandr.astakhov@aristocrat.com",
+        "maryna.skliar@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "Tsvetomir.Sabkov@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "Atlantic City": {
+      "to": [
+        "galit.morash@aristocrat.com",
+        "it.operations@ALC.ca"
+      ],
+      "cc": [
+        "NG_TechOps@aristocrat.com",
+        "aida.bachner@aristocrat.com",
+        "ohad.shlomoff@aristocrat.com",
+        "tomer.ozeri@aristocrat.com",
+        "roman.slyvka@aristocrat.com",
+        "oleksii.basov@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "oleksandr.astakhov@aristocrat.com",
+        "yevhen.kuzmin@aristocrat.com",
+        "kateryna.kharchenko@aristocrat.com",
+        "ron.tsadikov@aristocrat.com",
+        "liudmyla.korniienko@aristocrat.com",
+        "yaniv.brosh@aristocrat.com",
+        "aida.bachner@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    },
+    "IGT Georgia": {
+      "to": [
+        "GANEOPRODSupportTeam@igt.com"
+      ],
+      "cc": [
+        "aida.bachner@aristocrat.com",
+        "ohad.shlomoff@aristocrat.com",
+        "tomer.ozeri@aristocrat.com",
+        "roman.slyvka@aristocrat.com",
+        "oleksii.basov@aristocrat.com",
+        "NG_TechOps@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "oleksandr.astakhov@aristocrat.com",
+        "yevhen.kuzmin@aristocrat.com",
+        "kateryna.kharchenko@aristocrat.com",
+        "ron.tsadikov@aristocrat.com",
+        "liudmyla.korniienko@aristocrat.com",
+        "yaniv.brosh@aristocrat.com",
+        "aida.bachner@aristocrat.com",
+        "galit.morash@aristocrat.com",
+        "anastacia.benshalom@aristocrat.com",
+        "NOCShiftLeaders@aristocrat.com",
+        "NG_ServiceOps@aristocrat.com",
+        "noc-ng@aristocrat.com",
+        "mariia.mosiichuk@aristocrat.com",
+        "Chris.Shaban@aristocrat.com",
+        "Trish.Parker@aristocrat.com",
+        "daniel.odonoghue@aristocrat.com"
+      ]
+    }
+  }
+}

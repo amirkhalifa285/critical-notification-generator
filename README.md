@@ -28,10 +28,7 @@ A simple web tool for generating Critical Notification emails with customizable 
    cd critical-notification-email-generator
    ```
 
-2. **Open `index.html` in your browser**
-   - That's it! No installation needed.
-
-3. **Optional: Run with local server**
+2. **Run with a local server** (contact lists are loaded from `data/*.json`, so opening `index.html` directly does not work)
    ```bash
    python -m http.server 8000
    # Then open http://localhost:8000
@@ -69,6 +66,9 @@ Report Delay is available for NCEL, NHL, and VAL. The selected notification date
 ```
 critical-notification-email-generator/
 ├── index.html              # Main page
+├── data/
+│   ├── recipients.json    # Critical notification To/CC lists
+│   └── vendors.json       # Vendor/lottery outreach contacts
 ├── styles.css              # Styling
 ├── js/
 │   ├── main.js            # App initialization

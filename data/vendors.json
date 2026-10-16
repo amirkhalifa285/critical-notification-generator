@@ -1,0 +1,193 @@
+{
+  "vendors": {
+    "Paysafe": {
+      "label": "Paysafe",
+      "matches": [
+        "paysafe"
+      ],
+      "to": [
+        "igaminghelp@paysafe.com"
+      ]
+    },
+    "BtoBet": {
+      "label": "BtoBet",
+      "matches": [
+        "btobet"
+      ],
+      "to": [
+        "supportbtobet@aristocrat.com"
+      ]
+    },
+    "Mkodo": {
+      "label": "Mkodo (AGLC hosting provider)",
+      "matches": [
+        "mkodo"
+      ],
+      "to": [
+        "support@mkodo.com",
+        "Iain.Murray@mkodo.com"
+      ]
+    },
+    "FDJ": {
+      "label": "FDJ (games provider)",
+      "matches": [
+        "fdj"
+      ],
+      "to": [
+        "operations@lfdj.com"
+      ]
+    },
+    "IsoftBet": {
+      "label": "IsoftBet",
+      "matches": [
+        "isoftbet"
+      ],
+      "to": [
+        "isb_techsupport@IGT.com"
+      ]
+    },
+    "IWG": {
+      "label": "IWG",
+      "matches": [
+        "iwg",
+        "instant win"
+      ],
+      "to": [
+        "support@instantwingaming.com",
+        "priority1@instantwingaming.com"
+      ]
+    },
+    "PayPal": {
+      "label": "PayPal",
+      "matches": [
+        "paypal"
+      ],
+      "to": [
+        "merchanttechsupport@paypal.com",
+        "twallace@paypal.com",
+        "dwheatleytuck@paypal.com"
+      ]
+    },
+    "Gambyt MSL/NHL": {
+      "label": "Gambyt (MSL + NHL hosting)",
+      "matches": [
+        "gambyt"
+      ],
+      "environments": [
+        "MSL",
+        "NHL"
+      ],
+      "to": [
+        "sue.crawford@gambyt.com",
+        "lawrence.adams@gambyt.com",
+        "jessica.martin@gambyt.com",
+        "danny.bogus@gambyt.com"
+      ]
+    },
+    "Gambyt MASSL": {
+      "label": "Gambyt (MASSL hosting)",
+      "matches": [
+        "gambyt"
+      ],
+      "environments": [
+        "MASSL"
+      ],
+      "to": [
+        "katie.paugh@gambyt.com",
+        "Katlin.olmstead@gambyt.com",
+        "Paul.Green@gambyt.com",
+        "danny.bogus@gambyt.com"
+      ]
+    },
+    "Brightstar MSL": {
+      "label": "Brightstar (MSL)",
+      "matches": [
+        "brightstar",
+        "brighstar"
+      ],
+      "environments": [
+        "MSL"
+      ],
+      "to": [
+        "michigan.ops@brightstarlottery.com",
+        "Emma.Murray@brightstarlottery.com",
+        "Patrick.Cody@brightstarlottery.com",
+        "REN.ops@brightstarlottery.com",
+        "amanda.johns@brightstarlottery.com",
+        "soumya.bhattacharya@brightstarlottery.com"
+      ]
+    },
+    "Brightstar VAL": {
+      "label": "Brightstar (VAL)",
+      "matches": [
+        "brightstar",
+        "brighstar"
+      ],
+      "environments": [
+        "VAL"
+      ],
+      "to": [
+        "Emma.Murray@brightstarlottery.com",
+        "Patrick.Cody@brightstarlottery.com",
+        "REN.ops@brightstarlottery.com",
+        "amanda.johns@brightstarlottery.com",
+        "soumya.bhattacharya@brightstarlottery.com"
+      ]
+    },
+    "Brightstar": {
+      "label": "Brightstar (general)",
+      "matches": [
+        "brightstar",
+        "brighstar"
+      ],
+      "to": [
+        "REN.Ops@brightstarlottery.com"
+      ]
+    },
+    "Evolution": {
+      "label": "Evolution (games provider)",
+      "matches": [
+        "evolution"
+      ],
+      "to": [
+        "SERVICEDESK@EVOLUTION.COM"
+      ]
+    }
+  },
+  "lotteryOutreach": {
+    "NGL:JSC": [
+      "jsc.oper@jogossantacasa.pt",
+      "claudia.duarte@jogossantacasa.pt",
+      "alexandre.lopes@jogossantacasa.pt"
+    ],
+    "NGL:Olifeja": [
+      "loreta.balandyte@perlasnetwork.lt",
+      "tomas.norusis@perlasnetwork.lt"
+    ],
+    "NGL:UNL": [
+      "Pavel.Solovyov@unl.ua",
+      "andrey.bochkovskiy@unl.ua",
+      "Olga.Logvinenko@unl.ua",
+      "igor.shashkov@unl.ua"
+    ],
+    "NGL:Win2Day": [
+      "operations@win2day.at",
+      "valentin.suetzl@win2day.at",
+      "florian.ernst@win2day.at",
+      "christoph.wehofer@lotterien.at",
+      "wolfgang.volgger@win2day.at",
+      "fabian.sieghart@win2day.at"
+    ],
+    "NGL:SzZrt": [
+      "it_incmen@szerencsejatek.hu",
+      "e-channel_operator@szerencsejatek.hu",
+      "e-channel_operator@szerencsejatek.hu"
+    ],
+    "Atlantic City": [
+      "it.operations@ALC.ca"
+    ],
+    "IGT Georgia": [
+      "REN.Ops@brightstarlottery.com"
+    ]
+  }
+}

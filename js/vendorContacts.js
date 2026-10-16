@@ -14,137 +14,23 @@ const OUTREACH_CC = [
     'noc-ng@aristocrat.com'
 ];
 
-// Brightstar escalation path for VAL and MSL incidents.
-const BRIGHTSTAR_ESCALATION = [
-    'Emma.Murray@brightstarlottery.com',
-    'Patrick.Cody@brightstarlottery.com',
-    'REN.ops@brightstarlottery.com',
-    'amanda.johns@brightstarlottery.com',
-    'soumya.bhattacharya@brightstarlottery.com'
-];
+// Vendor and lottery outreach data lives in data/vendors.json so it can be
+// edited from the admin mode.
+// VENDOR_CONTACTS: `matches` are lowercase keywords looked up in the external
+// team name; `environments` restricts a variant to specific lotteries when one
+// vendor has several contact lists.
+// LOTTERY_OUTREACH_CONTACTS: dedicated contacts for NG-LOT and USLOT lotteries.
+// Lotteries absent from it fall back to the To list of their critical notification.
+const VENDOR_CONTACTS = {};
+const LOTTERY_OUTREACH_CONTACTS = {};
 
-// `matches` are lowercase keywords looked up in the external team name.
-// `environments` restricts a variant to specific lotteries when one vendor
-// has several contact lists.
-const VENDOR_CONTACTS = {
-    'Paysafe': {
-        label: 'Paysafe',
-        matches: ['paysafe'],
-        to: ['igaminghelp@paysafe.com']
-    },
-    'BtoBet': {
-        label: 'BtoBet',
-        matches: ['btobet'],
-        to: ['supportbtobet@aristocrat.com']
-    },
-    'Mkodo': {
-        label: 'Mkodo (AGLC hosting provider)',
-        matches: ['mkodo'],
-        to: ['support@mkodo.com', 'Iain.Murray@mkodo.com']
-    },
-    'FDJ': {
-        label: 'FDJ (games provider)',
-        matches: ['fdj'],
-        to: ['operations@lfdj.com']
-    },
-    'IsoftBet': {
-        label: 'IsoftBet',
-        matches: ['isoftbet'],
-        to: ['isb_techsupport@IGT.com']
-    },
-    'IWG': {
-        label: 'IWG',
-        matches: ['iwg', 'instant win'],
-        to: ['support@instantwingaming.com', 'priority1@instantwingaming.com']
-    },
-    'PayPal': {
-        label: 'PayPal',
-        matches: ['paypal'],
-        to: ['merchanttechsupport@paypal.com', 'twallace@paypal.com', 'dwheatleytuck@paypal.com']
-    },
-    'Gambyt MSL/NHL': {
-        label: 'Gambyt (MSL + NHL hosting)',
-        matches: ['gambyt'],
-        environments: ['MSL', 'NHL'],
-        to: [
-            'sue.crawford@gambyt.com',
-            'lawrence.adams@gambyt.com',
-            'jessica.martin@gambyt.com',
-            'danny.bogus@gambyt.com'
-        ]
-    },
-    'Gambyt MASSL': {
-        label: 'Gambyt (MASSL hosting)',
-        matches: ['gambyt'],
-        environments: ['MASSL'],
-        to: [
-            'katie.paugh@gambyt.com',
-            'Katlin.olmstead@gambyt.com',
-            'Paul.Green@gambyt.com',
-            'danny.bogus@gambyt.com'
-        ]
-    },
-    'Brightstar MSL': {
-        label: 'Brightstar (MSL)',
-        matches: ['brightstar', 'brighstar'],
-        environments: ['MSL'],
-        to: [
-            'michigan.ops@brightstarlottery.com',
-            ...BRIGHTSTAR_ESCALATION
-        ]
-    },
-    'Brightstar VAL': {
-        label: 'Brightstar (VAL)',
-        matches: ['brightstar', 'brighstar'],
-        environments: ['VAL'],
-        to: [...BRIGHTSTAR_ESCALATION]
-    },
-    'Brightstar': {
-        label: 'Brightstar (general)',
-        matches: ['brightstar', 'brighstar'],
-        to: ['REN.Ops@brightstarlottery.com']
-    },
-    'Evolution': {
-        label: 'Evolution (games provider)',
-        matches: ['evolution'],
-        to: ['SERVICEDESK@EVOLUTION.COM']
-    }
-};
-
-// Dedicated outreach contacts for NG-LOT and USLOT lotteries. Lotteries absent
-// from this map fall back to the To list of their critical notification.
-const LOTTERY_OUTREACH_CONTACTS = {
-    'NGL:JSC': [
-        'jsc.oper@jogossantacasa.pt',
-        'claudia.duarte@jogossantacasa.pt',
-        'alexandre.lopes@jogossantacasa.pt'
-    ],
-    'NGL:Olifeja': [
-        'loreta.balandyte@perlasnetwork.lt',
-        'tomas.norusis@perlasnetwork.lt'
-    ],
-    'NGL:UNL': [
-        'Pavel.Solovyov@unl.ua',
-        'andrey.bochkovskiy@unl.ua',
-        'Olga.Logvinenko@unl.ua',
-        'igor.shashkov@unl.ua'
-    ],
-    'NGL:Win2Day': [
-        'operations@win2day.at',
-        'valentin.suetzl@win2day.at',
-        'florian.ernst@win2day.at',
-        'christoph.wehofer@lotterien.at',
-        'wolfgang.volgger@win2day.at',
-        'fabian.sieghart@win2day.at'
-    ],
-    'NGL:SzZrt': [
-        'it_incmen@szerencsejatek.hu',
-        'e-channel_operator@szerencsejatek.hu',
-        'e-channel_operator@szerencsejatek.hu'
-    ],
-    'Atlantic City': ['it.operations@ALC.ca'],
-    'IGT Georgia': ['REN.Ops@brightstarlottery.com']
-};
+function setVendorData(data) {
+    [VENDOR_CONTACTS, LOTTERY_OUTREACH_CONTACTS].forEach(target => {
+        Object.keys(target).forEach(key => delete target[key]);
+    });
+    Object.assign(VENDOR_CONTACTS, data.vendors);
+    Object.assign(LOTTERY_OUTREACH_CONTACTS, data.lotteryOutreach);
+}
 
 /**
  * Recipients for contacting the selected lottery itself. Only NG-LOT and USLOT
@@ -180,12 +66,14 @@ function suggestVendor(teamName, environment) {
 }
 
 if (typeof module !== 'undefined' && module.exports) {
+    setVendorData(require('../data/vendors.json'));
     module.exports = {
         LOTTERY_OUTREACH_CONTACTS,
         OUTREACH_CC,
         VENDOR_CONTACTS,
         getLotteryOutreachRecipients,
         getVendorRecipients,
+        setVendorData,
         suggestVendor
     };
 }

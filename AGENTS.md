@@ -21,15 +21,19 @@ The application is a static site using HTML, CSS, and vanilla JavaScript. There 
 
 - `index.html`: form controls, environment options, issue/report choices, and script loading order.
 - `styles.css`: application UI and copy-safe preview styling.
-- `js/main.js`: application initialization and banner preloading.
+- `js/main.js`: application initialization, contact-data loading, and banner preloading.
+- `data/recipients.json`: authoritative To/CC lists (`lists`, keyed like `NHL` or `NGL:Sisal TR`) and the NPI common recipients (`npiCommon`).
+- `data/vendors.json`: vendor outreach contacts (`vendors`) and dedicated lottery outreach lists (`lotteryOutreach`).
 - `js/utils.js`: lottery configuration, Jira mappings, timezones, date formatting, banner embedding, and clipboard utilities.
-- `js/recipientLists.js`: authoritative To/CC data and recipient composition rules.
-- `js/vendorContacts.js`: vendor and lottery contacts for the outreach email, plus vendor suggestion from the external team name.
+- `js/recipientLists.js`: recipient composition rules (NPI merge, required CC).
+- `js/vendorContacts.js`: outreach recipient rules and vendor suggestion from the external team name.
 - `js/templateGenerator.js`: approved Ongoing and Resolved email HTML.
 - `js/formHandlers.js`: dynamic form state, validation, preview generation, and copy actions.
 - `tests/`: Node built-in test suite for templates, recipients, configuration, and time conversion.
 - `images/banner-opening.png`: ongoing notification banner.
 - `images/banner-resolved.png`: resolved notification banner.
+
+Contact data is fetched as JSON at startup (with `cache: 'no-cache'`), so the page must be served over HTTP; opening `index.html` via `file://` shows a load error. Lists that used to be shared constants (the Turkish Sisal To lists, `BRIGHTSTAR_ESCALATION`) are now stored as separate copies per key, so change every copy when one changes.
 
 Browser script order matters. `utils.js`, `recipientLists.js`, and `vendorContacts.js` (in that order) must load before the template and form scripts that use them.
 
@@ -173,7 +177,7 @@ Every NG-LOT and USLOT selection currently uses fixed `Drop in bets via [selecte
 
 ## Recipient Lists
 
-`js/recipientLists.js` is the authoritative source. It was manually transcribed and visually verified against the supplied Confluence PDF playbook.
+`data/recipients.json` is the authoritative source. It was manually transcribed and visually verified against the supplied Confluence PDF playbook.
 
 Safety rules:
 
@@ -209,7 +213,18 @@ When an external team is contacted, NOC also emails that vendor or lottery to co
 - Other environments get a vendor suggestion from the external team name. Brightstar and Gambyt have environment-specific lists (Brightstar MSL and VAL; Gambyt MSL/NHL vs MASSL). Brightstar VAL and MSL both include the five-address Brightstar escalation path (`BRIGHTSTAR_ESCALATION`); MSL also keeps `michigan.ops@`. Other environments use the general `REN.Ops@` list. The operator's manual selection is kept until the environment changes.
 - Vendor and lottery addresses follow the same exact-copy rules as the playbook recipients.
 - Operator-confirmed decisions: "the NOC email" in the outreach CC is `noc-ng@aristocrat.com`; Gambyt's "MAL" list in the source refers to MASSL; specific error-log details are never generated (the fixed "no errors on our side" line was approved on 2026-10-08).
-- Contacts live in `js/vendorContacts.js` (`VENDOR_CONTACTS`, `LOTTERY_OUTREACH_CONTACTS`). To add a vendor, add an entry with lowercase `matches` keywords, plus `environments` only when the vendor has lottery-specific lists, and update `tests/vendorContacts.test.js`.
+- Contacts live in `data/vendors.json` (`vendors`, `lotteryOutreach`). To add a vendor, add an entry with lowercase `matches` keywords, plus `environments` only when the vendor has lottery-specific lists, and update `tests/vendorContacts.test.js`.
+
+## Admin Mode
+
+`js/admin.js` lets the owner edit the contact data from the live page, including from a phone. It is single-user by design.
+
+- The header **Admin** button asks for a fine-grained GitHub token (this repository only, Contents read/write), validates it, and stores it in that browser's `localStorage`. Clicking it again offers log out.
+- In admin mode, red Edit buttons appear next to the critical To/CC lists (for the selected environment) and the outreach Send To (selected vendor or lottery), plus **New vendor**.
+- Save reads the latest file from GitHub, applies the change, and commits it straight to `main` with an `Admin: ...` message. GitHub Pages then redeploys. There is no review step or pre-save test run.
+- Pasted text is parsed by `parseAddressList`, which keeps order, spelling, and duplicates exactly and accepts Outlook `Name <address>` lists.
+- Recipient editing covers only the customer-specific lists; the NPI common list and the `NOCShiftLeaders@` rule stay in code. Clearing a list deletes that key. An empty lottery outreach list falls back to the critical To list.
+- Editing a vendor keeps extra fields such as `environments`. Shared-list copies (Turkish Sisal, Brightstar escalation) are not updated together.
 
 ## Email Preview and Clipboard Behavior
 

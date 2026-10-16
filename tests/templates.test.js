@@ -130,3 +130,15 @@ test('vendor outreach email uses the lottery name and has no banner', () => {
     assert.doesNotMatch(html, /<img/);
     assert.doesNotMatch(html, /Impact description|Root cause/);
 });
+
+test('adds an increase in declined or rejected deposits/cashouts before the processor', () => {
+    const { generateDeclineIncreaseImpact } = require('../js/templateGenerator');
+    assert.equal(
+        generateDeclineIncreaseImpact('Drop in approved deposits via Paysafe processor', 'declined'),
+        'Drop in approved deposits followed by an increase in declined deposits via Paysafe processor'
+    );
+    assert.equal(
+        generateDeclineIncreaseImpact('Decrease in approved cashouts via PayPal processor', 'rejected'),
+        'Decrease in approved cashouts followed by an increase in rejected cashouts via PayPal processor'
+    );
+});

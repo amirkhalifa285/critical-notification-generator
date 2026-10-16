@@ -43,6 +43,11 @@ const elements = {
     interruptionDuration: document.getElementById('interruptionDuration'),
     approvedDepositsGroup: document.getElementById('approvedDepositsGroup'),
     approvedDepositsInputs: document.querySelectorAll('input[name="approvedDepositsAffected"]'),
+    declineIncreaseGroup: document.getElementById('declineIncreaseGroup'),
+    declineIncreaseQuestion: document.getElementById('declineIncreaseQuestion'),
+    declineIncreaseInputs: document.querySelectorAll('input[name="declineIncrease"]'),
+    declineTypeGroup: document.getElementById('declineTypeGroup'),
+    declineTypeInputs: document.querySelectorAll('input[name="declineType"]'),
     percentageGroup: document.getElementById('percentageGroup'),
     percentageInput: document.getElementById('percentageInput'),
     startDate: document.getElementById('startDate'),
@@ -291,6 +296,15 @@ function issueAsksApprovedDeposits() {
         && elements.issueSelect.selectedOptions[0]?.dataset.approvedDepositsCheck === 'true';
 }
 
+function issueAsksDeclineIncrease() {
+    return !getSelectedContext()?.fixedDropInBets
+        && elements.issueSelect.selectedOptions[0]?.dataset.declineIncreaseCheck === 'true';
+}
+
+function getApprovedNoun() {
+    return /cashouts/i.test(elements.issueSelect.value) ? 'cashouts' : 'deposits';
+}
+
 function syncIssueControls() {
     const isSystem = currentTemplate === 'system';
     const context = getSelectedContext();
@@ -303,6 +317,9 @@ function syncIssueControls() {
     const targetLabel = elements.issueSelect.selectedOptions[0]?.dataset.targetLabel || optionalTargetLabel;
     const needsInterruptionDetails = isSystem && isInterruptionIssue();
     const needsApprovedDepositsAnswer = isSystem && issueAsksApprovedDeposits();
+    const needsDeclineIncreaseAnswer = isSystem && issueAsksDeclineIncrease();
+    const hasDeclineIncrease = needsDeclineIncreaseAnswer
+        && document.querySelector('input[name="declineIncrease"]:checked')?.value === 'yes';
 
     elements.issueSelect.disabled = hasFixedIssue;
     elements.issueSelect.required = isSystem && !hasFixedIssue;
@@ -322,6 +339,18 @@ function syncIssueControls() {
     elements.approvedDepositsInputs.forEach(input => {
         input.required = needsApprovedDepositsAnswer;
         if (!needsApprovedDepositsAnswer) input.checked = false;
+    });
+    elements.declineIncreaseGroup.classList.toggle('hidden', !needsDeclineIncreaseAnswer);
+    elements.declineIncreaseQuestion.textContent =
+        `Is there an increase in declined or rejected ${getApprovedNoun()}?`;
+    elements.declineIncreaseInputs.forEach(input => {
+        input.required = needsDeclineIncreaseAnswer;
+        if (!needsDeclineIncreaseAnswer) input.checked = false;
+    });
+    elements.declineTypeGroup.classList.toggle('hidden', !hasDeclineIncrease);
+    elements.declineTypeInputs.forEach(input => {
+        input.required = hasDeclineIncrease;
+        if (!hasDeclineIncrease) input.checked = false;
     });
     elements.percentageGroup.classList.toggle('hidden', !needsPercentage);
     elements.percentageInput.required = needsPercentage;
@@ -345,6 +374,7 @@ function renderIssueOptions() {
         if (issue.requiresPercentage) option.dataset.requiresPercentage = 'true';
         if (issue.interruption) option.dataset.interruption = 'true';
         if (issue.approvedDepositsCheck) option.dataset.approvedDepositsCheck = 'true';
+        if (issue.declineIncreaseCheck) option.dataset.declineIncreaseCheck = 'true';
 
         const category = issue.category || '';
         let group = groups.find(item => item.category === category);
@@ -656,7 +686,23 @@ function generateSystemPreview(fullTicket, emailType, context) {
         showPreviewMessage('Enter the impact percentage');
         return null;
     }
-    const impactIssueText = getImpactIssueDescription(context, issueText);
+    let impactIssueText = getImpactIssueDescription(context, issueText);
+    if (issueAsksDeclineIncrease()) {
+        const noun = getApprovedNoun();
+        const hasIncrease = document.querySelector('input[name="declineIncrease"]:checked')?.value;
+        if (!hasIncrease) {
+            showPreviewMessage(`Choose whether there is an increase in declined or rejected ${noun}`);
+            return null;
+        }
+        if (hasIncrease === 'yes') {
+            const increaseType = document.querySelector('input[name="declineType"]:checked')?.value;
+            if (!increaseType) {
+                showPreviewMessage(`Choose whether the ${noun} are rejected or declined`);
+                return null;
+            }
+            impactIssueText = generateDeclineIncreaseImpact(impactIssueText, increaseType);
+        }
+    }
     let impactDescription = needsPercentage ? `${impactIssueText} (~${percentage}%)` : impactIssueText;
 
     if (issueAsksApprovedDeposits()) {
@@ -891,13 +937,15 @@ function setupEventListeners() {
     elements.reportSelect.addEventListener('change', syncReportControls);
 
     elements.issueSelect.addEventListener('change', () => {
-        elements.approvedDepositsInputs.forEach(input => {
-            input.checked = false;
-        });
+        [...elements.approvedDepositsInputs, ...elements.declineIncreaseInputs, ...elements.declineTypeInputs]
+            .forEach(input => {
+                input.checked = false;
+            });
         syncIssueControls();
         syncExternalTeamSuggestion();
     });
     elements.customIssueInput.addEventListener('input', syncIssueControls);
+    elements.declineIncreaseInputs.forEach(input => input.addEventListener('change', syncIssueControls));
     elements.issueTargetInput.addEventListener('input', () => {
         syncProviderControls();
         syncExternalTeamSuggestion();

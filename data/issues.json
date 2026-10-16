@@ -67,25 +67,31 @@
     "value": "Drop in approved cashouts via {target} processor",
     "label": "Drop in approved cashouts via [Processor]",
     "category": "Cashouts/Deposits",
-    "targetLabel": "Payment processor"
+    "targetLabel": "Payment processor",
+    "declineIncreaseCheck": true
   },
   {
     "value": "Drop in approved deposits via {target} processor",
     "label": "Drop in approved deposits via [Processor]",
     "category": "Cashouts/Deposits",
-    "targetLabel": "Payment processor"
+    "targetLabel": "Payment processor",
+    "declineIncreaseCheck": true
   },
   {
     "value": "Decrease in approved cashouts via {target} processor",
     "label": "Decrease in approved cashouts via [Payment processor] processor",
     "category": "Cashouts/Deposits",
-    "targetLabel": "Payment processor"
+    "targetLabel": "Payment processor",
+    "requiresPercentage": true,
+    "declineIncreaseCheck": true
   },
   {
     "value": "Decrease in approved deposits via {target} processor",
     "label": "Decrease in approved deposits via [Payment processor] processor",
     "category": "Cashouts/Deposits",
-    "targetLabel": "Payment processor"
+    "targetLabel": "Payment processor",
+    "requiresPercentage": true,
+    "declineIncreaseCheck": true
   },
   {
     "value": "Increase in rejected deposits via {target} processor",

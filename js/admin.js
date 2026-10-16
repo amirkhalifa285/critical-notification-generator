@@ -363,7 +363,7 @@ function openIssueEditor() {
     openAdminDialog({
         title: 'Edit issue descriptions',
         hint: 'One issue per line, in dropdown order, under "# Category" lines. [Provider / channel] or [Payment processor] marks where the operator\'s input goes. '
-            + 'Options after "|": % (asks for a percentage), interruption, ask approved deposits. "Other (Custom)" is always added.',
+            + 'Options after "|": % (asks for a percentage), interruption, ask approved deposits, ask declined or rejected. "Other (Custom)" is always added.',
         fields: [{ id: 'issues', label: 'Issues', value: formatIssueLines(ISSUE_LIST), rows: 16, noWrap: true }],
         onSave: async values => {
             const issues = parseIssueLines(values.issues, ISSUE_LIST);

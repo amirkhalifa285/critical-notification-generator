@@ -175,6 +175,7 @@ Business wording rules:
 - `Decrease in bets` requires a percentage, but the percentage appears only in the Impact description—not the subject or detection sentence. This does not apply to the approved-deposit wording described below.
 - Generic processor/provider templates must use placeholders. Never hardcode Paysafe, Brightstar, or another example provider as the default.
 - Rejected and declined deposit incidents require an explicit Yes/No answer to `Are approved deposits affected?` with no default selection. When Yes, append `followed by a decrease in approved deposits` only in the Impact description; keep the subject and detection sentence unchanged. Failed-deposit incidents do not use this question.
+- Drop/Decrease in approved deposits or cashouts (`ask declined or rejected` in `data/issues.json`) ask `Is there an increase in declined or rejected deposits?` (or `cashouts`) with no default. If Yes, the engineer picks Rejected or Declined and only the Impact description becomes `Drop in approved deposits followed by an increase in declined deposits via Paysafe processor`; Decrease adds the percentage at the end. The subject and detection sentence stay short. Approved by the operator on 2026-10-16. The older rejected/declined issues and their `Are approved deposits affected?` question are kept.
 - The interruption template requires approximate frequency and duration in minutes.
 - Interruption impact wording changes tense between Ongoing and Resolved.
 - For an external team root cause, remove a trailing word `team` from operator input before generating `We have reached out to [name] team...` so the result never says `team team`.
@@ -321,6 +322,8 @@ When updating wording, compare generated output with an approved real example. S
 - Reference hint below the outreach email: `FYI this is the contact email for the subprovider: X, feel free to add them to the outreach email` (15px). Shown only when there is an outreach email and a contact; nothing for Fusion or subproviders without one.
 - Exact contact-count tests replaced with structure checks.
 - Issue Description dropdown grouped into Activity, Cashouts/Deposits, and Hosting (Interruptions moved into Activity).
+- Owner edits through admin mode: added Decrease in bets via mobile/web platform and Decrease in approved deposits/cashouts; removed Increase in failed deposits.
+- Drop/Decrease in approved deposits/cashouts ask about an increase in declined or rejected deposits/cashouts for the Impact description.
 
 Open items (not done; wait for the owner):
 

@@ -15,13 +15,15 @@ function setIssueData(data) {
  *   Drop in bets via [Provider / channel]
  *   Decrease in bets via [Provider / channel] | %
  *   Increase in rejected deposits via [Payment processor] processor | ask approved deposits
+ *   Drop in approved deposits via [Payment processor] processor | ask declined or rejected
  *   Interruptions in bets | interruption
  * [Label] marks where the operator's input goes and names the input field.
  */
 const ISSUE_FLAGS = {
     '%': 'requiresPercentage',
     'interruption': 'interruption',
-    'ask approved deposits': 'approvedDepositsCheck'
+    'ask approved deposits': 'approvedDepositsCheck',
+    'ask declined or rejected': 'declineIncreaseCheck'
 };
 
 function formatIssueLines(issues) {

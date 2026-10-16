@@ -35,6 +35,21 @@ function generateInterruptionImpact(issueDescription, frequencyMinutes, duration
 }
 
 /**
+ * Add an increase in declined or rejected deposits/cashouts after a drop or
+ * decrease in approved ones. Only the Impact description uses this; the
+ * processor stays at the end:
+ * "Drop in approved deposits followed by an increase in declined deposits via X processor".
+ */
+function generateDeclineIncreaseImpact(issueDescription, increaseType) {
+    const noun = /approved\s+(deposits|cashouts)/i.exec(issueDescription)?.[1].toLowerCase() || 'deposits';
+    const increase = `followed by an increase in ${increaseType} ${noun}`;
+    const viaMatch = /^(.*)\s+via\s+(.+)$/i.exec(issueDescription);
+    return viaMatch
+        ? `${viaMatch[1]} ${increase} via ${viaMatch[2]}`
+        : `${issueDescription} ${increase}`;
+}
+
+/**
  * Add the approved-deposit effect only to the Impact description while
  * preserving the shorter issue text used by the subject and detection line.
  */
@@ -200,6 +215,7 @@ if (typeof module !== 'undefined' && module.exports) {
         generateSystemResolvedHTML,
         generateInterruptionImpact,
         generateDepositApprovalImpact,
+        generateDeclineIncreaseImpact,
         generateBannerHTML,
         generateVendorOutreachHTML,
         generateVendorOutreachSubject,

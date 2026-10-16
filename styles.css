@@ -582,6 +582,9 @@ body.admin-mode .admin-only {
 
 .reference-hint {
     white-space: pre-line;
+    color: #2d3748;
+    font-size: 15px;
+    line-height: 1.5;
 }
 
 #outreachContactHint {

@@ -58,12 +58,8 @@ function getSubproviderContactHint(name) {
         .find(([subprovider]) => normalizeProviderName(subprovider) === wanted);
     if (!wanted || !entry) return '';
 
-    const [subprovider, contact] = entry;
-    const details = [`📇 ${subprovider} contact (Fusion team list, reference only, not added to the email): ${contact.to.join('; ')}`];
-    if (contact.cc?.length) details.push(`CC: ${contact.cc.join('; ')}`);
-    if (contact.note) details.push(`Note: ${contact.note}`);
-    if (contact.channel) details.push(`Channel: ${contact.channel}`);
-    return details.join('\n');
+    const [, contact] = entry;
+    return `FYI this is the contact email for the subprovider: ${contact.to.join('; ')}, feel free to add them to the outreach email`;
 }
 
 /** Providers and subproviders of an environment, for the input suggestions. */

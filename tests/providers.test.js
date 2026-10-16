@@ -58,10 +58,11 @@ test('round-trips the admin provider text format', () => {
 
 test('shows the Fusion team contact of a subprovider as a reference', () => {
     const { getSubproviderContactHint } = require('../js/providers');
-    const hint = getSubproviderContactHint('fazi');
-    assert.match(hint, /^📇 Fazi contact .*: onlinesupport@fazi\.rs/);
-    assert.match(hint, /Note: Marked latest email/);
-    assert.match(getSubproviderContactHint('Ainsworth'), /CC: SKhullar@agtslots\.com/);
+    assert.equal(
+        getSubproviderContactHint('fazi'),
+        'FYI this is the contact email for the subprovider: onlinesupport@fazi.rs, feel free to add them to the outreach email'
+    );
+    assert.match(getSubproviderContactHint('Wazdan'), /subprovider: lt@wazdan\.com; b2b@wazdan\.com, feel free/);
     assert.equal(getSubproviderContactHint('Adell'), '');
 });
 

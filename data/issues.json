@@ -111,5 +111,10 @@
     "value": "Hosting website is unavailable",
     "label": "Hosting website is unavailable",
     "category": "Hosting"
+  },
+  {
+    "value": "Segmentation Process failed to start",
+    "label": "Segmentation Process failed to start",
+    "category": "Segmentation"
   }
 ]

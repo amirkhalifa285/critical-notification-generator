@@ -181,6 +181,17 @@
       "to": [
         "gameops@wclc.com"
       ]
+    },
+    "IGT": {
+      "label": "IGT",
+      "matches": [
+        "igt",
+        "igt"
+      ],
+      "to": [
+        "IGT_RGSNotifications@igt.com",
+        "isb_techsupport@IGT.com"
+      ]
     }
   },
   "lotteryOutreach": {
